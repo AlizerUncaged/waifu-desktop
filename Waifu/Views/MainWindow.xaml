@@ -1,0 +1,44 @@
+﻿<Window x:Class="Waifu.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Background="{DynamicResource Background}"
+
+        Icon="/Resources/Images/Icon.ico"
+        TextOptions.TextFormattingMode="Display"
+        TextOptions.TextRenderingMode="ClearType"
+        RenderOptions.BitmapScalingMode="HighQuality"
+        RenderOptions.ClearTypeHint="Enabled"
+        TextElement.Foreground="{DynamicResource Foreground}"
+        WindowStartupLocation="CenterScreen"
+
+        WindowStyle="SingleBorderWindow"
+
+        FontFamily="{DynamicResource OpenSans}"
+        FontWeight="Bold"
+
+        Loaded="WindowLoaded"
+
+        xmlns:shared="clr-namespace:Waifu.Views.Shared"
+        Title="Waifu Control"
+        MinHeight="400"
+        MinWidth="600"
+        Height="450"
+        Width="800">
+    <WindowChrome.WindowChrome>
+        <WindowChrome GlassFrameThickness="0" CaptionHeight="0" UseAeroCaptionButtons="False" ResizeBorderThickness="7" />
+    </WindowChrome.WindowChrome>
+    <Grid>
+        <DockPanel>
+            <shared:Header x:Name="Header" DockPanel.Dock="Top">
+
+            </shared:Header>
+            <Grid Name="Main">
+
+            </Grid>
+        </DockPanel>
+
+    </Grid>
+</Window>

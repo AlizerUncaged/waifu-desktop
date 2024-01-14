@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="Waifu.Views.Shared.Header"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Waifu.Views.Shared"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"
+             VerticalAlignment="Top"
+             Background="Transparent"
+             d:DesignHeight="300"
+             d:DesignWidth="300">
+    <Grid MouseDown="HeaderMouseDown" Background="{DynamicResource BackgroundLight}" Height="35"
+          VerticalAlignment="Top">
+        <DockPanel VerticalAlignment="Center">
+            <StackPanel VerticalAlignment="Center" DockPanel.Dock="Left" Orientation="Horizontal">
+                <Image Margin="15,3,0,3" Source="/Resources/Images/Icon.png"></Image>
+                <Image Margin="5,10,8,10" Source="/Resources/Images/Brand-Text.png"></Image>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" DockPanel.Dock="Right" Margin="0,0,15,0"
+                        HorizontalAlignment="Right">
+                <materialDesign:PackIcon Cursor="Hand" Margin="0,0,15,0" FontWeight="Heavy" Background="Transparent"
+                                         MouseDown="MinimizeClicked" VerticalAlignment="Center"
+                                         Kind="Minimize">
+                </materialDesign:PackIcon>
+                <materialDesign:PackIcon Cursor="Hand" FontWeight="Heavy" Background="Transparent"
+                                         MouseDown="CloseClicked" VerticalAlignment="Center"
+                                         Kind="Close">
+                </materialDesign:PackIcon>
+            </StackPanel>
+        </DockPanel>
+    </Grid>
+</UserControl>
