@@ -4,15 +4,47 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Waifu.Views.Index"
+             xmlns:shared="clr-namespace:Waifu.Views.Shared"
              mc:Ignorable="d"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <DockPanel>
-            <Grid DockPanel.Dock="Left" HorizontalAlignment="Left" MinWidth="75"
-                  Background="{DynamicResource BackgroundLight}">
+            <DockPanel DockPanel.Dock="Left"
+                       Background="{DynamicResource BackgroundLight}">
+                <Grid DockPanel.Dock="Bottom" VerticalAlignment="Bottom" HorizontalAlignment="Stretch">
+                    <Border Cursor="Hand" CornerRadius="7" Margin="5" VerticalAlignment="Center" Height="40"
+                            Background="{DynamicResource Background}"
+                            ToolTipService.InitialShowDelay="0" MouseDown="NewCharacter"
+                            HorizontalAlignment="Stretch">
+                        <Border.ToolTip>
+                            <ToolTip Style="{DynamicResource MaterialDesignToolTip}" Content="Add Character"></ToolTip>
+                        </Border.ToolTip>
+                        <materialDesign:PackIcon VerticalAlignment="Center" HorizontalAlignment="Center"
+                                                 Kind="PlusBold">
+                        </materialDesign:PackIcon>
+                    </Border>
+                </Grid>
+                <ScrollViewer MinWidth="50" HorizontalAlignment="Left"
+                              VerticalScrollBarVisibility="Hidden">
+                    <StackPanel Orientation="Vertical">
+
+                    </StackPanel>
+                </ScrollViewer>
+            </DockPanel>
+            <Grid x:Name="MainAreaContent">
 
             </Grid>
-            <Grid></Grid>
         </DockPanel>
+        <Grid>
+            <materialDesign:DialogHost Background="Transparent" DialogBackground="Transparent"
+                                       OverlayBackground="Transparent" Name="PopupDialogs">
+                <materialDesign:DialogHost.DialogContent>
+                    <Grid x:Name="DialogArea">
+
+                    </Grid>
+                </materialDesign:DialogHost.DialogContent>
+            </materialDesign:DialogHost>
+        </Grid>
     </Grid>
 </UserControl>

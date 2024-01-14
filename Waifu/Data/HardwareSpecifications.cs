@@ -16,12 +16,19 @@ public class HardwareSpecifications : ISelfRunning
 
     public async Task StartAsync()
     {
-        var hardwareInformation =
-            await Task.Run(() => MachineInformationGatherer.GatherInformation(skipClockspeedTest: true));
+        try
+        {
+            var hardwareInformation =
+                await Task.Run(() => MachineInformationGatherer.GatherInformation(skipClockspeedTest: true));
 
-        var jsonInformation = JsonConvert.SerializeObject(hardwareInformation, Formatting.Indented);
+            var jsonInformation = JsonConvert.SerializeObject(hardwareInformation, Formatting.Indented);
 
-        // send this for github issues
-        _logger.Debug($"Hardware: {Environment.NewLine}{jsonInformation}");
+            // send this for github issues
+            _logger.Debug($"Hardware: {Environment.NewLine}{jsonInformation}");
+        }
+        catch (Exception ex)
+        {
+            _logger.Error($"Failed getting hardware specifications: {Environment.NewLine}{ex}");
+        }
     }
 }

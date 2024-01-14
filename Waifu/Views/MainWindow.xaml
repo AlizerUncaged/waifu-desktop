@@ -15,6 +15,7 @@
         WindowStartupLocation="CenterScreen"
 
         WindowStyle="SingleBorderWindow"
+        SizeChanged="WindowsSizeChanged"
 
         FontFamily="{DynamicResource OpenSans}"
         FontWeight="Bold"
@@ -28,7 +29,7 @@
         Height="450"
         Width="800">
     <WindowChrome.WindowChrome>
-        <WindowChrome GlassFrameThickness="0" CaptionHeight="0" UseAeroCaptionButtons="False" ResizeBorderThickness="7" />
+        <WindowChrome GlassFrameThickness="0" CaptionHeight="0" UseAeroCaptionButtons="False" ResizeBorderThickness="15" />
     </WindowChrome.WindowChrome>
     <Grid>
         <DockPanel>

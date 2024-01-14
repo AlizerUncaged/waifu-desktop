@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace Waifu.Views.Shared;
 
@@ -25,6 +26,20 @@ public partial class CharacterItem : UserControl
                 //  It's read-write, so make it bind both ways by default
                 BindsTwoWayByDefault = true
             });
+
+    #endregion
+
+    #region Character Image Property
+
+    public ImageSource Image
+    {
+        get { return (ImageSource)GetValue(ImageProperty); }
+        set { SetValue(ImageProperty, value); }
+    }
+
+    public static readonly DependencyProperty ImageProperty =
+        DependencyProperty.Register(nameof(Image), typeof(ImageSource), typeof(CharacterItem),
+            new FrameworkPropertyMetadata(null));
 
     #endregion
 }

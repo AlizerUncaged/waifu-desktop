@@ -14,14 +14,22 @@
           VerticalAlignment="Top">
         <DockPanel VerticalAlignment="Center">
             <StackPanel VerticalAlignment="Center" DockPanel.Dock="Left" Orientation="Horizontal">
-                <Image Margin="15,3,0,3" Source="/Resources/Images/Icon.png"></Image>
+                <Image Margin="7,3,0,3" Source="/Resources/Images/Icon.png"></Image>
                 <Image Margin="5,10,8,10" Source="/Resources/Images/Brand-Text.png"></Image>
             </StackPanel>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" DockPanel.Dock="Right" Margin="0,0,15,0"
                         HorizontalAlignment="Right">
                 <materialDesign:PackIcon Cursor="Hand" Margin="0,0,15,0" FontWeight="Heavy" Background="Transparent"
+                                         MouseDown="GithubClicked" VerticalAlignment="Center"
+                                         Kind="Github">
+                </materialDesign:PackIcon>
+                <materialDesign:PackIcon Cursor="Hand" Margin="0,0,15,0" FontWeight="Heavy" Background="Transparent"
                                          MouseDown="MinimizeClicked" VerticalAlignment="Center"
                                          Kind="Minimize">
+                </materialDesign:PackIcon>
+                <materialDesign:PackIcon Cursor="Hand" Margin="0,0,15,0" FontWeight="Heavy" Background="Transparent"
+                                         MouseDown="MaximizeClicked" VerticalAlignment="Center"
+                                         Kind="Maximize">
                 </materialDesign:PackIcon>
                 <materialDesign:PackIcon Cursor="Hand" FontWeight="Heavy" Background="Transparent"
                                          MouseDown="CloseClicked" VerticalAlignment="Center"

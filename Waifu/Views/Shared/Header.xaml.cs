@@ -1,5 +1,7 @@
-﻿using System.Windows.Controls;
+﻿using System.Diagnostics;
+using System.Windows.Controls;
 using System.Windows.Input;
+using Waifu.Utilities;
 
 namespace Waifu.Views.Shared;
 
@@ -12,7 +14,7 @@ public partial class Header : UserControl
 
     private void HeaderMouseDown(object sender, MouseButtonEventArgs e)
     {
-        if (e.ChangedButton == MouseButton.Left)
+        if (e is { ChangedButton: MouseButton.Left, ButtonState: MouseButtonState.Pressed })
             OnHeaderMouseDown?.Invoke(this, EventArgs.Empty);
     }
 
@@ -29,4 +31,14 @@ public partial class Header : UserControl
     }
 
     public event EventHandler OnMinimizeClicked;
+
+    public event EventHandler OnMaximizeClicked;
+
+    private void MaximizeClicked(object sender, MouseButtonEventArgs e)
+    {
+        OnMaximizeClicked?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void GithubClicked(object sender, MouseButtonEventArgs e) =>
+        "https://github.com/AlizerUncaged/waifu-desktop".OpenAsUrl();
 }

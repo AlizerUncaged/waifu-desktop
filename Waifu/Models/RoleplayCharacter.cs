@@ -17,5 +17,5 @@ public class RoleplayCharacter
 
     public string ProfilePictureHash { get; set; } = "default.jpg";
 
-    public string ProfilePictureFilePath => Path.Combine("Resources", "Images", ProfilePictureHash);
+    public string ProfilePictureFilePath => Path.Combine(Constants.ProfilePicturesFolder, ProfilePictureHash);
 }

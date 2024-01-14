@@ -31,6 +31,8 @@ public partial class MainWindow : Window
     {
         Header.OnHeaderMouseDown += (_, args) => this.DragMove();
         Header.OnMinimizeClicked += (_, args) => WindowState = WindowState.Minimized;
+        Header.OnMaximizeClicked += (_, args) =>
+            WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
 
         _startupCheck.OnCheckFinishedSuccessfully += (o, args) =>
         {
@@ -51,5 +53,13 @@ public partial class MainWindow : Window
         Main.Children.Clear();
 
         Main.Children.Add(child);
+    }
+
+    private void WindowsSizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        // fix for windows 11 where maximized window is bigger than the screen
+        this.BorderThickness = this.WindowState == WindowState.Maximized
+            ? new System.Windows.Thickness(8)
+            : new System.Windows.Thickness(0);
     }
 }

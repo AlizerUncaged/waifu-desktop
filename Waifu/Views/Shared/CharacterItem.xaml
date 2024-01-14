@@ -4,9 +4,22 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Waifu.Views.Shared"
+             RenderOptions.BitmapScalingMode="HighQuality"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        
+             d:DesignHeight="100" d:DesignWidth="100">
+    <Grid Height="40" Width="40" Cursor="Hand"
+          ToolTipService.InitialShowDelay="0">
+        <Grid.ToolTip>
+            <ToolTip Style="{DynamicResource MaterialDesignToolTip}"
+                     Content="{Binding CharacterName, RelativeSource={RelativeSource AncestorType=UserControl}}">
+            </ToolTip>
+        </Grid.ToolTip>
+        <!-- <TextBox Text="{Binding CharacterName, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" /> -->
+        <Ellipse VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Ellipse.Fill>
+                <ImageBrush Stretch="UniformToFill"
+                            ImageSource="{Binding Image, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" />
+            </Ellipse.Fill>
+        </Ellipse>
     </Grid>
 </UserControl>
