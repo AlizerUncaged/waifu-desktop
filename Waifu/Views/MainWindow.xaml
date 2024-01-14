@@ -29,7 +29,7 @@
         Height="450"
         Width="800">
     <WindowChrome.WindowChrome>
-        <WindowChrome GlassFrameThickness="0" CaptionHeight="0" UseAeroCaptionButtons="False" ResizeBorderThickness="15" />
+        <WindowChrome GlassFrameThickness="0" CaptionHeight="0" UseAeroCaptionButtons="False" ResizeBorderThickness="6" />
     </WindowChrome.WindowChrome>
     <Grid>
         <DockPanel>

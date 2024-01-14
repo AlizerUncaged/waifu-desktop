@@ -48,10 +48,9 @@ public partial class AtarashiCharacter : UserControl, IPopup
         }
     }
 
-    public void CharacterSaved()
-    {
-        ;
-    }
+    public void CharacterSaved() =>
+        CloseTriggered?.Invoke(this, EventArgs.Empty);
+
 
     private void SaveCharacter(object sender, RoutedEventArgs e)
     {
@@ -73,7 +72,7 @@ public partial class AtarashiCharacter : UserControl, IPopup
                 character.ProfilePictureHash = fileHash;
 
                 await _characters.AddCharacterAsync(character);
-                
+
                 this.Dispatcher.Invoke(CharacterSaved);
             }
         });

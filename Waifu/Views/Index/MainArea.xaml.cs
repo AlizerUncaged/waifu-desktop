@@ -12,6 +12,7 @@ public partial class MainArea : UserControl
     public MainArea(AtarashiCharacter atarashiCharacter)
     {
         _atarashiCharacter = atarashiCharacter;
+
         InitializeComponent();
     }
 

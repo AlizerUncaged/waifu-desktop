@@ -19,5 +19,12 @@ public class Characters
         _applicationDbContext.RoleplayCharacters.Add(roleplayCharacter);
 
         await _applicationDbContext.SaveChangesAsync();
+
+        OnCharacterAdded?.Invoke(this, roleplayCharacter);
     }
+
+    /// <summary>
+    /// Gets called whenever a character gets added.
+    /// </summary>
+    public event EventHandler<RoleplayCharacter> OnCharacterAdded;
 }
