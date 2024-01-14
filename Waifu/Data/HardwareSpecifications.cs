@@ -13,6 +13,7 @@ public class HardwareSpecifications : ISelfRunning
         _logger = logger;
     }
 
+
     public async Task StartAsync()
     {
         var hardwareInformation =

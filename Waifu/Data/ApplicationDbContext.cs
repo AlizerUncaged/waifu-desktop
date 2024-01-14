@@ -12,13 +12,6 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<RoleplayCharacter> RoleplayCharacters { get; set; }
 
-    private readonly ILogger _logger;
-
-    public ApplicationDbContext(ILogger logger)
-    {
-        _logger = logger;
-    }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         // Configure SQLite as the database provider

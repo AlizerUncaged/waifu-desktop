@@ -30,8 +30,18 @@ public partial class App : Application
         builder.RegisterType<Welcome>()
             .AsSelf();
 
+        builder.RegisterType<MainArea>()
+            .AsSelf();
+
+        builder.RegisterType<Characters>()
+            .AsSelf();
+
         builder.RegisterType<HardwareSpecifications>()
             .AsSelf().As<ISelfRunning>();
+
+        builder.RegisterType<StartupCheck>()
+            .AsSelf().As<ISelfRunning>()
+            .SingleInstance();
 
         builder.RegisterType<ApplicationDbContext>()
             .InstancePerLifetimeScope();
@@ -48,16 +58,20 @@ public partial class App : Application
 
         MainWindow = mainWindow;
 
-        // run self running services.
-        using (var scope = container.BeginLifetimeScope())
-        {
-            var selfRunningServices = scope.Resolve<IEnumerable<ISelfRunning>>();
-            var startTasks = selfRunningServices.Select(service => service.StartAsync());
-
-            _ = Task.WhenAll(startTasks);
-        }
-
         mainWindow.Show();
+
+        // run self running services.
+        _ = Task.Run(async () =>
+        {
+            using (var scope = container.BeginLifetimeScope())
+            {
+                var selfRunningServices = scope.Resolve<IEnumerable<ISelfRunning>>();
+
+                var startTasks = selfRunningServices.Select(service => service.StartAsync());
+
+                await Task.WhenAll(startTasks);
+            }
+        });
     }
 
     public void ConfigureLogger()

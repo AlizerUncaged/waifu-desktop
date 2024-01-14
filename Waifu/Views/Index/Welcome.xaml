@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Waifu.Views.Index"
              mc:Ignorable="d"
+             Loaded="ControlLoaded"
              TextOptions.TextFormattingMode="Display"
              TextOptions.TextRenderingMode="ClearType"
              RenderOptions.BitmapScalingMode="HighQuality"
@@ -12,7 +13,8 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
         <StackPanel Orientation="Vertical">
-            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="Welcome Back!" FontSize="32"
+            <TextBlock Margin="0,0,0,10" VerticalAlignment="Center" HorizontalAlignment="Center" Text="Welcome Back!"
+                       FontSize="32"
                        FontWeight="Bold">
             </TextBlock>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -21,7 +23,7 @@
                              Style="{StaticResource MaterialDesignCircularProgressBar}">
                 </ProgressBar>
                 <TextBlock TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <Run Text="Checking Things"></Run>
+                    <Run x:Name="LoadingMessage" Text="Checking Things"></Run>
                 </TextBlock>
             </StackPanel>
         </StackPanel>

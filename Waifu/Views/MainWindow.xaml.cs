@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Waifu.Data;
 using Waifu.Views.Index;
 using ILogger = Serilog.ILogger;
 
@@ -13,11 +14,15 @@ public partial class MainWindow : Window
 {
     private readonly Welcome _welcome;
     private readonly ILogger _logger;
+    private readonly StartupCheck _startupCheck;
+    private readonly MainArea _mainArea;
 
-    public MainWindow(Welcome welcome, ILogger logger)
+    public MainWindow(Welcome welcome, ILogger logger, StartupCheck startupCheck, MainArea mainArea)
     {
         _welcome = welcome;
         _logger = logger;
+        _startupCheck = startupCheck;
+        _mainArea = mainArea;
 
         InitializeComponent();
     }
@@ -26,6 +31,12 @@ public partial class MainWindow : Window
     {
         Header.OnHeaderMouseDown += (_, args) => this.DragMove();
         Header.OnMinimizeClicked += (_, args) => WindowState = WindowState.Minimized;
+
+        _startupCheck.OnCheckFinishedSuccessfully += (o, args) =>
+        {
+            // at this point everything should be already loaded!
+            Dispatcher.Invoke(() => SetView(_mainArea));
+        };
 
         SetView(_welcome);
 

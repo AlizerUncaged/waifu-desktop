@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Waifu.Models;
 
-[Table("channels")]
+[Table("characters")]
 public class RoleplayCharacter
 {
     [Key] public long Id { get; set; }

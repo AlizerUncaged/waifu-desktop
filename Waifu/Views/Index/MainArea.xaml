@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="Waifu.Views.Index.MainArea"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Waifu.Views.Index"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <DockPanel>
+            <Grid DockPanel.Dock="Left" HorizontalAlignment="Left" MinWidth="75"
+                  Background="{DynamicResource BackgroundLight}">
+
+            </Grid>
+            <Grid></Grid>
+        </DockPanel>
+    </Grid>
+</UserControl>
