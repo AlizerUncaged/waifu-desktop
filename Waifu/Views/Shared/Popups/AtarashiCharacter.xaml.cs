@@ -22,6 +22,7 @@ public partial class AtarashiCharacter : UserControl, IPopup
     }
 
     public event EventHandler? CloseTriggered;
+    public event EventHandler<FrameworkElement>? ReplaceTriggered;
 
     private void NewCharacterPopupLoaded(object sender, RoutedEventArgs e)
     {

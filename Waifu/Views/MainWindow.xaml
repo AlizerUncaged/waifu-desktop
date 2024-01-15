@@ -36,8 +36,13 @@
             <shared:Header x:Name="Header" DockPanel.Dock="Top">
 
             </shared:Header>
-            <Grid Name="Main">
+            <Grid>
+                <Grid Name="Main">
 
+                </Grid>
+                <Grid Name="LayerAboveContent">
+
+                </Grid>
             </Grid>
         </DockPanel>
 

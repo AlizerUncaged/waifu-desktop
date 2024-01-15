@@ -9,7 +9,7 @@
              VerticalAlignment="Top"
              Background="Transparent"
              d:DesignHeight="300"
-             d:DesignWidth="300">
+             d:DesignWidth="400">
     <Grid MouseDown="HeaderMouseDown" Background="{DynamicResource BackgroundLight}" Height="35"
           VerticalAlignment="Top">
         <DockPanel VerticalAlignment="Center">
@@ -22,18 +22,37 @@
                 <materialDesign:PackIcon Cursor="Hand" Margin="0,0,15,0" FontWeight="Heavy" Background="Transparent"
                                          MouseDown="GithubClicked" VerticalAlignment="Center"
                                          Kind="Github">
+                    <materialDesign:PackIcon.RenderTransform>
+                        <ScaleTransform CenterX="0.5" CenterY="2" ScaleX="1.3" ScaleY="1.3" />
+                    </materialDesign:PackIcon.RenderTransform>
+                </materialDesign:PackIcon>
+                <materialDesign:PackIcon Cursor="Hand" Margin="0,0,15,0" FontWeight="Heavy" Background="Transparent"
+                                         MouseDown="SettingsClicked" VerticalAlignment="Center"
+                                         Kind="Settings">
+                    <materialDesign:PackIcon.RenderTransform>
+                        <ScaleTransform CenterX="0.5" CenterY="2" ScaleX="1.3" ScaleY="1.3" />
+                    </materialDesign:PackIcon.RenderTransform>
                 </materialDesign:PackIcon>
                 <materialDesign:PackIcon Cursor="Hand" Margin="0,0,15,0" FontWeight="Heavy" Background="Transparent"
                                          MouseDown="MinimizeClicked" VerticalAlignment="Center"
                                          Kind="Minimize">
+                    <materialDesign:PackIcon.RenderTransform>
+                        <ScaleTransform CenterX="0.5" CenterY="2" ScaleX="1.3" ScaleY="1.3" />
+                    </materialDesign:PackIcon.RenderTransform>
                 </materialDesign:PackIcon>
                 <materialDesign:PackIcon Cursor="Hand" Margin="0,0,15,0" FontWeight="Heavy" Background="Transparent"
                                          MouseDown="MaximizeClicked" VerticalAlignment="Center"
                                          Kind="Maximize">
+                    <materialDesign:PackIcon.RenderTransform>
+                        <ScaleTransform CenterX="0.5" CenterY="2" ScaleX="1.3" ScaleY="1.3" />
+                    </materialDesign:PackIcon.RenderTransform>
                 </materialDesign:PackIcon>
                 <materialDesign:PackIcon Cursor="Hand" FontWeight="Heavy" Background="Transparent"
                                          MouseDown="CloseClicked" VerticalAlignment="Center"
                                          Kind="Close">
+                    <materialDesign:PackIcon.RenderTransform>
+                        <ScaleTransform CenterX="0.5" CenterY="2" ScaleX="1.3" ScaleY="1.3" />
+                    </materialDesign:PackIcon.RenderTransform>
                 </materialDesign:PackIcon>
             </StackPanel>
         </DockPanel>

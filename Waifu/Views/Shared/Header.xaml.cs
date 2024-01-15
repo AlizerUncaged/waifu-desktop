@@ -33,6 +33,7 @@ public partial class Header : UserControl
     public event EventHandler OnMinimizeClicked;
 
     public event EventHandler OnMaximizeClicked;
+    public event EventHandler OnSettingsClicked;
 
     private void MaximizeClicked(object sender, MouseButtonEventArgs e)
     {
@@ -41,4 +42,9 @@ public partial class Header : UserControl
 
     private void GithubClicked(object sender, MouseButtonEventArgs e) =>
         "https://github.com/AlizerUncaged/waifu-desktop".OpenAsUrl();
+
+    private void SettingsClicked(object sender, MouseButtonEventArgs e)
+    {
+        OnSettingsClicked?.Invoke(this, EventArgs.Empty);
+    }
 }

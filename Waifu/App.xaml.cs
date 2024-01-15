@@ -5,6 +5,7 @@ using System.Windows;
 using Autofac;
 using AutofacSerilogIntegration;
 using Serilog;
+using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 using Waifu.Data;
 using Waifu.Views;
@@ -42,6 +43,12 @@ public partial class App : Application
             .AsSelf();
 
         builder.RegisterType<CharactersMenu>()
+            .AsSelf();
+
+        builder.RegisterType<Settings>()
+            .AsSelf();
+
+        builder.RegisterType<ManageModels>()
             .AsSelf();
 
         builder.RegisterType<Llama>()
@@ -102,7 +109,8 @@ public partial class App : Application
 
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
-            .WriteTo.Console(theme: AnsiConsoleTheme.Literate, applyThemeToRedirectedOutput: true)
+            .WriteTo.Console(theme: AnsiConsoleTheme.Literate, applyThemeToRedirectedOutput: true,
+                restrictedToMinimumLevel: LogEventLevel.Information)
             .WriteTo.File(logFilePath,
                 rollingInterval: RollingInterval.Day,
                 fileSizeLimitBytes: null,

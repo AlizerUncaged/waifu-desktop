@@ -20,6 +20,7 @@ public class FilePathToImageSourceConverter : IValueConverter
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        throw new NotImplementedException();
+        // nah we dont need this
+        throw new NotImplementedException("You're not supposed to see this...");
     }
 }

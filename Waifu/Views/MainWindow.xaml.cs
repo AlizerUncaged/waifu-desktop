@@ -16,13 +16,15 @@ public partial class MainWindow : Window
     private readonly ILogger _logger;
     private readonly StartupCheck _startupCheck;
     private readonly MainArea _mainArea;
+    private readonly Settings _settings;
 
-    public MainWindow(Welcome welcome, ILogger logger, StartupCheck startupCheck, MainArea mainArea)
+    public MainWindow(Welcome welcome, ILogger logger, StartupCheck startupCheck, MainArea mainArea, Settings settings)
     {
         _welcome = welcome;
         _logger = logger;
         _startupCheck = startupCheck;
         _mainArea = mainArea;
+        _settings = settings;
 
         InitializeComponent();
     }
@@ -33,6 +35,7 @@ public partial class MainWindow : Window
         Header.OnMinimizeClicked += (_, args) => WindowState = WindowState.Minimized;
         Header.OnMaximizeClicked += (_, args) =>
             WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+        Header.OnSettingsClicked += (_, args) => SetTopView(_settings);
 
         _startupCheck.OnCheckFinishedSuccessfully += (o, args) =>
         {
@@ -53,6 +56,26 @@ public partial class MainWindow : Window
         Main.Children.Clear();
 
         Main.Children.Add(child);
+    }
+
+    private void SetTopView<T>(T child) where T : IPopup
+    {
+        if (child is not FrameworkElement)
+            throw new ArgumentException("child must be a FrameworkElement!");
+
+        LayerAboveContent.Children.Clear();
+
+        child.CloseTriggered += (sender, args) => { LayerAboveContent.Children.Remove(sender as FrameworkElement); };
+
+        child.ReplaceTriggered += (sender, element) =>
+        {
+            if (element is IPopup popupElement)
+            {
+                SetTopView(popupElement); // Now 'popupElement' is treated as both FrameworkElement and IPopup
+            }
+        };
+
+        LayerAboveContent.Children.Add((child as FrameworkElement)!);
     }
 
     private void WindowsSizeChanged(object sender, SizeChangedEventArgs e)
