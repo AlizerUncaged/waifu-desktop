@@ -6,8 +6,10 @@
              xmlns:local="clr-namespace:Waifu.Views.Shared"
              RenderOptions.BitmapScalingMode="HighQuality"
              mc:Ignorable="d"
+             MouseDown="ItemClicked"
+             Loaded="CharacterItemLoaded"
              d:DesignHeight="100" d:DesignWidth="100">
-    <Grid Height="40" Width="40" Cursor="Hand"
+    <Grid Height="40" Width="40" Cursor="Hand" Name="MainGrid"
           ToolTipService.InitialShowDelay="0">
         <Grid.ToolTip>
             <ToolTip Style="{DynamicResource MaterialDesignToolTip}"

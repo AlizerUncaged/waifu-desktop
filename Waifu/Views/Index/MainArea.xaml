@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:Waifu.Views.Index"
              xmlns:shared="clr-namespace:Waifu.Views.Shared"
              mc:Ignorable="d"
+             Loaded="MainAreaLoaded"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
@@ -27,8 +28,8 @@
                 </Grid>
                 <ScrollViewer MinWidth="50" HorizontalAlignment="Left"
                               VerticalScrollBarVisibility="Hidden">
-                    <StackPanel Orientation="Vertical">
-
+                    <StackPanel Orientation="Vertical" x:Name="CharactersMenuControl">
+                    
                     </StackPanel>
                 </ScrollViewer>
             </DockPanel>

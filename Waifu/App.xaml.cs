@@ -9,6 +9,7 @@ using Serilog.Sinks.SystemConsole.Themes;
 using Waifu.Data;
 using Waifu.Views;
 using Waifu.Views.Index;
+using Waifu.Views.Shared;
 using Waifu.Views.Shared.Popups;
 
 namespace Waifu;
@@ -40,8 +41,14 @@ public partial class App : Application
         builder.RegisterType<AtarashiCharacter>()
             .AsSelf();
 
-        builder.RegisterType<Characters>()
+        builder.RegisterType<CharactersMenu>()
             .AsSelf();
+
+        builder.RegisterType<Llama>()
+            .AsSelf();
+
+        builder.RegisterType<Characters>()
+            .AsSelf().SingleInstance();
 
         builder.RegisterType<HardwareSpecifications>()
             .AsSelf().As<ISelfRunning>();

@@ -1,6 +1,9 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Vulkan;
+using Waifu.Data;
+using Waifu.Views.Shared;
 using Waifu.Views.Shared.Popups;
 
 namespace Waifu.Views.Index;
@@ -8,10 +11,14 @@ namespace Waifu.Views.Index;
 public partial class MainArea : UserControl
 {
     private readonly AtarashiCharacter _atarashiCharacter;
+    private readonly Characters _characters;
+    private readonly CharactersMenu _charactersMenu;
 
-    public MainArea(AtarashiCharacter atarashiCharacter)
+    public MainArea(AtarashiCharacter atarashiCharacter, Characters characters, CharactersMenu charactersMenu)
     {
         _atarashiCharacter = atarashiCharacter;
+        _characters = characters;
+        _charactersMenu = charactersMenu;
 
         InitializeComponent();
     }
@@ -33,5 +40,22 @@ public partial class MainArea : UserControl
     private void NewCharacter(object sender, MouseButtonEventArgs e)
     {
         OpenDialog(_atarashiCharacter);
+    }
+
+    private void MainAreaLoaded(object sender, RoutedEventArgs e)
+    {
+        CharactersMenuControl.Children.Add(_charactersMenu);
+        
+        // start showing characters
+        _ = Task.Run(async () =>
+        {
+            var roleplayCharacters = await _characters.GetAllRoleplayCharactersAsync();
+
+            Dispatcher.Invoke(() =>
+            {
+                foreach (var roleplayCharacter in roleplayCharacters)
+                    _charactersMenu?.RoleplayCharacters.Add(roleplayCharacter);
+            });
+        });
     }
 }

@@ -1,15 +1,28 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
+using Waifu.Models;
 
 namespace Waifu.Views.Shared;
 
 public partial class CharacterItem : UserControl
 {
-    public CharacterItem()
+    private readonly RoleplayCharacter? _roleplayCharacter;
+
+    public CharacterItem(RoleplayCharacter? roleplayCharacter = null)
     {
+        _roleplayCharacter = roleplayCharacter;
+
         InitializeComponent();
     }
+
+    // for wpf previews to work
+    public CharacterItem() : this(null)
+    {
+    }
+
+    public event EventHandler<RoleplayCharacter?> OnActiveRequest;
 
     #region Character Name Property
 
@@ -42,4 +55,14 @@ public partial class CharacterItem : UserControl
             new FrameworkPropertyMetadata(null));
 
     #endregion
+
+    private void ItemClicked(object sender, MouseButtonEventArgs e)
+    {
+        OnActiveRequest?.Invoke(this, _roleplayCharacter);
+    }
+
+    private void CharacterItemLoaded(object sender, RoutedEventArgs e)
+    {
+        ToolTipService.SetToolTip(MainGrid, CharacterName);
+    }
 }

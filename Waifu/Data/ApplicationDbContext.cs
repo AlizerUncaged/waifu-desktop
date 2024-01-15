@@ -15,6 +15,6 @@ public class ApplicationDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         // Configure SQLite as the database provider
-        optionsBuilder.UseSqlite("Data Source=app.db");
+        optionsBuilder.UseSqlite($"Data Source={Constants.DatabasePath}");
     }
 }

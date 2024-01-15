@@ -8,6 +8,7 @@
              mc:Ignorable="d"
              Loaded="NewCharacterPopupLoaded"
              TextElement.Foreground="{DynamicResource Foreground}"
+             Width="600"
              d:DesignHeight="700" d:DesignWidth="600">
     <Grid>
         <Border CornerRadius="15" Background="{DynamicResource Background}">

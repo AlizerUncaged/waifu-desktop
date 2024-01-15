@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="Waifu.Views.Shared.CharactersMenu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Waifu.Views.Shared"
+             Loaded="CharactersMenuLoaded"
+             xmlns:converters="clr-namespace:Waifu.Data.xamlValueConverters"
+             mc:Ignorable="d" d:DesignHeight="500" d:DesignWidth="100"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <UserControl.Resources>
+        <converters:FilePathToImageSourceConverter x:Key="FilePathToImageSourceConverter" />
+    </UserControl.Resources>
+    <Grid>
+        <ItemsControl ItemsSource="{Binding RoleplayCharacters, Mode=OneWay}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <local:CharacterItem Margin="0,5"
+                                         Image="{Binding ProfilePictureFilePath, Converter={StaticResource FilePathToImageSourceConverter}}"
+                                         CharacterName="{Binding CharacterName}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</UserControl>
