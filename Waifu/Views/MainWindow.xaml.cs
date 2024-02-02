@@ -1,8 +1,10 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Waifu.Data;
 using Waifu.Views.Index;
+using Waifu.Views.Shared;
 using ILogger = Serilog.ILogger;
 
 namespace Waifu.Views;
@@ -17,25 +19,25 @@ public partial class MainWindow : Window
     private readonly StartupCheck _startupCheck;
     private readonly MainArea _mainArea;
     private readonly Settings _settings;
+    private readonly Header _header;
 
-    public MainWindow(Welcome welcome, ILogger logger, StartupCheck startupCheck, MainArea mainArea, Settings settings)
+    public MainWindow(Welcome welcome, ILogger logger, StartupCheck startupCheck, MainArea mainArea, Settings settings,
+        Header header)
     {
         _welcome = welcome;
         _logger = logger;
         _startupCheck = startupCheck;
         _mainArea = mainArea;
         _settings = settings;
+        _header = header;
 
         InitializeComponent();
     }
 
     private void WindowLoaded(object sender, RoutedEventArgs e)
     {
-        Header.OnHeaderMouseDown += (_, args) => this.DragMove();
-        Header.OnMinimizeClicked += (_, args) => WindowState = WindowState.Minimized;
-        Header.OnMaximizeClicked += (_, args) =>
-            WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
-        Header.OnSettingsClicked += (_, args) => SetTopView(_settings);
+        DockPanel.SetDock(_header, Dock.Top);
+        MainDock.Children.Insert(0, _header);
 
         _startupCheck.OnCheckFinishedSuccessfully += (o, args) =>
         {
@@ -58,14 +60,15 @@ public partial class MainWindow : Window
         Main.Children.Add(child);
     }
 
-    private void SetTopView<T>(T child) where T : IPopup
+    public void SetTopView<T>(T child) where T : IPopup
     {
         if (child is not FrameworkElement)
             throw new ArgumentException("child must be a FrameworkElement!");
 
-        LayerAboveContent.Children.Clear();
-
-        child.CloseTriggered += (sender, args) => { LayerAboveContent.Children.Remove(sender as FrameworkElement); };
+        child.CloseTriggered += (sender, args) =>
+        {
+            LayerAboveContent.Children.Remove(sender as FrameworkElement);
+        };
 
         child.ReplaceTriggered += (sender, element) =>
         {

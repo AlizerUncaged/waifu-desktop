@@ -25,6 +25,7 @@
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
       <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="8.0.1" />
+      <PackageReference Include="NAudio" Version="2.2.1" />
       <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
       <PackageReference Include="NvAPIWrapper.Net" Version="0.8.1.101" />
       <PackageReference Include="Pastel" Version="4.2.0" />
@@ -43,6 +44,7 @@
 
     <ItemGroup>
       <Folder Include="Resources\Fonts\" />
+      <Folder Include="Resources\Models\" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,43 +1,46 @@
 ﻿using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Waifu.Utilities;
+using Waifu.Views.Index;
 
 namespace Waifu.Views.Shared;
 
 public partial class Header : UserControl
 {
-    public Header()
+    private readonly Settings _settings;
+
+    public Header(Settings settings)
     {
+        _settings = settings;
         InitializeComponent();
     }
 
     private void HeaderMouseDown(object sender, MouseButtonEventArgs e)
     {
         if (e is { ChangedButton: MouseButton.Left, ButtonState: MouseButtonState.Pressed })
-            OnHeaderMouseDown?.Invoke(this, EventArgs.Empty);
+            this.GetCurrentWindow()?.DragMove();
     }
-
-    public event EventHandler OnHeaderMouseDown;
 
     private void CloseClicked(object sender, MouseButtonEventArgs e)
     {
-        Environment.Exit(Environment.ExitCode);
+        Application.Current.Shutdown();
     }
 
     private void MinimizeClicked(object sender, MouseButtonEventArgs e)
     {
-        OnMinimizeClicked?.Invoke(this, EventArgs.Empty);
+        if (this.GetCurrentWindow() is MainWindow mainWindow)
+            mainWindow.WindowState = mainWindow.WindowState == WindowState.Minimized
+                ? WindowState.Normal
+                : WindowState.Minimized;
     }
 
-    public event EventHandler OnMinimizeClicked;
-
-    public event EventHandler OnMaximizeClicked;
-    public event EventHandler OnSettingsClicked;
 
     private void MaximizeClicked(object sender, MouseButtonEventArgs e)
     {
-        OnMaximizeClicked?.Invoke(this, EventArgs.Empty);
+        if (this.GetCurrentWindow() is MainWindow mainWindow)
+            mainWindow.WindowState = WindowState.Maximized;
     }
 
     private void GithubClicked(object sender, MouseButtonEventArgs e) =>
@@ -45,6 +48,7 @@ public partial class Header : UserControl
 
     private void SettingsClicked(object sender, MouseButtonEventArgs e)
     {
-        OnSettingsClicked?.Invoke(this, EventArgs.Empty);
+        if (this.GetCurrentWindow() is MainWindow mainWindow)
+            mainWindow.SetTopView(_settings);
     }
 }

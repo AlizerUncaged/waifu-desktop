@@ -5,9 +5,9 @@ namespace Waifu.Views.Index;
 
 public partial class Settings : UserControl, IPopup
 {
-    private readonly ManageModels _manageModels;
+    private readonly ModelManager _manageModels;
 
-    public Settings(ManageModels manageModels)
+    public Settings(ModelManager manageModels)
     {
         _manageModels = manageModels;
         InitializeComponent();

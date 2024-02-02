@@ -15,15 +15,15 @@
                     <Button Click="CancelClicked" Margin="0,0,7,0" BorderThickness="0"
                             Background="{DynamicResource BackgroundLight}">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Padding="0" Margin="0" VerticalAlignment="Center">Cancel</TextBlock>
+                            <TextBlock Padding="0" Margin="0" VerticalAlignment="Center">Close</TextBlock>
                         </StackPanel>
                     </Button>
-                    <Button BorderThickness="0" Background="{DynamicResource Green}">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <materialDesign:PackIcon VerticalAlignment="Center" Margin="0,0,7,0" Kind="FloppyDisk"></materialDesign:PackIcon>
-                            <TextBlock Padding="0" Margin="0" VerticalAlignment="Center">Save</TextBlock>
-                        </StackPanel>
-                    </Button>
+                    <!-- <Button BorderThickness="0"> -->
+                    <!--     <StackPanel Orientation="Horizontal" VerticalAlignment="Center"> -->
+                    <!--         <materialDesign:PackIcon VerticalAlignment="Center" Margin="0,0,7,0" Kind="FloppyDisk"></materialDesign:PackIcon> -->
+                    <!--         <TextBlock Padding="0" Margin="0" VerticalAlignment="Center">Save</TextBlock> -->
+                    <!--     </StackPanel> -->
+                    <!-- </Button> -->
                 </StackPanel>
             </Grid>
             <ScrollViewer HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -49,6 +49,21 @@
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <materialDesign:PackIcon VerticalAlignment="Center" Margin="0,0,7,0" Kind="Tune"></materialDesign:PackIcon>
                                 <TextBlock Padding="0" Margin="0" VerticalAlignment="Center">Manage Models</TextBlock>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Margin="0,0,0,15">
+                        <TextBlock FontWeight="Black">
+                            <materialDesign:PackIcon Kind="Audio"></materialDesign:PackIcon>
+                            <Run Text="Audio"></Run>
+                        </TextBlock>
+                        <TextBlock Margin="0,0,0,7" TextWrapping="Wrap"
+                                   Text="Manage Audio Output Devices">
+                        </TextBlock>
+                        <Button BorderThickness="0" Click="ManageModelsClicked">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <materialDesign:PackIcon VerticalAlignment="Center" Margin="0,0,7,0" Kind="Tune"></materialDesign:PackIcon>
+                                <TextBlock Padding="0" Margin="0" VerticalAlignment="Center">Manage Audio</TextBlock>
                             </StackPanel>
                         </Button>
                     </StackPanel>

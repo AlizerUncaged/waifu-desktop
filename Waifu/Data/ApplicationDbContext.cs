@@ -11,6 +11,9 @@ public class ApplicationDbContext : DbContext
     public DbSet<ChatMessage> ChatMessages { get; set; }
 
     public DbSet<RoleplayCharacter> RoleplayCharacters { get; set; }
+    public DbSet<LocalLlamaModel> LocalLlamaModels { get; set; }
+    
+    public DbSet<Settings> Settings { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

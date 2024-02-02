@@ -8,6 +8,7 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 using Waifu.Data;
+using Waifu.Data.HuggingFace;
 using Waifu.Views;
 using Waifu.Views.Index;
 using Waifu.Views.Shared;
@@ -32,6 +33,8 @@ public partial class App : Application
 
         builder.RegisterType<Welcome>()
             .AsSelf();
+        builder.RegisterType<Header>()
+            .AsSelf();
 
         builder.RegisterType<MainArea>()
             .AsSelf();
@@ -48,7 +51,10 @@ public partial class App : Application
         builder.RegisterType<Settings>()
             .AsSelf();
 
-        builder.RegisterType<ManageModels>()
+        builder.RegisterType<ModelManager>()
+            .AsSelf();
+
+        builder.RegisterType<HuggingFaceModelApi>()
             .AsSelf();
 
         builder.RegisterType<Llama>()

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.IO;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace Waifu.Data;
@@ -14,6 +15,13 @@ public class StartupCheck : ISelfRunning
         _logger = logger;
     }
 
+    public async Task<bool> DoesAModelExistAsync()
+    {
+        Directory.CreateDirectory(Constants.ModelsFolder);
+
+        return Directory.GetFiles(Constants.ModelsFolder, "*", SearchOption.AllDirectories).Any();
+    }
+
     public async Task StartAsync()
     {
         Log("Migrating Database");
@@ -21,7 +29,6 @@ public class StartupCheck : ISelfRunning
         await _applicationDbContext.Database.MigrateAsync();
 
         Log("Starting");
-
         OnCheckFinishedSuccessfully?.Invoke(this, EventArgs.Empty);
     }
 

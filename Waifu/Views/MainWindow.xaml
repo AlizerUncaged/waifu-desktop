@@ -32,10 +32,10 @@
         <WindowChrome GlassFrameThickness="0" CaptionHeight="0" UseAeroCaptionButtons="False" ResizeBorderThickness="6" />
     </WindowChrome.WindowChrome>
     <Grid>
-        <DockPanel>
-            <shared:Header x:Name="Header" DockPanel.Dock="Top">
-
-            </shared:Header>
+        <DockPanel Name="MainDock">
+            <!-- <shared:Header x:Name="Header" DockPanel.Dock="Top"> -->
+            <!-- -->
+            <!-- </shared:Header> -->
             <Grid>
                 <Grid Name="Main">
 

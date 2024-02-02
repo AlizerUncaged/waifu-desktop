@@ -15,4 +15,9 @@ public class LocalLlamaModel
     public string? ModelHash { get; set; }
 
     public string? FilePath { get; set; }
+
+    /// <summary>
+    /// Optional, hugging face ID of the model.
+    /// </summary>
+    public string? HuggingFaceId { get; set; }
 }
