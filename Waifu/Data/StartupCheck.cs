@@ -1,15 +1,16 @@
 ﻿using System.IO;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
+using Microsoft.Extensions.Logging;
+using ILogger = Serilog.ILogger;
 
 namespace Waifu.Data;
 
 public class StartupCheck : ISelfRunning
 {
     private readonly ApplicationDbContext _applicationDbContext;
-    private readonly ILogger _logger;
+    private readonly ILogger<StartupCheck> _logger;
 
-    public StartupCheck(ApplicationDbContext applicationDbContext, ILogger logger)
+    public StartupCheck(ApplicationDbContext applicationDbContext, ILogger<StartupCheck> logger)
     {
         _applicationDbContext = applicationDbContext;
         _logger = logger;
@@ -34,7 +35,7 @@ public class StartupCheck : ISelfRunning
 
     private void Log(string log)
     {
-        _logger.Debug(log);
+        _logger.LogDebug(log);
         OnLogChanged?.Invoke(this, log);
     }
 

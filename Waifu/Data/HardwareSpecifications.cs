@@ -1,4 +1,5 @@
 ﻿using HardwareInformation;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Serilog;
 
@@ -6,9 +7,9 @@ namespace Waifu.Data;
 
 public class HardwareSpecifications : ISelfRunning
 {
-    private readonly ILogger _logger;
+    private readonly ILogger<HardwareSpecifications> _logger;
 
-    public HardwareSpecifications(ILogger logger)
+    public HardwareSpecifications(ILogger<HardwareSpecifications> logger)
     {
         _logger = logger;
     }
@@ -23,11 +24,11 @@ public class HardwareSpecifications : ISelfRunning
             var jsonInformation = JsonConvert.SerializeObject(hardwareInformation, Formatting.Indented);
 
             // send this for github issues
-            _logger.Debug($"Hardware: {Environment.NewLine}{jsonInformation}");
+            _logger.LogDebug($"Hardware: {Environment.NewLine}{jsonInformation}");
         }
         catch (Exception ex)
         {
-            _logger.Error($"Failed getting hardware specifications: {Environment.NewLine}{ex}");
+            _logger.LogError($"Failed getting hardware specifications: {Environment.NewLine}{ex}");
         }
     }
 }

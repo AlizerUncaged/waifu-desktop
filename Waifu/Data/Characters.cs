@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using Waifu.Models;
 
@@ -7,9 +8,9 @@ namespace Waifu.Data;
 public class Characters
 {
     private readonly ApplicationDbContext _applicationDbContext;
-    private readonly ILogger _logger;
+    private readonly ILogger<Characters> _logger;
 
-    public Characters(ApplicationDbContext applicationDbContext, ILogger logger)
+    public Characters(ApplicationDbContext applicationDbContext, ILogger<Characters> logger)
     {
         _applicationDbContext = applicationDbContext;
         _logger = logger;
@@ -37,11 +38,11 @@ public class Characters
 
     public async Task<IEnumerable<RoleplayCharacter>> GetAllRoleplayCharactersAsync()
     {
-        _logger.Debug($"Fetching characters");
+        _logger.LogDebug($"Fetching characters");
 
         var roleplayCharacters = await _applicationDbContext.RoleplayCharacters.ToListAsync();
 
-        _logger.Information(
+        _logger.LogInformation(
             $"Fetched {roleplayCharacters.Count()} characters! Names: {string.Join(", ", roleplayCharacters.Select(x => x.CharacterName))}");
 
         return roleplayCharacters;

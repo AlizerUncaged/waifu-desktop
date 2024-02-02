@@ -7,8 +7,7 @@
              Loaded="CharactersMenuLoaded"
              xmlns:converters="clr-namespace:Waifu.Data.xamlValueConverters"
              mc:Ignorable="d" d:DesignHeight="500" d:DesignWidth="100"
-             DataContext="{Binding RelativeSource={RelativeSource Self}}"
-             >
+             DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <UserControl.Resources>
         <converters:FilePathToImageSourceConverter x:Key="FilePathToImageSourceConverter" />
     </UserControl.Resources>
@@ -16,7 +15,7 @@
         <ItemsControl ItemsSource="{Binding RoleplayCharacters, Mode=OneWay}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <local:CharacterItem Margin="0,5"
+                    <local:CharacterItem Margin="0,5" OnActiveRequest="CharacterClicked" RoleplayCharacter="{Binding}"
                                          Image="{Binding ProfilePictureFilePath, Converter={StaticResource FilePathToImageSourceConverter}}"
                                          CharacterName="{Binding CharacterName}" />
                 </DataTemplate>

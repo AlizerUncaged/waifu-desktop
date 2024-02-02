@@ -37,6 +37,13 @@ public partial class MainArea : UserControl
         PopupDialogs.IsOpen = true;
     }
 
+    public void SetMainContent<T>(T child) where T : FrameworkElement
+    {
+        MainAreaContent.Children.Clear();
+
+        MainAreaContent.Children.Add(child);
+    }
+
     private void NewCharacter(object sender, MouseButtonEventArgs e)
     {
         OpenDialog(_atarashiCharacter);
@@ -45,7 +52,7 @@ public partial class MainArea : UserControl
     private void MainAreaLoaded(object sender, RoutedEventArgs e)
     {
         CharactersMenuControl.Children.Add(_charactersMenu);
-        
+
         // start showing characters
         _ = Task.Run(async () =>
         {
@@ -54,7 +61,7 @@ public partial class MainArea : UserControl
             Dispatcher.Invoke(() =>
             {
                 foreach (var roleplayCharacter in roleplayCharacters)
-                    _charactersMenu?.RoleplayCharacters.Add(roleplayCharacter);
+                    _charactersMenu?.AddCharacter(roleplayCharacter);
             });
         });
     }

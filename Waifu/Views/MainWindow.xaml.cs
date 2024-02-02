@@ -15,13 +15,14 @@ namespace Waifu.Views;
 public partial class MainWindow : Window
 {
     private readonly Welcome _welcome;
-    private readonly ILogger _logger;
+    private readonly ILogger<MainWindow> _logger;
     private readonly StartupCheck _startupCheck;
     private readonly MainArea _mainArea;
     private readonly Settings _settings;
     private readonly Header _header;
 
-    public MainWindow(Welcome welcome, ILogger logger, StartupCheck startupCheck, MainArea mainArea, Settings settings,
+    public MainWindow(Welcome welcome, ILogger<MainWindow> logger, StartupCheck startupCheck, MainArea mainArea,
+        Settings settings,
         Header header)
     {
         _welcome = welcome;
@@ -47,7 +48,7 @@ public partial class MainWindow : Window
 
         SetView(_welcome);
 
-        _logger.Debug("MainWindow loaded completely");
+        _logger.LogDebug("MainWindow loaded completely");
     }
 
     /// <summary>
@@ -65,10 +66,7 @@ public partial class MainWindow : Window
         if (child is not FrameworkElement)
             throw new ArgumentException("child must be a FrameworkElement!");
 
-        child.CloseTriggered += (sender, args) =>
-        {
-            LayerAboveContent.Children.Remove(sender as FrameworkElement);
-        };
+        child.CloseTriggered += (sender, args) => { LayerAboveContent.Children.Remove(sender as FrameworkElement); };
 
         child.ReplaceTriggered += (sender, element) =>
         {

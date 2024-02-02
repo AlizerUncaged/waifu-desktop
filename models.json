@@ -1,0 +1,7 @@
+[
+  {
+    "name": "TheBloke/Mistral-7B-Instruct-v0.2-GGUF",
+    "description": "Lightweight model by Mistral AI, best for roleplaying.",
+    "huggingFaceId": "TheBloke/Mistral-7B-Instruct-v0.2-GGUF"
+  }
+]

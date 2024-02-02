@@ -8,18 +8,10 @@ namespace Waifu.Views.Shared;
 
 public partial class CharacterItem : UserControl
 {
-    private readonly RoleplayCharacter? _roleplayCharacter;
-
-    public CharacterItem(RoleplayCharacter? roleplayCharacter = null)
-    {
-        _roleplayCharacter = roleplayCharacter;
-
-        InitializeComponent();
-    }
-
     // for wpf previews to work
-    public CharacterItem() : this(null)
+    public CharacterItem()
     {
+        InitializeComponent();
     }
 
     public event EventHandler<RoleplayCharacter?> OnActiveRequest;
@@ -42,6 +34,23 @@ public partial class CharacterItem : UserControl
 
     #endregion
 
+    #region Character Object Property
+
+    public RoleplayCharacter RoleplayCharacter
+    {
+        get { return (RoleplayCharacter)GetValue(RoleplayCharacterProperty); }
+        set { SetValue(RoleplayCharacterProperty, value); }
+    }
+
+    public static readonly DependencyProperty RoleplayCharacterProperty =
+        DependencyProperty.Register(nameof(RoleplayCharacter), typeof(RoleplayCharacter), typeof(CharacterItem),
+            new FrameworkPropertyMetadata(null)
+            {
+                
+            });
+
+    #endregion
+
     #region Character Image Property
 
     public ImageSource Image
@@ -58,7 +67,7 @@ public partial class CharacterItem : UserControl
 
     private void ItemClicked(object sender, MouseButtonEventArgs e)
     {
-        OnActiveRequest?.Invoke(this, _roleplayCharacter);
+        OnActiveRequest?.Invoke(this, RoleplayCharacter);
     }
 
     private void CharacterItemLoaded(object sender, RoutedEventArgs e)

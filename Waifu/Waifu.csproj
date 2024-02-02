@@ -11,7 +11,6 @@
 
     <ItemGroup>
       <PackageReference Include="Autofac" Version="7.1.0" />
-      <PackageReference Include="AutofacSerilogIntegration" Version="5.0.0" />
       <PackageReference Include="HardwareInformation" Version="6.0.0-rc2" />
       <PackageReference Include="LLamaSharp" Version="0.9.1" />
       <PackageReference Include="LLamaSharp.Backend.Cpu" Version="0.9.1" />
@@ -30,6 +29,7 @@
       <PackageReference Include="NvAPIWrapper.Net" Version="0.8.1.101" />
       <PackageReference Include="Pastel" Version="4.2.0" />
       <PackageReference Include="Serilog" Version="3.1.2-dev-02097" />
+      <PackageReference Include="Serilog.Extensions.Autofac.DependencyInjection" Version="5.0.0" />
       <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
       <PackageReference Include="Serilog.Sinks.File" Version="5.0.1-dev-00972" />
     </ItemGroup>

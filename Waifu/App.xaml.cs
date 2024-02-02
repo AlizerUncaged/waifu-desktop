@@ -3,9 +3,9 @@ using System.Data;
 using System.IO;
 using System.Windows;
 using Autofac;
-using AutofacSerilogIntegration;
 using Serilog;
 using Serilog.Events;
+using Serilog.Extensions.Autofac.DependencyInjection;
 using Serilog.Sinks.SystemConsole.Themes;
 using Waifu.Data;
 using Waifu.Data.HuggingFace;
@@ -26,6 +26,24 @@ public partial class App : Application
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
+
+        var logPath = Path.Combine(Constants.DataFolder,
+            "log",
+            $"extUI-{DateTime.Now:yyyy-MM-dd}-Log.log");
+
+        var logConfiguration = new LoggerConfiguration()
+            .WriteTo.Console(
+                applyThemeToRedirectedOutput: true,
+                theme: AnsiConsoleTheme.Code, restrictedToMinimumLevel: LogEventLevel.Information,
+                outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {NewLine}{Exception}"
+            ).WriteTo.File(logPath)
+            .MinimumLevel.Information();
+        
+        //
+        // Log.Logger = logConfiguration
+        //     .CreateLogger();
+
+        builder.RegisterSerilog(logConfiguration);
 
         // register views
         builder.RegisterType<MainWindow>()
@@ -73,9 +91,6 @@ public partial class App : Application
         builder.RegisterType<ApplicationDbContext>()
             .InstancePerLifetimeScope();
 
-        // set logs
-        ConfigureLogger();
-        builder.RegisterLogger();
 
         var container = builder.Build();
 
@@ -99,37 +114,5 @@ public partial class App : Application
                 await Task.WhenAll(startTasks);
             }
         });
-    }
-
-    public void ConfigureLogger()
-    {
-        string logFolderPath = "Logs";
-
-        // Ensure the log folder exists
-        if (!Directory.Exists(logFolderPath))
-        {
-            Directory.CreateDirectory(logFolderPath);
-        }
-
-        string logFilePath = Path.Combine(logFolderPath, GetLogFileName());
-
-        Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Debug()
-            .WriteTo.Console(theme: AnsiConsoleTheme.Literate, applyThemeToRedirectedOutput: true,
-                restrictedToMinimumLevel: LogEventLevel.Information)
-            .WriteTo.File(logFilePath,
-                rollingInterval: RollingInterval.Day,
-                fileSizeLimitBytes: null,
-                retainedFileCountLimit: null,
-                outputTemplate:
-                "[{Timestamp:HH:mm:ss} {Level}] ({SourceContext:l}) {NewLine}{Message}{Exception}{NewLine}")
-            .CreateLogger();
-    }
-
-    string GetLogFileName()
-    {
-        // Use the current date to generate the dynamic filename
-        string date = DateTime.Now.ToString("yyyy-MM-dd");
-        return $"{date}-waifu-logs.txt";
     }
 }
