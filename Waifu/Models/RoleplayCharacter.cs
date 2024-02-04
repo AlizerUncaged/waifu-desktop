@@ -16,6 +16,10 @@ public class RoleplayCharacter
     public string Description { get; set; } = string.Empty;
 
     public string ProfilePictureHash { get; set; } = "default.jpg";
+    
+    
 
     public string ProfilePictureFilePath => Path.Combine(Constants.ProfilePicturesFolder, ProfilePictureHash);
+
+    public List<ChatChannel> CharacterChannels { get; set; } = new();
 }

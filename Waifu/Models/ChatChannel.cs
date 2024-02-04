@@ -8,5 +8,7 @@ public class ChatChannel
 {
     [Key] public long Id { get; set; }
 
-    public required RoleplayCharacter Character { get; set; }
+    public List<RoleplayCharacter> Characters { get; set; } = new();
+
+    public List<ChatMessage> Messages { get; set; } = new();
 }

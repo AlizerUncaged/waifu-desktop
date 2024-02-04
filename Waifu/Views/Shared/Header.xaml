@@ -6,16 +6,22 @@
              xmlns:local="clr-namespace:Waifu.Views.Shared"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
+             TextElement.Foreground="{DynamicResource Foreground}"
              VerticalAlignment="Top"
              Background="Transparent"
              d:DesignHeight="300"
              d:DesignWidth="400">
-    <Grid MouseDown="HeaderMouseDown" Background="{DynamicResource BackgroundLight}" Height="35"
+    <Grid MouseDown="HeaderMouseDown" Background="{DynamicResource BackgroundLight}" Height="40"
           VerticalAlignment="Top">
-        <DockPanel VerticalAlignment="Center">
+        <DockPanel VerticalAlignment="Center" Margin="3">
             <StackPanel VerticalAlignment="Center" DockPanel.Dock="Left" Orientation="Horizontal">
                 <Image Margin="7,3,0,3" Source="/Resources/Images/Icon.png"></Image>
                 <Image Margin="5,10,8,10" Source="/Resources/Images/Brand-Text.png"></Image>
+                <Border VerticalAlignment="Center" CornerRadius="7" Padding="5,2"
+                        Margin="-7,7,0,0"
+                        Background="{DynamicResource Background}">
+                    <TextBlock Name="VersionName" Text="beta" VerticalAlignment="Center" FontWeight="Black"></TextBlock>
+                </Border>
             </StackPanel>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" DockPanel.Dock="Right" Margin="0,0,15,0"
                         HorizontalAlignment="Right">

@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Interop;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Waifu.Data;
@@ -18,11 +19,11 @@ public partial class MainWindow : Window
     private readonly ILogger<MainWindow> _logger;
     private readonly StartupCheck _startupCheck;
     private readonly MainArea _mainArea;
-    private readonly Settings _settings;
+    private readonly Waifu.Data.Settings _settings;
     private readonly Header _header;
 
     public MainWindow(Welcome welcome, ILogger<MainWindow> logger, StartupCheck startupCheck, MainArea mainArea,
-        Settings settings,
+        Waifu.Data.Settings settings,
         Header header)
     {
         _welcome = welcome;
@@ -33,6 +34,9 @@ public partial class MainWindow : Window
         _header = header;
 
         InitializeComponent();
+
+        if (GetWindow(this) is { } realWindow)
+            WinApi.AttemptRoundedCorners(new WindowInteropHelper(realWindow).EnsureHandle());
     }
 
     private void WindowLoaded(object sender, RoutedEventArgs e)
@@ -65,6 +69,9 @@ public partial class MainWindow : Window
     {
         if (child is not FrameworkElement)
             throw new ArgumentException("child must be a FrameworkElement!");
+
+        if (LayerAboveContent.Children.Contains(child as FrameworkElement))
+            return;
 
         child.CloseTriggered += (sender, args) => { LayerAboveContent.Children.Remove(sender as FrameworkElement); };
 

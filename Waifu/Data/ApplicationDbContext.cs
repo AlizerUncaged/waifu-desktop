@@ -11,13 +11,19 @@ public class ApplicationDbContext : DbContext
     public DbSet<ChatMessage> ChatMessages { get; set; }
 
     public DbSet<RoleplayCharacter> RoleplayCharacters { get; set; }
-    public DbSet<LocalLlamaModel> LocalLlamaModels { get; set; }
-    
-    public DbSet<Settings> Settings { get; set; }
+
+    public DbSet<Waifu.Models.Settings> Settings { get; set; }
+
+    public DbSet<PersonaSingle> Personas { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         // Configure SQLite as the database provider
         optionsBuilder.UseSqlite($"Data Source={Constants.DatabasePath}");
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
     }
 }

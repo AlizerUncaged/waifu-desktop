@@ -6,6 +6,8 @@
              xmlns:local="clr-namespace:Waifu.Views.Shared"
              Background="{DynamicResource Background}"
              TextElement.Foreground="{DynamicResource Foreground}"
+             xmlns:shared="clr-namespace:Waifu.Views.Shared"
+             Loaded="ChatAreaLoaded"
              xmlns:converters="clr-namespace:Waifu.Data.xamlValueConverters"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
@@ -38,7 +40,8 @@
                           VerticalAlignment="Bottom">
                         <DockPanel>
                             <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Right">
-                                <Button BorderThickness="0" Background="{DynamicResource Purple}">
+                                <Button Click="SendMessageButton" BorderThickness="0"
+                                        Background="{DynamicResource Purple}">
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal">
                                             <materialDesign:PackIcon Kind="Send" Margin="0,0,7,0"
@@ -49,13 +52,26 @@
                                     </Button.Content>
                                 </Button>
                             </StackPanel>
-                            <TextBox VerticalContentAlignment="Center" BorderBrush="{DynamicResource BackgroundLight}"
-                                     BorderThickness="2"
+                            <TextBox PreviewKeyDown="TextBoxTextChanged" VerticalContentAlignment="Center"
+                                     BorderBrush="{DynamicResource BackgroundLight}"
+                                     BorderThickness="2" Name="MessageInput"
                                      Style="{StaticResource MaterialDesignOutlinedTextBox}" Padding="0,0" Margin="5,0">
                             </TextBox>
                         </DockPanel>
                     </Grid>
-                    <ScrollViewer></ScrollViewer>
+                    <ScrollViewer VerticalAlignment="Stretch" Name="ChatScroll">
+                        <StackPanel VerticalAlignment="Bottom" Orientation="Vertical">
+                            <ItemsControl ItemsSource="{Binding ChatMessages, Mode=OneWay}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <shared:MessageItem MessageContent="{Binding Message}"
+                                                            ChatMessage="{Binding Mode=OneWay}">
+                                        </shared:MessageItem>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </ScrollViewer>
                 </DockPanel>
             </Grid>
         </DockPanel>

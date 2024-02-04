@@ -25,7 +25,7 @@ public class StartupCheck : ISelfRunning
 
     public async Task StartAsync()
     {
-        Log("Migrating Database");
+        Log("Updating Database");
         // make sure database is ok
         await _applicationDbContext.Database.MigrateAsync();
 

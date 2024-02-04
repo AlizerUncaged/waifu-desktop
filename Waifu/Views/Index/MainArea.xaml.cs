@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Vulkan;
 using Waifu.Data;
+using Waifu.Models;
 using Waifu.Views.Shared;
 using Waifu.Views.Shared.Popups;
 
@@ -42,6 +43,7 @@ public partial class MainArea : UserControl
         MainAreaContent.Children.Clear();
 
         MainAreaContent.Children.Add(child);
+
     }
 
     private void NewCharacter(object sender, MouseButtonEventArgs e)
@@ -51,7 +53,8 @@ public partial class MainArea : UserControl
 
     private void MainAreaLoaded(object sender, RoutedEventArgs e)
     {
-        CharactersMenuControl.Children.Add(_charactersMenu);
+        if (CharactersMenuControl.Children.Count <= 0)
+            CharactersMenuControl.Children.Add(_charactersMenu);
 
         // start showing characters
         _ = Task.Run(async () =>

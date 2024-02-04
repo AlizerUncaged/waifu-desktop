@@ -45,10 +45,25 @@
                         <TextBlock Margin="0,0,0,7" TextWrapping="Wrap"
                                    Text="Manage the models you'll use for the roleplaying characters">
                         </TextBlock>
-                        <Button BorderThickness="0" Click="ManageModelsClicked">
+                        <Button Background="{DynamicResource Purple}" BorderThickness="0" Click="ManageModelsClicked">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <materialDesign:PackIcon VerticalAlignment="Center" Margin="0,0,7,0" Kind="Tune"></materialDesign:PackIcon>
                                 <TextBlock Padding="0" Margin="0" VerticalAlignment="Center">Manage Models</TextBlock>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Margin="0,0,0,15">
+                        <TextBlock FontWeight="Black">
+                            <materialDesign:PackIcon Kind="DominoMask"></materialDesign:PackIcon>
+                            <Run Text="Persona"></Run>
+                        </TextBlock>
+                        <TextBlock Margin="0,0,0,7" TextWrapping="Wrap"
+                                   Text="How the characters perceive you">
+                        </TextBlock>
+                        <Button Background="{DynamicResource Purple}" BorderThickness="0" Click="ManagePersonasClicked">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <materialDesign:PackIcon VerticalAlignment="Center" Margin="0,0,7,0" Kind="Tune"></materialDesign:PackIcon>
+                                <TextBlock Padding="0" Margin="0" VerticalAlignment="Center">Manage Personas</TextBlock>
                             </StackPanel>
                         </Button>
                     </StackPanel>
@@ -60,7 +75,7 @@
                         <TextBlock Margin="0,0,0,7" TextWrapping="Wrap"
                                    Text="Manage Audio Output Devices">
                         </TextBlock>
-                        <Button BorderThickness="0" Click="ManageModelsClicked">
+                        <Button Background="{DynamicResource Purple}" BorderThickness="0" Click="ManageAudioClicked">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <materialDesign:PackIcon VerticalAlignment="Center" Margin="0,0,7,0" Kind="Tune"></materialDesign:PackIcon>
                                 <TextBlock Padding="0" Margin="0" VerticalAlignment="Center">Manage Audio</TextBlock>

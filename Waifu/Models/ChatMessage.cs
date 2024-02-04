@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace Waifu.Models;
 
@@ -8,7 +9,11 @@ public class ChatMessage
 {
     [Key] public long Id { get; set; }
 
+    /// <summary>
+    /// If SentByUser is true, this is user ID, if not, this is character ID.
+    /// </summary>
     public required long Sender { get; set; }
+
 
     public bool SentByUser { get; set; } = false;
 

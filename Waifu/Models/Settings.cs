@@ -11,9 +11,11 @@ public class Settings
     /// <summary>
     /// The model this settings is for, if null, this is might be the global settings.
     /// </summary>
-    public LocalLlamaModel? TargetModel { get; set; } = null;
+    public string? LocalModel { get; set; } = null;
 
     public SettingsTarget SettingsTarget { get; set; } = SettingsTarget.Global;
+
+    public int GpuLayerCount { get; set; } = 35;
 
     public float Temperature { get; set; } = 0.6f;
 

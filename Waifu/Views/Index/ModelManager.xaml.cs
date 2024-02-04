@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -7,8 +8,12 @@ namespace Waifu.Views.Index;
 
 public partial class ModelManager : UserControl, IPopup
 {
-    public ModelManager()
+    private readonly Data.Settings _settings;
+
+    public ModelManager(Data.Settings settings)
     {
+        _settings = settings;
+
         InitializeComponent();
     }
 
@@ -25,11 +30,41 @@ public partial class ModelManager : UserControl, IPopup
 
     private void ModelManagerLoaded(object sender, RoutedEventArgs e)
     {
-        Directory.CreateDirectory(Constants.ModelsFolder);
+        foreach (var model in _settings.GetModelsOnDirectory())
+        {
+            ModelNames.Add(model);
+        }
+    }
 
-        var filesInModelsFolder = Directory.GetFiles(Constants.ModelsFolder, "*", SearchOption.AllDirectories);
+    private void OpenModelsFolder(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            // this doesnt work on ubuntu!!!!!!!!!
+            var fullFolderPath = Path.GetFullPath(Constants.ModelsFolder);
+            var tutorialFile = Path.Combine(fullFolderPath, "paste models here, .gguf preferably");
 
-        foreach (var file in filesInModelsFolder)
-            ModelNames.Add(Path.GetFileName(file));
+            if (!File.Exists(tutorialFile))
+                File.Create(tutorialFile).Close();
+
+            Process.Start("explorer.exe", fullFolderPath);
+        }
+        catch
+        {
+        }
+    }
+
+    private void ModelSave(object sender, RoutedEventArgs e)
+    {
+        var modelName = ModelsList.Text;
+        _ = Task.Run(async () =>
+        {
+            await _settings.ClearAndAddSettings(new Models.Settings()
+            {
+                LocalModel = modelName
+            });
+
+            MessageBox.Show("Model added!", string.Empty, MessageBoxButton.OK, MessageBoxImage.Information);
+        });
     }
 }

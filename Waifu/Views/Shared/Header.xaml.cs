@@ -1,17 +1,19 @@
 ﻿using System.Diagnostics;
 using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
 using Waifu.Utilities;
 using Waifu.Views.Index;
+using Application = System.Windows.Application;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace Waifu.Views.Shared;
 
 public partial class Header : UserControl
 {
-    private readonly Settings _settings;
+    private readonly Views.Index.Settings _settings;
 
-    public Header(Settings settings)
+    public Header(Views.Index.Settings settings)
     {
         _settings = settings;
         InitializeComponent();
@@ -40,7 +42,9 @@ public partial class Header : UserControl
     private void MaximizeClicked(object sender, MouseButtonEventArgs e)
     {
         if (this.GetCurrentWindow() is MainWindow mainWindow)
-            mainWindow.WindowState = WindowState.Maximized;
+            mainWindow.WindowState = mainWindow.WindowState == WindowState.Maximized
+                ? WindowState.Normal
+                : WindowState.Maximized;
     }
 
     private void GithubClicked(object sender, MouseButtonEventArgs e) =>

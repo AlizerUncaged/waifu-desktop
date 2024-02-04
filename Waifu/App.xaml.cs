@@ -3,6 +3,7 @@ using System.Data;
 using System.IO;
 using System.Windows;
 using Autofac;
+using LLama.Common;
 using Serilog;
 using Serilog.Events;
 using Serilog.Extensions.Autofac.DependencyInjection;
@@ -38,7 +39,7 @@ public partial class App : Application
                 outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {NewLine}{Exception}"
             ).WriteTo.File(logPath)
             .MinimumLevel.Information();
-        
+
         //
         // Log.Logger = logConfiguration
         //     .CreateLogger();
@@ -54,6 +55,9 @@ public partial class App : Application
         builder.RegisterType<Header>()
             .AsSelf();
 
+        builder.RegisterType<Messages>()
+            .AsSelf();
+
         builder.RegisterType<MainArea>()
             .AsSelf();
 
@@ -66,10 +70,19 @@ public partial class App : Application
         builder.RegisterType<CharactersMenu>()
             .AsSelf();
 
-        builder.RegisterType<Settings>()
+        builder.RegisterType<Waifu.Data.Settings>()
+            .AsSelf();
+
+        builder.RegisterType<Views.Index.Settings>()
+            .AsSelf();
+
+        builder.RegisterType<Personas>()
             .AsSelf();
 
         builder.RegisterType<ModelManager>()
+            .AsSelf();
+
+        builder.RegisterType<Llama>()
             .AsSelf();
 
         builder.RegisterType<HuggingFaceModelApi>()

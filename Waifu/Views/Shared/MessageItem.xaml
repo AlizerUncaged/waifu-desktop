@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="Waifu.Views.Shared.MessageItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Waifu.Views.Shared"
+             Loaded="MessageItemLoaded" Margin="7"
+             Background="{DynamicResource Background}" PreviewMouseDown="ItemClicked"
+             xmlns:converters="clr-namespace:Waifu.Data.xamlValueConverters"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             TextElement.Foreground="{DynamicResource Foreground}"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <converters:FilePathToImageSourceConverter x:Key="FilePathToImageSourceConverter" />
+    </UserControl.Resources>
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center">
+        <Grid Name="ChatParent">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0" Name="ChatComponent">
+                <!-- <Ellipse Height="35" Width="35" VerticalAlignment="Center" Margin="0,0,7,0" -->
+                <!--          HorizontalAlignment="Stretch"> -->
+                <!--     <Ellipse.Fill> -->
+                <!--         <ImageBrush Stretch="UniformToFill" -->
+                <!--                     ImageSource="{Binding RoleplayCharacter.ProfilePictureFilePath, Converter={StaticResource FilePathToImageSourceConverter}}" /> -->
+                <!--     </Ellipse.Fill> -->
+                <!-- </Ellipse> -->
+                <Border CornerRadius="7" Padding="2" HorizontalAlignment="Left" Name="MainBorder"
+                        Background="{DynamicResource BackgroundLight}">
+                    <Grid MinHeight="30" Margin="7,0" VerticalAlignment="Center">
+                        <TextBlock TextWrapping="Wrap" VerticalAlignment="Center"
+                                   Text="{Binding MessageContent, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=OneWay}">
+                        </TextBlock>
+                    </Grid>
+                </Border>
+            </Grid>
+            <Grid Grid.Column="1" Name="Extra"></Grid>
+        </Grid>
+
+    </Grid>
+</UserControl>

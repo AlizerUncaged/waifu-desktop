@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Waifu.Data;
 
@@ -10,27 +11,14 @@ using Waifu.Data;
 namespace Waifu.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240203143225_IncrementingMessages")]
+    partial class IncrementingMessages
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.1");
-
-            modelBuilder.Entity("ChatChannelRoleplayCharacter", b =>
-                {
-                    b.Property<long>("CharacterChannelsId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<long>("CharactersId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("CharacterChannelsId", "CharactersId");
-
-                    b.HasIndex("CharactersId");
-
-                    b.ToTable("ChatChannelRoleplayCharacter");
-                });
 
             modelBuilder.Entity("Waifu.Models.ChatChannel", b =>
                 {
@@ -38,7 +26,12 @@ namespace Waifu.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<long>("CharacterId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CharacterId");
 
                     b.ToTable("channels");
                 });
@@ -50,6 +43,10 @@ namespace Waifu.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<long?>("ChatChannelId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("IncrementId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Message")
@@ -69,23 +66,31 @@ namespace Waifu.Migrations
                     b.ToTable("messages");
                 });
 
-            modelBuilder.Entity("Waifu.Models.PersonaSingle", b =>
+            modelBuilder.Entity("Waifu.Models.LocalLlamaModel", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("CharacterDescription")
+                    b.Property<string>("FilePath")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("HuggingFaceId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModelHash")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("StageName")
-                        .IsRequired()
+                    b.Property<string>("Source")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("personas");
+                    b.ToTable("models");
                 });
 
             modelBuilder.Entity("Waifu.Models.RoleplayCharacter", b =>
@@ -121,16 +126,13 @@ namespace Waifu.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("GpuLayerCount")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("LocalModel")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("MaxTokens")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("SettingsTarget")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long?>("TargetModelId")
                         .HasColumnType("INTEGER");
 
                     b.Property<float>("Temperature")
@@ -144,22 +146,20 @@ namespace Waifu.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("TargetModelId");
+
                     b.ToTable("settings");
                 });
 
-            modelBuilder.Entity("ChatChannelRoleplayCharacter", b =>
+            modelBuilder.Entity("Waifu.Models.ChatChannel", b =>
                 {
-                    b.HasOne("Waifu.Models.ChatChannel", null)
+                    b.HasOne("Waifu.Models.RoleplayCharacter", "Character")
                         .WithMany()
-                        .HasForeignKey("CharacterChannelsId")
+                        .HasForeignKey("CharacterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Waifu.Models.RoleplayCharacter", null)
-                        .WithMany()
-                        .HasForeignKey("CharactersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Character");
                 });
 
             modelBuilder.Entity("Waifu.Models.ChatMessage", b =>
@@ -169,6 +169,15 @@ namespace Waifu.Migrations
                         .HasForeignKey("ChatChannelId");
 
                     b.Navigation("ChatChannel");
+                });
+
+            modelBuilder.Entity("Waifu.Models.Settings", b =>
+                {
+                    b.HasOne("Waifu.Models.LocalLlamaModel", "TargetModel")
+                        .WithMany()
+                        .HasForeignKey("TargetModelId");
+
+                    b.Navigation("TargetModel");
                 });
 
             modelBuilder.Entity("Waifu.Models.ChatChannel", b =>
