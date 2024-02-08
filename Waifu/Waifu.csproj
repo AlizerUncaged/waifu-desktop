@@ -37,7 +37,7 @@
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
       <PackageReference Include="NAudio" Version="2.2.1" />
-      <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
       <PackageReference Include="NvAPIWrapper.Net" Version="0.8.1.101" />
       <PackageReference Include="Pastel" Version="4.2.0" />
       <PackageReference Include="Serilog" Version="3.1.2-dev-02097" />
@@ -174,6 +174,10 @@
       <Content Include="Resources\Images\default.jpg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Dependencies\CharacterAI-NET-API-Wrapper\CharacterAI.Client\CharacterAI.Client.csproj" />
     </ItemGroup>
 
 </Project>
