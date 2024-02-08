@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Forms;
-using MessageBox = System.Windows.MessageBox;
+using Waifu.Utilities;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace Waifu.Views.Index;
@@ -31,13 +31,13 @@ public partial class Settings : UserControl, IPopup
 
     private void ManageAudioClicked(object sender, RoutedEventArgs e)
     {
-        MessageBox.Show("Coming soon...", string.Empty, MessageBoxButton.OK, MessageBoxImage.Information);
-        // todo
+        if (this.GetCurrentWindow() is MainWindow mainWindow)
+            mainWindow.ShowMessage("Coming soon...");
     }
 
     private void ManagePersonasClicked(object sender, RoutedEventArgs e)
     {
-        MessageBox.Show("Coming soon...", string.Empty, MessageBoxButton.OK, MessageBoxImage.Information);
-        // todo
+        if (this.GetCurrentWindow() is MainWindow mainWindow)
+            mainWindow.ShowMessage("Coming soon...");
     }
 }

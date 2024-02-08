@@ -15,17 +15,17 @@ public partial class ChatArea : UserControl
     private readonly RoleplayCharacter _character;
     private readonly ChatChannel _channel;
     private readonly Messages _messages;
-    private readonly Llama _llama;
+    private readonly ChatServiceManager _chatServiceManager;
     private readonly Settings _settings;
     private readonly Personas _personas;
 
-    public ChatArea(RoleplayCharacter character, ChatChannel channel, Messages messages, Llama llama,
+    public ChatArea(RoleplayCharacter character, ChatChannel channel, Messages messages, ChatServiceManager chatServiceManager,
         Data.Settings settings, Personas personas)
     {
         _character = character;
         _channel = channel;
         _messages = messages;
-        _llama = llama;
+        _chatServiceManager = chatServiceManager;
         _settings = settings;
         _personas = personas;
 
@@ -77,10 +77,10 @@ public partial class ChatArea : UserControl
             CurrentMessageId = currentMessages.MinBy(x => x.Id).Id;
 
             // load the llama model
-            LocalLlama =
-                await _llama.LoadLlamaAndResult(_channel,
-                    await _settings.GetOrCreateSettings(),
-                    await _personas.GetOrCreatePersona(), _character);
+            // LocalLlama =
+            //     await _chatServiceManager.LoadLlamaAndResult(_channel,
+            //         await _settings.GetOrCreateSettings(),
+            //         await _personas.GetOrCreatePersona(), _character);
 
             Dispatcher.Invoke(() =>
             {

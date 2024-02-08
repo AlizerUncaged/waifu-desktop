@@ -35,16 +35,24 @@
                                 <Run>Manage Models</Run>
                             </TextBlock>
                             <TextBlock Margin="0,0,0,7" Text="Set your preferred model."></TextBlock>
-                            <ComboBox Margin="0,0,0,15" ItemsSource="{Binding ModelNames}" Name="ModelsList"
-                                      Padding="5" SelectedIndex="0"
-                                      Style="{StaticResource MaterialDesignOutlinedComboBox}">
-                            </ComboBox>
-                            <Button Click="OpenModelsFolder" BorderThickness="0" Background="{DynamicResource Purple}">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="Folder" VerticalAlignment="Center" Margin="0,0,7,0"></materialDesign:PackIcon>
-                                    <TextBlock VerticalAlignment="Center" Text="Open Models Folder"></TextBlock>
-                                </StackPanel>
-                            </Button>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,7">
+                                <CheckBox Name="UseCharacterAi" Unchecked="UseCharacterAiUnchecked" Checked="UseCharacterAiChecked" Content="Use character.ai"></CheckBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical" Name="CustomModelOptions">
+                                <ComboBox Margin="0,0,0,15" ItemsSource="{Binding ModelNames}" Name="ModelsList"
+                                          Padding="5" SelectedIndex="0"
+                                          Style="{StaticResource MaterialDesignOutlinedComboBox}">
+                                </ComboBox>
+                                <Button Click="OpenModelsFolder" BorderThickness="0"
+                                        Background="{DynamicResource Purple}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="Folder" VerticalAlignment="Center"
+                                                                 Margin="0,0,7,0">
+                                        </materialDesign:PackIcon>
+                                        <TextBlock VerticalAlignment="Center" Text="Open Models Folder"></TextBlock>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>

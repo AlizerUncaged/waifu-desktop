@@ -15,6 +15,8 @@ public class Settings
 
     public SettingsTarget SettingsTarget { get; set; } = SettingsTarget.Global;
 
+    public bool UseCharacterAi { get; set; } = true;
+
     public int GpuLayerCount { get; set; } = 35;
 
     public float Temperature { get; set; } = 0.6f;

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using Waifu.Utilities;
 
 namespace Waifu.Views.Index;
 
@@ -30,6 +31,13 @@ public partial class ModelManager : UserControl, IPopup
 
     private void ModelManagerLoaded(object sender, RoutedEventArgs e)
     {
+        _ = Task.Run(async () =>
+        {
+            var settings = await _settings.GetOrCreateSettings();
+
+            Dispatcher.Invoke(() => { UseCharacterAi.IsChecked = settings?.UseCharacterAi; });
+        });
+
         foreach (var model in _settings.GetModelsOnDirectory())
         {
             ModelNames.Add(model);
@@ -64,7 +72,18 @@ public partial class ModelManager : UserControl, IPopup
                 LocalModel = modelName
             });
 
-            MessageBox.Show("Model added!", string.Empty, MessageBoxButton.OK, MessageBoxImage.Information);
+            if (this.GetCurrentWindow() is MainWindow mainWindow)
+                mainWindow.ShowMessage("Model successfully added!");
         });
+    }
+
+    private void UseCharacterAiChecked(object sender, RoutedEventArgs e)
+    {
+        CustomModelOptions.IsEnabled = false;
+    }
+
+    private void UseCharacterAiUnchecked(object sender, RoutedEventArgs e)
+    {
+        CustomModelOptions.IsEnabled = true;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
+using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Waifu.Data;
@@ -21,6 +22,8 @@ public partial class MainWindow : Window
     private readonly MainArea _mainArea;
     private readonly Waifu.Data.Settings _settings;
     private readonly Header _header;
+
+    public SnackbarMessageQueue SnackbarMessageQueue { get; } = new();
 
     public MainWindow(Welcome welcome, ILogger<MainWindow> logger, StartupCheck startupCheck, MainArea mainArea,
         Waifu.Data.Settings settings,
@@ -67,9 +70,6 @@ public partial class MainWindow : Window
 
     public void SetTopView<T>(T child) where T : IPopup
     {
-        if (child is not FrameworkElement)
-            throw new ArgumentException("child must be a FrameworkElement!");
-
         if (LayerAboveContent.Children.Contains(child as FrameworkElement))
             return;
 
@@ -92,5 +92,10 @@ public partial class MainWindow : Window
         this.BorderThickness = this.WindowState == WindowState.Maximized
             ? new System.Windows.Thickness(8)
             : new System.Windows.Thickness(0);
+    }
+
+    public void ShowMessage(string message)
+    {
+        Dispatcher.Invoke(() => { SnackbarMessageQueue.Enqueue(message); });
     }
 }

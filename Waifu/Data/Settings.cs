@@ -36,7 +36,7 @@ public class Settings
         await _applicationDbContext.SaveChangesAsync();
     }
 
-    public async Task<Waifu.Models.Settings?> GetOrCreateSettings()
+    public async Task<Waifu.Models.Settings> GetOrCreateSettings()
     {
         var existingSettings = await _applicationDbContext.Settings.FirstOrDefaultAsync(x => x.LocalModel != null);
 
@@ -45,13 +45,6 @@ public class Settings
 
         var modelsInDirectory = GetModelsOnDirectory();
 
-        if (!modelsInDirectory.Any())
-        {
-            MessageBox.Show("No models found! Please add the model and go to settings to set it.", string.Empty,
-                MessageBoxButton.OK, MessageBoxImage.Error);
-
-            return null;
-        }
 
         var settings = new Waifu.Models.Settings()
         {

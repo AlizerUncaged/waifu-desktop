@@ -8,6 +8,8 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Extensions.Autofac.DependencyInjection;
 using Serilog.Sinks.SystemConsole.Themes;
+using Waifu.ChatHandlers;
+using Waifu.Controllers;
 using Waifu.Data;
 using Waifu.Data.HuggingFace;
 using Waifu.Views;
@@ -52,6 +54,7 @@ public partial class App : Application
 
         builder.RegisterType<Welcome>()
             .AsSelf();
+        
         builder.RegisterType<Header>()
             .AsSelf();
 
@@ -73,6 +76,10 @@ public partial class App : Application
         builder.RegisterType<Waifu.Data.Settings>()
             .AsSelf();
 
+        builder.RegisterType<CharacterAi>()
+            .As<IChatHandler>()
+            .AsSelf();
+
         builder.RegisterType<Views.Index.Settings>()
             .AsSelf();
 
@@ -82,13 +89,23 @@ public partial class App : Application
         builder.RegisterType<ModelManager>()
             .AsSelf();
 
-        builder.RegisterType<Llama>()
+        builder.RegisterType<ChatServiceManager>()
             .AsSelf();
 
         builder.RegisterType<HuggingFaceModelApi>()
             .AsSelf();
 
-        builder.RegisterType<Llama>()
+        builder.RegisterType<ChatServiceManager>()
+            .AsSelf();
+
+        builder.RegisterType<ChatServiceManager>()
+            .AsSelf();
+
+        builder.RegisterType<ChatAreaController>()
+            .AsSelf();
+
+        builder.RegisterType<ChatArea>()
+            .InstancePerLifetimeScope()
             .AsSelf();
 
         builder.RegisterType<Characters>()

@@ -23,6 +23,8 @@
         Loaded="WindowLoaded"
 
         xmlns:shared="clr-namespace:Waifu.Views.Shared"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
         Title="Waifu Control"
         MinHeight="400"
         MinWidth="600"
@@ -45,6 +47,8 @@
                 </Grid>
             </Grid>
         </DockPanel>
-
+        <materialDesign:Snackbar
+            MessageQueue="{Binding SnackbarMessageQueue}">
+        </materialDesign:Snackbar>
     </Grid>
 </Window>

@@ -52,7 +52,10 @@ public partial class Header : UserControl
 
     private void SettingsClicked(object sender, MouseButtonEventArgs e)
     {
+
         if (this.GetCurrentWindow() is MainWindow mainWindow)
+        {
             mainWindow.SetTopView(_settings);
+        }
     }
 }
