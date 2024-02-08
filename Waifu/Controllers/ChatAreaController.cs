@@ -50,15 +50,27 @@ public class ChatAreaController
         return chatArea;
     }
 
+    /// <summary>
+    /// Callback for message from current user.
+    /// </summary>
+    public event EventHandler<ChatMessage> MessageFromCurrentUser;
+
     private void ChatAreaOnMessageSend(object? sender, string e)
     {
         if (sender is not ChatArea chatArea) return;
 
+        var stringMessageContent = e.Trim();
+
         var message = new ChatMessage()
         {
-            ChatChannel = chatArea.ChatChannel, Sender = -1, Message = e.Trim(), SentByUser = true
+            ChatChannel = chatArea.ChatChannel, Sender = -1, Message = stringMessageContent, SentByUser = true
         };
 
-        _ = Task.Run(async () => { await _messages.AddMessageAsync(message); });
+        _ = Task.Run(async () =>
+        {
+            var dbMessage = await _messages.AddMessageAsync(message);
+
+            MessageFromCurrentUser?.Invoke(this, dbMessage);
+        });
     }
 }

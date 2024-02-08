@@ -54,7 +54,7 @@ public partial class App : Application
 
         builder.RegisterType<Welcome>()
             .AsSelf();
-        
+
         builder.RegisterType<Header>()
             .AsSelf();
 
@@ -95,14 +95,9 @@ public partial class App : Application
         builder.RegisterType<HuggingFaceModelApi>()
             .AsSelf();
 
-        builder.RegisterType<ChatServiceManager>()
-            .AsSelf();
-
-        builder.RegisterType<ChatServiceManager>()
-            .AsSelf();
 
         builder.RegisterType<ChatAreaController>()
-            .AsSelf();
+            .AsSelf().SingleInstance();
 
         builder.RegisterType<ChatArea>()
             .InstancePerLifetimeScope()

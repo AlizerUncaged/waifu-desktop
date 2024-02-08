@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.EntityFrameworkCore;
 using Waifu.ChatHandlers;
+using Waifu.Controllers;
 using Waifu.Data;
 using Waifu.Models;
 using Settings = Waifu.Data.Settings;
@@ -18,9 +19,11 @@ public partial class ChatArea : UserControl
     private readonly ChatServiceManager _chatServiceManager;
     private readonly Settings _settings;
     private readonly Personas _personas;
+    private readonly ChatAreaController _chatAreaController;
 
-    public ChatArea(RoleplayCharacter character, ChatChannel channel, Messages messages, ChatServiceManager chatServiceManager,
-        Data.Settings settings, Personas personas)
+    public ChatArea(RoleplayCharacter character, ChatChannel channel, Messages messages,
+        ChatServiceManager chatServiceManager,
+        Data.Settings settings, Personas personas, ChatAreaController chatAreaController)
     {
         _character = character;
         _channel = channel;
@@ -28,6 +31,7 @@ public partial class ChatArea : UserControl
         _chatServiceManager = chatServiceManager;
         _settings = settings;
         _personas = personas;
+        _chatAreaController = chatAreaController;
 
         InitializeComponent();
     }
@@ -58,8 +62,6 @@ public partial class ChatArea : UserControl
             SendMessageFromUi();
     }
 
-    public LocalLlama LocalLlama { get; set; }
-
     public long CurrentMessageId { get; set; } = long.MaxValue;
 
     private void ChatAreaLoaded(object sender, RoutedEventArgs e)
@@ -88,6 +90,8 @@ public partial class ChatArea : UserControl
                     AddChatBasedOnIdLocation(chatMessage);
             });
         });
+
+        _chatAreaController.MessageFromCurrentUser += (o, s) => { Dispatcher.Invoke(() => { ChatMessages.Add(s); }); };
     }
 
     void AddChatBasedOnIdLocation(ChatMessage chatMessage)

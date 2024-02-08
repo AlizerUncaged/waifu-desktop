@@ -23,7 +23,13 @@ public class ChatServiceManager
         var settings = await _settings.GetOrCreateSettings();
 
         if (settings.UseCharacterAi)
-            return _chatHandlers.FirstOrDefault(x => x is CharacterAi);
+        {
+            var chatHandler = _chatHandlers.FirstOrDefault(x => x is CharacterAi);
+            
+            _logger.LogInformation($"Chat handler is {chatHandler.GetType().Name}");
+            
+            return chatHandler;
+        }
 
 
         return null;
