@@ -4,10 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Waifu.Views.Shared.Popups"
-             mc:Ignorable="d" Width="600"
+             mc:Ignorable="d" Width="600" Loaded="AtarashiCharacterAiLoaded"
              TextElement.Foreground="{DynamicResource Foreground}"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}"
+             xmlns:cachedImage="clr-namespace:CachedImage;assembly=CachedImage"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="400" d:DesignWidth="300">
     <Grid>
         <Border CornerRadius="15" Background="{DynamicResource Background}">
             <Grid Margin="15">
@@ -38,19 +40,62 @@
                             Style="{StaticResource MaterialDesignOutlinedTextBox}">
                         </TextBox>
                     </StackPanel>
+                    <StackPanel Orientation="Vertical" Name="CharacterInfo" Margin="0,0,0,15">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock FontWeight="Black">
+                                <materialDesign:PackIcon Kind="Image"></materialDesign:PackIcon>
+                                <Run Text="Character"></Run>
+                            </TextBlock>
+                            <TextBlock Margin="0,0,0,7" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid VerticalAlignment="Center">
+                                    <StackPanel>
+                                        <TextBlock TextWrapping="Wrap">
+                                            <Run Text="Name: "></Run>
+                                            <Run Text=" "></Run>
+                                            <Run Text="{Binding Character.Name}"></Run>
+                                        </TextBlock>
+                                        <TextBlock TextWrapping="Wrap" Text="{Binding Character.Title}"></TextBlock>
+                                        <TextBlock TextWrapping="Wrap">
+                                            <Run Text="{Binding Character.Interactions}"></Run>
+                                            <Run Text=" total interactions"></Run>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Grid>
+                                <Grid Grid.Column="1" VerticalAlignment="Center" DockPanel.Dock="Left"
+                                      HorizontalAlignment="Stretch">
+                                    <cachedImage:Image VerticalAlignment="Center" HorizontalAlignment="Center"
+                                                       Name="CharacterImage" MinHeight="25" MinWidth="25"
+                                                       MaxHeight="100" MaxWidth="100" Stretch="UniformToFill">
+                                    </cachedImage:Image>
+                                </Grid>
+                            </Grid>
+                        </StackPanel>
+                    </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
                         <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
                                 Background="{DynamicResource BackgroundLight}" BorderThickness="0"
                                 HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,15,0">
                             <TextBlock>Cancel</TextBlock>
                         </Button>
-                        <Button Click="SaveCharacter" BorderThickness="0"
+                        <Button Click="SaveCharacter" BorderThickness="0" Name="SearchButton"
                                 HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,15,0">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <materialDesign:PackIcon VerticalAlignment="Center" Margin="0,0,7,0" Kind="Add"></materialDesign:PackIcon>
-                                <TextBlock VerticalAlignment="Center">Search</TextBlock>
+                                <materialDesign:PackIcon Name="SearchIcon" VerticalAlignment="Center" Margin="0,0,7,0"
+                                                         Kind="Add">
+                                </materialDesign:PackIcon>
+                                <TextBlock VerticalAlignment="Center" Name="SearchText">Search</TextBlock>
                             </StackPanel>
                         </Button>
+                        <ProgressBar IsIndeterminate="True" Value="50" Margin="0,0,7,0"
+                                     VerticalAlignment="Center" Visibility="Collapsed"
+                                     HorizontalAlignment="Center" Name="SearchProgressBar"
+                                     Style="{StaticResource MaterialDesignCircularProgressBar}">
+                        </ProgressBar>
                     </StackPanel>
                 </StackPanel>
             </Grid>

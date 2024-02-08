@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Waifu.Data;
 using Waifu.Utilities;
 using Waifu.Views.Index;
 using Application = System.Windows.Application;
@@ -12,10 +13,12 @@ namespace Waifu.Views.Shared;
 public partial class Header : UserControl
 {
     private readonly Views.Index.Settings _settings;
+    private readonly CharacterAiApi _characterAiApi;
 
-    public Header(Views.Index.Settings settings)
+    public Header(Views.Index.Settings settings, CharacterAiApi characterAiApi)
     {
         _settings = settings;
+        _characterAiApi = characterAiApi;
         InitializeComponent();
     }
 
@@ -27,6 +30,9 @@ public partial class Header : UserControl
 
     private void CloseClicked(object sender, MouseButtonEventArgs e)
     {
+        // kill puppeteer first
+        _characterAiApi.CharacterAiClient?.EnsureAllChromeInstancesAreKilled();
+
         Application.Current.Shutdown();
     }
 
@@ -52,7 +58,6 @@ public partial class Header : UserControl
 
     private void SettingsClicked(object sender, MouseButtonEventArgs e)
     {
-
         if (this.GetCurrentWindow() is MainWindow mainWindow)
         {
             mainWindow.SetTopView(_settings);
