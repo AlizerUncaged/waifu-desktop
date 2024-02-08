@@ -15,7 +15,9 @@ public class Settings
 
     public SettingsTarget SettingsTarget { get; set; } = SettingsTarget.Global;
 
-    public bool UseCharacterAi { get; set; } = true;
+    // public bool UseCharacterAi { get; set; } = true;
+
+    public string? CharacterAiToken { get; set; }
 
     public int GpuLayerCount { get; set; } = 35;
 

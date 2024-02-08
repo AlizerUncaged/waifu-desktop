@@ -5,10 +5,55 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Waifu.Views.Index"
              xmlns:shared="clr-namespace:Waifu.Views.Shared"
+             xmlns:cachedImage="clr-namespace:CachedImage;assembly=CachedImage"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
              Loaded="MainAreaLoaded"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <!-- Define the ContextMenu -->
+        <ContextMenu x:Key="AddCharacterContextMenu">
+            <MenuItem Click="NewCharacterAi">
+                <MenuItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Border CornerRadius="7" Background="Transparent" Margin="0,0,8,0">
+                            <Border.OpacityMask>
+                                <VisualBrush>
+                                    <VisualBrush.Visual>
+                                        <Border
+                                            Background="Black"
+                                            SnapsToDevicePixels="True"
+                                            CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource AncestorType=Border}}"
+                                            Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Border}}"
+                                            Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Border}}" />
+                                    </VisualBrush.Visual>
+                                </VisualBrush>
+                            </Border.OpacityMask>
+                            <cachedImage:Image VerticalAlignment="Stretch" Stretch="UniformToFill"
+                                               HorizontalAlignment="Stretch"
+                                               ImageUrl="https://pbs.twimg.com/profile_images/1638842319104516097/TketN7Pm_400x400.jpg">
+                            </cachedImage:Image>
+                        </Border>
+                        <TextBlock Text="character.ai"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center">
+                        </TextBlock>
+                    </StackPanel>
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem Click="NewLocalCharacter">
+                <MenuItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Local Character"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center">
+                        </TextBlock>
+                    </StackPanel>
+                </MenuItem.Header>
+            </MenuItem>
+            <!-- Add more menu items as needed -->
+        </ContextMenu>
+    </UserControl.Resources>
     <Grid>
         <DockPanel>
             <DockPanel DockPanel.Dock="Left"
@@ -43,6 +88,8 @@
                                    HorizontalAlignment="Center">
                         </TextBlock>
                     </StackPanel>
+
+
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock Text="Or create a" Margin="0,0,7,0"
                                    VerticalAlignment="Center"

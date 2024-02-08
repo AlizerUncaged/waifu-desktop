@@ -1,0 +1,59 @@
+﻿<UserControl x:Class="Waifu.Views.Shared.Popups.AtarashiCharacterAi"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Waifu.Views.Shared.Popups"
+             mc:Ignorable="d" Width="600"
+             TextElement.Foreground="{DynamicResource Foreground}"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Border CornerRadius="15" Background="{DynamicResource Background}">
+            <Grid Margin="15">
+                <StackPanel>
+                    <StackPanel Margin="0,0,0,15">
+                        <TextBlock FontSize="24">
+                            <materialDesign:PackIcon Kind="Stadium"></materialDesign:PackIcon>
+                            <Run>Import Character</Run>
+                        </TextBlock>
+                        <TextBlock TextWrapping="Wrap"
+                                   Text="Import a character from https://character.ai/, this will use character.ai as the chat engine!">
+                        </TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Margin="0,0,0,15">
+                        <TextBlock FontWeight="Black">
+                            <materialDesign:PackIcon Kind="Code"></materialDesign:PackIcon>
+                            <Run Text="ID"></Run>
+                        </TextBlock>
+                        <TextBlock Margin="0,0,0,7" TextWrapping="Wrap"
+                                   Text="The character's ID in character.ai, you can find this in the URL.">
+                        </TextBlock>
+                        <TextBox
+                            Name="CharacterId"
+                            TextWrapping="Wrap"
+                            materialDesign:HintAssist.Hint="2-SEtUECP7sXHwYUsxL-SN6PjeUp4vPZzHThsvBOPqg"
+                            Padding="7"
+                            materialDesign:HintAssist.IsFloating="False"
+                            Style="{StaticResource MaterialDesignOutlinedTextBox}">
+                        </TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                        <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                                Background="{DynamicResource BackgroundLight}" BorderThickness="0"
+                                HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,15,0">
+                            <TextBlock>Cancel</TextBlock>
+                        </Button>
+                        <Button Click="SaveCharacter" BorderThickness="0"
+                                HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,15,0">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <materialDesign:PackIcon VerticalAlignment="Center" Margin="0,0,7,0" Kind="Add"></materialDesign:PackIcon>
+                                <TextBlock VerticalAlignment="Center">Search</TextBlock>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

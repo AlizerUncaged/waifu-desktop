@@ -14,12 +14,15 @@ public partial class MainArea : UserControl
     private readonly AtarashiCharacter _atarashiCharacter;
     private readonly Characters _characters;
     private readonly CharactersMenu _charactersMenu;
+    private readonly AtarashiCharacterAi _atarashiCharacterAi;
 
-    public MainArea(AtarashiCharacter atarashiCharacter, Characters characters, CharactersMenu charactersMenu)
+    public MainArea(AtarashiCharacter atarashiCharacter, Characters characters, CharactersMenu charactersMenu,
+        AtarashiCharacterAi atarashiCharacterAi)
     {
         _atarashiCharacter = atarashiCharacter;
         _characters = characters;
         _charactersMenu = charactersMenu;
+        _atarashiCharacterAi = atarashiCharacterAi;
 
         InitializeComponent();
     }
@@ -47,7 +50,11 @@ public partial class MainArea : UserControl
 
     private void NewCharacter(object sender, RoutedEventArgs routedEventArgs)
     {
-        OpenDialog(_atarashiCharacter);
+        if (FindResource("AddCharacterContextMenu") is ContextMenu contextMenu)
+        {
+            contextMenu.PlacementTarget = sender as FrameworkElement;
+            contextMenu.IsOpen = true;
+        }
     }
 
     private void MainAreaLoaded(object sender, RoutedEventArgs e)
@@ -66,5 +73,15 @@ public partial class MainArea : UserControl
                     _charactersMenu?.AddCharacter(roleplayCharacter);
             });
         });
+    }
+
+    private void NewLocalCharacter(object sender, RoutedEventArgs e)
+    {
+        OpenDialog(_atarashiCharacter);
+    }
+
+    private void NewCharacterAi(object sender, RoutedEventArgs e)
+    {
+        OpenDialog(_atarashiCharacterAi);
     }
 }

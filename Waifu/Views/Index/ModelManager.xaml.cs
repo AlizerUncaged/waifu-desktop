@@ -35,7 +35,7 @@ public partial class ModelManager : UserControl, IPopup
         {
             var settings = await _settings.GetOrCreateSettings();
 
-            Dispatcher.Invoke(() => { UseCharacterAi.IsChecked = settings?.UseCharacterAi; });
+            Dispatcher.Invoke(() => { CharacterAiTokenField.Password = settings.CharacterAiToken ?? String.Empty; });
         });
 
         foreach (var model in _settings.GetModelsOnDirectory())

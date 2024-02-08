@@ -34,11 +34,24 @@
                                 <materialDesign:PackIcon Kind="GlobeModel"></materialDesign:PackIcon>
                                 <Run>Manage Models</Run>
                             </TextBlock>
-                            <TextBlock Margin="0,0,0,7" Text="Set your preferred model."></TextBlock>
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,7">
-                                <CheckBox Name="UseCharacterAi" Unchecked="UseCharacterAiUnchecked" Checked="UseCharacterAiChecked" Content="Use character.ai"></CheckBox>
+                            <StackPanel Orientation="Vertical" Margin="0,0,0,15">
+                                <TextBlock FontWeight="Black">
+                                    <materialDesign:PackIcon Kind="Signature"></materialDesign:PackIcon>
+                                    <Run Text="character.ai Token"></Run>
+                                </TextBlock>
+                                <TextBlock Margin="0,0,0,7" Text="You character.ai token"></TextBlock>
+                                <PasswordBox
+                                    Name="CharacterAiTokenField"
+                                    materialDesign:HintAssist.Hint="Vanilla"
+                                    Padding="7"
+                                    materialDesign:HintAssist.IsFloating="False"
+                                    Style="{StaticResource MaterialDesignOutlinedPasswordBox}">
+                                </PasswordBox>
                             </StackPanel>
+
                             <StackPanel Orientation="Vertical" Name="CustomModelOptions">
+                                <TextBlock Margin="0,0,0,7" Text="Set your preferred model."></TextBlock>
+
                                 <ComboBox Margin="0,0,0,15" ItemsSource="{Binding ModelNames}" Name="ModelsList"
                                           Padding="5" SelectedIndex="0"
                                           Style="{StaticResource MaterialDesignOutlinedComboBox}">

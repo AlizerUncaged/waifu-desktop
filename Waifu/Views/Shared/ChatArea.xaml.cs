@@ -20,10 +20,12 @@ public partial class ChatArea : UserControl
     private readonly Settings _settings;
     private readonly Personas _personas;
     private readonly ChatAreaController _chatAreaController;
+    private readonly IChatHandler _chatHandler;
 
     public ChatArea(RoleplayCharacter character, ChatChannel channel, Messages messages,
         ChatServiceManager chatServiceManager,
-        Data.Settings settings, Personas personas, ChatAreaController chatAreaController)
+        Data.Settings settings, Personas personas,
+        ChatAreaController chatAreaController, IChatHandler chatHandler)
     {
         _character = character;
         _channel = channel;
@@ -32,6 +34,7 @@ public partial class ChatArea : UserControl
         _settings = settings;
         _personas = personas;
         _chatAreaController = chatAreaController;
+        _chatHandler = chatHandler;
 
         InitializeComponent();
     }

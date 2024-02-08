@@ -18,21 +18,13 @@ public class ChatServiceManager
         _chatHandlers = chatHandlers;
     }
 
-    public async Task<IChatHandler?> GetEnabledChatService()
+    public async Task<IChatHandler?> GetEnabledChatService<T>() where T : IChatHandler
     {
-        var settings = await _settings.GetOrCreateSettings();
+        var chatHandler = _chatHandlers.FirstOrDefault(x => x is T);
 
-        if (settings.UseCharacterAi)
-        {
-            var chatHandler = _chatHandlers.FirstOrDefault(x => x is CharacterAi);
-            
-            _logger.LogInformation($"Chat handler is {chatHandler.GetType().Name}");
-            
-            return chatHandler;
-        }
+        _logger.LogInformation($"Chat handler is {chatHandler.GetType().Name}");
 
-
-        return null;
+        return chatHandler;
     }
 
     // public async Task<LocalLlama> LoadLlamaAndResult(ChatChannel chatChannel, Waifu.Models.Settings settings,

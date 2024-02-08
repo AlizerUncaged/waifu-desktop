@@ -16,8 +16,10 @@ public class RoleplayCharacter
     public string Description { get; set; } = string.Empty;
 
     public string ProfilePictureHash { get; set; } = "default.jpg";
-    
-    
+
+    public bool IsCharacterAi { get; set; }
+
+    public string? CharacterAiId { get; set; } = null;
 
     public string ProfilePictureFilePath => Path.Combine(Constants.ProfilePicturesFolder, ProfilePictureHash);
 

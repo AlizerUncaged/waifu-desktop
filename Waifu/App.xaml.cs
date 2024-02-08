@@ -92,6 +92,9 @@ public partial class App : Application
         builder.RegisterType<ChatServiceManager>()
             .AsSelf();
 
+        builder.RegisterType<AtarashiCharacterAi>()
+            .AsSelf();
+
         builder.RegisterType<HuggingFaceModelApi>()
             .AsSelf();
 
