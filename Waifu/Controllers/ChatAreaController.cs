@@ -41,7 +41,7 @@ public class ChatAreaController
             x.RegisterInstance(roleplayCharacter).AsSelf().SingleInstance();
             x.RegisterInstance(channelWithCharacter).AsSelf().SingleInstance();
 
-            if (roleplayCharacter.IsCharacterAi && _chatHandlers.FirstOrDefault(x => x is CharacterAi) is
+            if (roleplayCharacter.IsCharacterAi && _chatHandlers.FirstOrDefault(x => x is CharacterAiChatHandler) is
                     { } chatHandler)
                 x.RegisterInstance(chatHandler).AsSelf().SingleInstance();
         });

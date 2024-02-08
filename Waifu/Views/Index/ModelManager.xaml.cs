@@ -11,9 +11,12 @@ public partial class ModelManager : UserControl, IPopup
 {
     private readonly Data.Settings _settings;
 
+    public Models.Settings Settings { get; set; }
+
     public ModelManager(Data.Settings settings)
     {
         _settings = settings;
+
 
         InitializeComponent();
     }
@@ -35,7 +38,9 @@ public partial class ModelManager : UserControl, IPopup
         {
             var settings = await _settings.GetOrCreateSettings();
 
-            Dispatcher.Invoke(() => { CharacterAiTokenField.Password = settings.CharacterAiToken ?? String.Empty; });
+            Settings = settings;
+
+            Dispatcher.Invoke(() => { CharacterAiTokenField.Password = settings.CharacterAiToken; });
         });
 
         foreach (var model in _settings.GetModelsOnDirectory())
@@ -65,15 +70,20 @@ public partial class ModelManager : UserControl, IPopup
     private void ModelSave(object sender, RoutedEventArgs e)
     {
         var modelName = ModelsList.Text;
+        var chaiToken = CharacterAiTokenField.Password;
+
         _ = Task.Run(async () =>
         {
             await _settings.ClearAndAddSettings(new Models.Settings()
             {
-                LocalModel = modelName
+                LocalModel = modelName, CharacterAiToken = chaiToken
             });
 
-            if (this.GetCurrentWindow() is MainWindow mainWindow)
-                mainWindow.ShowMessage("Model successfully added!");
+            Dispatcher.Invoke(() =>
+            {
+                if (this.GetCurrentWindow() is MainWindow mainWindow)
+                    mainWindow.ShowMessage("Model successfully added!");
+            });
         });
     }
 

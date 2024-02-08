@@ -1,29 +1,25 @@
 ﻿using CharacterAI.Client;
+using Waifu.Data;
 using Waifu.Models;
 using Settings = Waifu.Data.Settings;
 
 namespace Waifu.ChatHandlers;
 
-public class CharacterAi : IChatHandler
+public class CharacterAiChatHandler : IChatHandler
 {
     private readonly Settings _settings;
+    private readonly CharacterAiApi _characterAiApi;
     public event EventHandler<string>? CompleteMessageGenerated;
 
     public event EventHandler<string>? PartialMessageGenerated;
 
     public ChatChannel ChatChannel { get; set; }
 
-    public CharacterAiClient? CharacterAiClient { get; set; }
 
-    public CharacterAi(Settings settings)
+    public CharacterAiChatHandler(Settings settings, CharacterAiApi characterAiApi)
     {
         _settings = settings;
-
-        AppDomain.CurrentDomain.ProcessExit += (sender, args) =>
-        {
-            if (CharacterAiClient is not null)
-                CharacterAiClient.EnsureAllChromeInstancesAreKilled();
-        };
+        _characterAiApi = characterAiApi;
     }
 
     private bool isInitialized = false;
@@ -35,14 +31,6 @@ public class CharacterAi : IChatHandler
 
         if (isInitialized)
             return;
-
-        var currentSettings = await _settings.GetOrCreateSettings();
-
-        var chaiToken = currentSettings.CharacterAiToken;
-
-        CharacterAiClient = new CharacterAiClient(chaiToken);
-
-        await CharacterAiClient.LaunchBrowserAsync();
 
         isInitialized = true;
 

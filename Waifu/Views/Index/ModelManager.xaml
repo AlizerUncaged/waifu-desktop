@@ -41,8 +41,8 @@
                                 </TextBlock>
                                 <TextBlock Margin="0,0,0,7" Text="You character.ai token"></TextBlock>
                                 <PasswordBox
-                                    Name="CharacterAiTokenField"
-                                    materialDesign:HintAssist.Hint="Vanilla"
+                                    Name="CharacterAiTokenField" 
+                                    materialDesign:HintAssist.Hint="character ai token"
                                     Padding="7"
                                     materialDesign:HintAssist.IsFloating="False"
                                     Style="{StaticResource MaterialDesignOutlinedPasswordBox}">

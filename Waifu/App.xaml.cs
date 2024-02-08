@@ -50,7 +50,7 @@ public partial class App : Application
 
         // register views
         builder.RegisterType<MainWindow>()
-            .AsSelf();
+            .AsSelf().SingleInstance();
 
         builder.RegisterType<Welcome>()
             .AsSelf();
@@ -76,7 +76,7 @@ public partial class App : Application
         builder.RegisterType<Waifu.Data.Settings>()
             .AsSelf();
 
-        builder.RegisterType<CharacterAi>()
+        builder.RegisterType<CharacterAiChatHandler>()
             .As<IChatHandler>()
             .AsSelf();
 
@@ -91,6 +91,9 @@ public partial class App : Application
 
         builder.RegisterType<ChatServiceManager>()
             .AsSelf();
+        
+        builder.RegisterType<CharacterAiApi>()
+            .AsSelf().SingleInstance();
 
         builder.RegisterType<AtarashiCharacterAi>()
             .AsSelf();
@@ -124,12 +127,6 @@ public partial class App : Application
 
         var lifetime = container.BeginLifetimeScope();
 
-        var mainWindow = lifetime.Resolve<MainWindow>();
-
-        MainWindow = mainWindow;
-
-        mainWindow.Show();
-
         // run self running services.
         _ = Task.Run(async () =>
         {
@@ -142,5 +139,13 @@ public partial class App : Application
                 await Task.WhenAll(startTasks);
             }
         });
+
+        
+        var mainWindow = lifetime.Resolve<MainWindow>();
+
+        MainWindow = mainWindow;
+
+        mainWindow.Show();
+
     }
 }

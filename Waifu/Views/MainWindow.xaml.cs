@@ -22,12 +22,13 @@ public partial class MainWindow : Window
     private readonly MainArea _mainArea;
     private readonly Waifu.Data.Settings _settings;
     private readonly Header _header;
+    private readonly CharacterAiApi _characterAiApi;
 
     public SnackbarMessageQueue SnackbarMessageQueue { get; } = new();
 
     public MainWindow(Welcome welcome, ILogger<MainWindow> logger, StartupCheck startupCheck, MainArea mainArea,
         Waifu.Data.Settings settings,
-        Header header)
+        Header header, CharacterAiApi characterAiApi)
     {
         _welcome = welcome;
         _logger = logger;
@@ -35,6 +36,7 @@ public partial class MainWindow : Window
         _mainArea = mainArea;
         _settings = settings;
         _header = header;
+        _characterAiApi = characterAiApi;
 
         InitializeComponent();
 
@@ -52,6 +54,8 @@ public partial class MainWindow : Window
             // at this point everything should be already loaded!
             Dispatcher.Invoke(() => SetView(_mainArea));
         };
+
+        _characterAiApi.ApiNotificationMessage += (o, s) => { ShowMessage(s.Trim()); };
 
         SetView(_welcome);
 

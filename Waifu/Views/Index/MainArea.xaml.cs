@@ -15,14 +15,16 @@ public partial class MainArea : UserControl
     private readonly Characters _characters;
     private readonly CharactersMenu _charactersMenu;
     private readonly AtarashiCharacterAi _atarashiCharacterAi;
+    private readonly CharacterAiApi _characterAiApi;
 
     public MainArea(AtarashiCharacter atarashiCharacter, Characters characters, CharactersMenu charactersMenu,
-        AtarashiCharacterAi atarashiCharacterAi)
+        AtarashiCharacterAi atarashiCharacterAi, CharacterAiApi characterAiApi)
     {
         _atarashiCharacter = atarashiCharacter;
         _characters = characters;
         _charactersMenu = charactersMenu;
         _atarashiCharacterAi = atarashiCharacterAi;
+        _characterAiApi = characterAiApi;
 
         InitializeComponent();
     }
@@ -32,13 +34,16 @@ public partial class MainArea : UserControl
     /// </summary>
     public void OpenDialog<T>(T child) where T : FrameworkElement, IPopup
     {
-        DialogArea.Children.Clear();
+        Dispatcher.Invoke(() =>
+        {
+            DialogArea.Children.Clear();
 
-        DialogArea.Children.Add(child);
+            DialogArea.Children.Add(child);
 
-        child.CloseTriggered += (sender, args) => { PopupDialogs.IsOpen = false; };
+            child.CloseTriggered += (sender, args) => { PopupDialogs.IsOpen = false; };
 
-        PopupDialogs.IsOpen = true;
+            PopupDialogs.IsOpen = true;
+        });
     }
 
     public void SetMainContent<T>(T child) where T : FrameworkElement
@@ -82,6 +87,12 @@ public partial class MainArea : UserControl
 
     private void NewCharacterAi(object sender, RoutedEventArgs e)
     {
-        OpenDialog(_atarashiCharacterAi);
+        _ = Task.Run(async () =>
+        {
+            if (await _characterAiApi.CheckCharacterAiToken() is false)
+                return;
+            
+            OpenDialog(_atarashiCharacterAi);
+        });
     }
 }
