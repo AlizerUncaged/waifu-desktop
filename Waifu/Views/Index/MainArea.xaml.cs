@@ -91,7 +91,7 @@ public partial class MainArea : UserControl
         {
             if (await _characterAiApi.CheckCharacterAiToken() is false)
                 return;
-            
+
             OpenDialog(_atarashiCharacterAi);
         });
     }

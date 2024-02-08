@@ -80,8 +80,9 @@ public class CharacterAiApi
     {
         if (!isInitialized)
             await InitializeAsync();
-
-        return await CharacterAiClient.CreateNewChatAsync(characterId);
+        var settings = await _settings.GetOrCreateSettings();
+        var chatId = await CharacterAiClient.CreateNewChatAsync(characterId, authToken: settings.CharacterAiToken);
+        return chatId;
     }
 
 
@@ -106,7 +107,7 @@ public class CharacterAiApi
             characterId: character.CharacterAiId,
             characterTgt: character.CharacterAiTargetPersona,
             historyId: channel.CharacterAiHistoryId,
-            message: chatMessage.Message, authToken: currentSettings.CharacterAiToken
+            message: chatMessage.Message, authToken: currentSettings.CharacterAiToken, plusMode: false
         );
 
         return serverResponse;

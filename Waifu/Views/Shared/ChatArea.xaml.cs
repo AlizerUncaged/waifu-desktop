@@ -68,8 +68,6 @@ public partial class ChatArea : UserControl
 
     private void ChatAreaLoaded(object sender, RoutedEventArgs e)
     {
-        _chatHandler.CompleteMessageGenerated += (o, s) => { AddChatBasedOnIdLocation(s); };
-
         _ = Task.Run(async () =>
         {
             var currentMessages = await _messages.GetMessagesAsync(_channel.Id, CurrentMessageId);

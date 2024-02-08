@@ -57,11 +57,11 @@ public class CharacterAiChatHandler : IChatHandler
 
         var savedResponseMessage = await _messages.AddMessageAsync(new ChatMessage()
         {
-            Sender = _roleplayCharacter.Id, 
+            Sender = _roleplayCharacter.Id,
             ChatChannel = ChatChannel,
             Message = characterResponse.Response?.Text ?? string.Empty
         });
-        
+
         CompleteMessageGenerated?.Invoke(this, savedResponseMessage);
 
         return savedResponseMessage.Message;
