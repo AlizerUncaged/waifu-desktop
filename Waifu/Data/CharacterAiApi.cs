@@ -1,6 +1,7 @@
 ﻿using CharacterAI.Client;
 using CharacterAI.Models;
 using Microsoft.Extensions.Logging;
+using Waifu.Models;
 using Waifu.Views;
 
 namespace Waifu.Data;
@@ -10,7 +11,13 @@ public class CharacterAiApi
     private readonly Settings _settings;
     private readonly ILogger<CharacterAiApi> _logger;
 
-    public CharacterAiClient? CharacterAiClient { get; set; }
+    public static CharacterAiClient? StaticCharacterAiClient { get; set; }
+
+    public CharacterAiClient? CharacterAiClient
+    {
+        get => StaticCharacterAiClient;
+        set { StaticCharacterAiClient = value; }
+    }
 
     public CharacterAiApi(Settings settings, ILogger<CharacterAiApi> logger)
     {
@@ -45,7 +52,7 @@ public class CharacterAiApi
         await CharacterAiClient.LaunchBrowserAsync();
 
         isInitialized = true;
-        
+
         _logger.LogInformation("Chrome browser initialized!");
 
         initSemaphore.Release();
@@ -86,6 +93,23 @@ public class CharacterAiApi
         var character = await CharacterAiClient.GetInfoAsync(characterId);
 
         return character;
+    }
+
+    public async Task<CharacterResponse> SendMessageAsync(RoleplayCharacter character, ChatChannel channel,
+        ChatMessage chatMessage)
+    {
+        if (!isInitialized)
+            await InitializeAsync();
+        var currentSettings = await _settings.GetOrCreateSettings();
+
+        var serverResponse = await CharacterAiClient.CallCharacterAsync(
+            characterId: character.CharacterAiId,
+            characterTgt: character.CharacterAiTargetPersona,
+            historyId: channel.CharacterAiHistoryId,
+            message: chatMessage.Message, authToken: currentSettings.CharacterAiToken
+        );
+
+        return serverResponse;
     }
 
     public void Log(string log)

@@ -42,7 +42,7 @@ public partial class AtarashiCharacterAi : UserControl, IPopup, INotifyPropertyC
         if (sender is not FrameworkElement frameworkElement) return;
 
         SearchProgressBar.Visibility = Visibility.Visible;
-        
+
         if (Character is not null)
         {
             _ = Task.Run(async () =>
@@ -56,11 +56,12 @@ public partial class AtarashiCharacterAi : UserControl, IPopup, INotifyPropertyC
                     SampleMessages = Character.Greeting,
                     ProfilePictureHash = $".\\{localFileDownload}",
                     IsCharacterAi = true,
-                    CharacterAiId = Character.Id
+                    CharacterAiId = Character.Id,
+                    CharacterAiTargetPersona = Character.Tgt
                 };
 
                 await _characters.AddCharacterAsync(character);
-                
+
                 Dispatcher.Invoke(() => { CloseTriggered?.Invoke(this, EventArgs.Empty); });
             });
             return;

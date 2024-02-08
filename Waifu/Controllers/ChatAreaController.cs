@@ -52,8 +52,9 @@ public class ChatAreaController
         });
 
         var chatServiceManager = chatAreaScope.Resolve<ChatServiceManager>();
+        var chatHandlerForUser = await chatServiceManager.GetEnabledChatServiceForCharacter(roleplayCharacter);
 
-        if (await chatServiceManager.GetEnabledChatServiceForCharacter(roleplayCharacter) is null)
+        if (chatHandlerForUser is null)
         {
             ChatAreaMessage?.Invoke(this, "No chat service available for character.");
             return null;
@@ -64,6 +65,11 @@ public class ChatAreaController
         Application.Current.Dispatcher.Invoke(() =>
         {
             chatArea = chatAreaScope.Resolve<ChatArea>();
+
+            chatHandlerForUser.CompleteMessageGenerated += (sender, message) =>
+            {
+                chatArea.AddChatBasedOnIdLocation(message);
+            };
 
             chatArea.MessageSend += ChatAreaOnMessageSend;
         });
@@ -89,9 +95,11 @@ public class ChatAreaController
 
         _ = Task.Run(async () =>
         {
-            var dbMessage = await _messages.AddMessageAsync(message);
+            // process the message to the character ai parallel
+            _ = chatArea.ChatHandler.SendMessageAndGetResultAsync(message);
 
-            MessageFromCurrentUser?.Invoke(this, dbMessage);
+            // save the user's sent message to the ui
+            MessageFromCurrentUser?.Invoke(this, message);
         });
     }
 }

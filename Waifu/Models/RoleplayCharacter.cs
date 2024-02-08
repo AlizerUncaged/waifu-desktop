@@ -21,6 +21,8 @@ public class RoleplayCharacter
 
     public string? CharacterAiId { get; set; } = null;
 
+    public string? CharacterAiTargetPersona { get; set; } = null;
+
     public string ProfilePictureFilePath => Path.Combine(Constants.ProfilePicturesFolder, ProfilePictureHash);
 
     public List<ChatChannel> CharacterChannels { get; set; } = new();

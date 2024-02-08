@@ -21,6 +21,8 @@ public partial class ChatArea : UserControl
     private readonly ChatAreaController _chatAreaController;
     private readonly IChatHandler _chatHandler;
 
+    public IChatHandler ChatHandler => _chatHandler;
+
     public ChatArea(RoleplayCharacter character, ChatChannel channel, Messages messages,
         Data.Settings settings, Personas personas,
         ChatAreaController chatAreaController, IChatHandler chatHandler)
@@ -66,6 +68,8 @@ public partial class ChatArea : UserControl
 
     private void ChatAreaLoaded(object sender, RoutedEventArgs e)
     {
+        _chatHandler.CompleteMessageGenerated += (o, s) => { AddChatBasedOnIdLocation(s); };
+
         _ = Task.Run(async () =>
         {
             var currentMessages = await _messages.GetMessagesAsync(_channel.Id, CurrentMessageId);
@@ -90,22 +94,25 @@ public partial class ChatArea : UserControl
 
     public void AddChatBasedOnIdLocation(ChatMessage chatMessage)
     {
-        var indexToInsert = ChatMessages
-            .Select((msg, index) => new { Message = msg, Index = index })
-            .OrderBy(item => item.Message.Id)
-            .TakeWhile(item => item.Message.Id < chatMessage.Id)
-            .LastOrDefault()?.Index + 1 ?? 0;
+        Dispatcher.Invoke(() =>
+        {
+            var indexToInsert = ChatMessages
+                .Select((msg, index) => new { Message = msg, Index = index })
+                .OrderBy(item => item.Message.Id)
+                .TakeWhile(item => item.Message.Id < chatMessage.Id)
+                .LastOrDefault()?.Index + 1 ?? 0;
 
-        if (indexToInsert < 0)
-            indexToInsert = 0;
+            if (indexToInsert < 0)
+                indexToInsert = 0;
 
-        ChatMessages.Insert(indexToInsert, chatMessage);
+            ChatMessages.Insert(indexToInsert, chatMessage);
 
-        // goofy ahh ui update
-        ChatScroll.ScrollToEnd();
+            // goofy ahh ui update
+            ChatScroll.ScrollToEnd();
 
-        UpdateLayout();
+            UpdateLayout();
 
-        ChatScroll.ScrollToEnd();
+            ChatScroll.ScrollToEnd();
+        });
     }
 }

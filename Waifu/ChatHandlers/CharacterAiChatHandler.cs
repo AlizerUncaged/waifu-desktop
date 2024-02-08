@@ -12,7 +12,7 @@ public class CharacterAiChatHandler : IChatHandler
     private readonly CharacterAiApi _characterAiApi;
     private readonly RoleplayCharacter _roleplayCharacter;
     private readonly Messages _messages;
-    public event EventHandler<string>? CompleteMessageGenerated;
+    public event EventHandler<ChatMessage>? CompleteMessageGenerated;
 
     public event EventHandler<string>? PartialMessageGenerated;
 
@@ -51,7 +51,19 @@ public class CharacterAiChatHandler : IChatHandler
         if (!isInitialized)
             await InitializeAsync();
 
+        var savedMessage = await _messages.AddMessageAsync(message);
 
-        return null;
+        var characterResponse = await _characterAiApi.SendMessageAsync(_roleplayCharacter, ChatChannel, savedMessage);
+
+        var savedResponseMessage = await _messages.AddMessageAsync(new ChatMessage()
+        {
+            Sender = _roleplayCharacter.Id, 
+            ChatChannel = ChatChannel,
+            Message = characterResponse.Response?.Text ?? string.Empty
+        });
+        
+        CompleteMessageGenerated?.Invoke(this, savedResponseMessage);
+
+        return savedResponseMessage.Message;
     }
 }

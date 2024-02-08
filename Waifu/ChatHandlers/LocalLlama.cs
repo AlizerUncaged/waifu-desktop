@@ -12,7 +12,7 @@ public class LocalLlama : IChatHandler
     private readonly PersonaSingle _personaSingle;
     private readonly RoleplayCharacter _roleplayCharacter;
 
-    public event EventHandler<string>? CompleteMessageGenerated;
+    public event EventHandler<ChatMessage>? CompleteMessageGenerated;
 
     public event EventHandler<string>? PartialMessageGenerated;
     public ChatChannel ChatChannel { get; set; }
