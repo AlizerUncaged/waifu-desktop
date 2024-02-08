@@ -2,6 +2,12 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Waifu", "Waifu\Waifu.csproj", "{9996D564-8C94-4AC5-B9A0-06B5CEEED35C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CharacterAI.Client", "Dependencies\CharacterAI-NET-API-Wrapper\CharacterAI.Client\CharacterAI.Client.csproj", "{4940C425-C45F-47E5-B822-AD192EF0B258}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PuppeteerLib", "Dependencies\CharacterAI-NET-API-Wrapper\PuppeteerLib\PuppeteerLib.csproj", "{A5EEE558-A7BD-4786-BFF8-2F236949A8BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedUtils", "Dependencies\CharacterAI-NET-API-Wrapper\SharedUtils\SharedUtils.csproj", "{1988C86F-D1AA-4181-AAE3-65CFCA9C4268}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +18,17 @@ Global
 		{9996D564-8C94-4AC5-B9A0-06B5CEEED35C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9996D564-8C94-4AC5-B9A0-06B5CEEED35C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9996D564-8C94-4AC5-B9A0-06B5CEEED35C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4940C425-C45F-47E5-B822-AD192EF0B258}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4940C425-C45F-47E5-B822-AD192EF0B258}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4940C425-C45F-47E5-B822-AD192EF0B258}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4940C425-C45F-47E5-B822-AD192EF0B258}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5EEE558-A7BD-4786-BFF8-2F236949A8BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5EEE558-A7BD-4786-BFF8-2F236949A8BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5EEE558-A7BD-4786-BFF8-2F236949A8BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5EEE558-A7BD-4786-BFF8-2F236949A8BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1988C86F-D1AA-4181-AAE3-65CFCA9C4268}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1988C86F-D1AA-4181-AAE3-65CFCA9C4268}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1988C86F-D1AA-4181-AAE3-65CFCA9C4268}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1988C86F-D1AA-4181-AAE3-65CFCA9C4268}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -78,12 +78,6 @@ public partial class ChatArea : UserControl
 
             CurrentMessageId = currentMessages.MinBy(x => x.Id).Id;
 
-            // load the llama model
-            // LocalLlama =
-            //     await _chatServiceManager.LoadLlamaAndResult(_channel,
-            //         await _settings.GetOrCreateSettings(),
-            //         await _personas.GetOrCreatePersona(), _character);
-
             Dispatcher.Invoke(() =>
             {
                 foreach (var chatMessage in currentMessages.OrderByDescending(x => x.Id))
@@ -94,9 +88,9 @@ public partial class ChatArea : UserControl
         _chatAreaController.MessageFromCurrentUser += (o, s) => { Dispatcher.Invoke(() => { ChatMessages.Add(s); }); };
     }
 
-    void AddChatBasedOnIdLocation(ChatMessage chatMessage)
+    public void AddChatBasedOnIdLocation(ChatMessage chatMessage)
     {
-        int indexToInsert = ChatMessages
+        var indexToInsert = ChatMessages
             .Select((msg, index) => new { Message = msg, Index = index })
             .OrderBy(item => item.Message.Id)
             .TakeWhile(item => item.Message.Id < chatMessage.Id)
@@ -107,13 +101,11 @@ public partial class ChatArea : UserControl
 
         ChatMessages.Insert(indexToInsert, chatMessage);
 
-        // Scroll to the end after adding a new message
+        // goofy ahh ui update
         ChatScroll.ScrollToEnd();
 
-        // Ensure the layout is updated before scrolling
         UpdateLayout();
 
-        // Scroll to the end again to ensure it's accurate
         ChatScroll.ScrollToEnd();
     }
 }

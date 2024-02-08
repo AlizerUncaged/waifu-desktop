@@ -27,7 +27,7 @@ public partial class MainArea : UserControl
     /// <summary>
     /// Set's the current main content of the window.
     /// </summary>
-    private void OpenDialog<T>(T child) where T : FrameworkElement, IPopup
+    public void OpenDialog<T>(T child) where T : FrameworkElement, IPopup
     {
         DialogArea.Children.Clear();
 
@@ -43,10 +43,9 @@ public partial class MainArea : UserControl
         MainAreaContent.Children.Clear();
 
         MainAreaContent.Children.Add(child);
-
     }
 
-    private void NewCharacter(object sender, MouseButtonEventArgs e)
+    private void NewCharacter(object sender, RoutedEventArgs routedEventArgs)
     {
         OpenDialog(_atarashiCharacter);
     }

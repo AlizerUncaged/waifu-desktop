@@ -34,7 +34,27 @@
                 </ScrollViewer>
             </DockPanel>
             <Grid x:Name="MainAreaContent">
+                <StackPanel Opacity="0.75" Orientation="Vertical" VerticalAlignment="Center"
+                            HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,7">
+                        <materialDesign:PackIcon Kind="Chat" Margin="0,0,8,0" VerticalAlignment="Center"></materialDesign:PackIcon>
+                        <TextBlock FontSize="16" FontWeight="Bold" Text="Select a chat to start!"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center">
+                        </TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="Or create a" Margin="0,0,7,0"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center">
+                        </TextBlock>
+                        <Button BorderThickness="0" Padding="7,0" FontWeight="Bold" VerticalAlignment="Center"
+                                Content="new character" Click="NewCharacter"
+                                Background="{DynamicResource BackgroundLight}">
 
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
             </Grid>
         </DockPanel>
         <Grid>
