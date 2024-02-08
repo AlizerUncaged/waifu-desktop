@@ -11,4 +11,6 @@ public class ChatChannel
     public List<RoleplayCharacter> Characters { get; set; } = new();
 
     public List<ChatMessage> Messages { get; set; } = new();
+
+    public string? CharacterAiHistoryId { get; set; } = default;
 }

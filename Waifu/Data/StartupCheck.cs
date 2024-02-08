@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using CharacterAI.Client;
+using Humanizer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ILogger = Serilog.ILogger;
@@ -31,12 +32,14 @@ public class StartupCheck : ISelfRunning
         await _applicationDbContext.Database.MigrateAsync();
 
         Log("Checking Puppeteer");
-        
-        PuppeteerLib.PuppeteerLib.PuppeteerDownloadChanged += (sender, i) =>
+
+        PuppeteerLib.PuppeteerLib.PuppeteerDownloadProcessChanged += (sender, i) =>
         {
-            Log($"Downloading Puppeteer {i}%", true);
+            Log(
+                $"Downloading Puppeteer {i.BytesReceived.Bytes().Humanize()}/{Convert.ToInt32(i.TotalBytesToReceive).Bytes().Humanize()}",
+                true);
         };
-        
+
         await new CharacterAiClient().DownloadBrowserAsync();
 
         Log("Starting");

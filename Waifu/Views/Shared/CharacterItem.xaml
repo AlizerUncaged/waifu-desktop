@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:Waifu.Views.Shared"
              RenderOptions.BitmapScalingMode="HighQuality"
              mc:Ignorable="d"
+             TextElement.Foreground="{DynamicResource Foreground}"
              MouseDown="ItemClicked"
              Loaded="CharacterItemLoaded"
              d:DesignHeight="100" d:DesignWidth="100">
@@ -23,5 +24,13 @@
                             ImageSource="{Binding Image, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" />
             </Ellipse.Fill>
         </Ellipse>
+        <Border Name="Badge" CornerRadius="7" Padding="3" Background="{DynamicResource BackgroundLight}"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Right">
+            <Border.RenderTransform>
+                <TranslateTransform X="3" Y="3"></TranslateTransform>
+            </Border.RenderTransform>
+            <TextBlock FontSize="9" Text="chai" Name="BadgeText"></TextBlock>
+        </Border>
     </Grid>
 </UserControl>

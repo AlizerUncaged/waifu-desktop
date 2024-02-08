@@ -18,7 +18,6 @@ public partial class CharactersMenu : UserControl
 {
     private readonly Characters _characters;
     private readonly ILogger<CharactersMenu> _logger;
-    private readonly ChatServiceManager _chatServiceManager;
     private readonly ChatAreaController _chatAreaController;
 
     // has to be public to be able to be accessed by the xaml frontend, so all operations of this collection
@@ -34,12 +33,10 @@ public partial class CharactersMenu : UserControl
 
     public CharactersMenu(Characters characters,
         ILogger<CharactersMenu> logger,
-        ChatServiceManager chatServiceManager,
         ChatAreaController chatAreaController)
     {
         _characters = characters;
         _logger = logger;
-        _chatServiceManager = chatServiceManager;
         _chatAreaController = chatAreaController;
 
         RoleplayCharacters =
@@ -65,7 +62,7 @@ public partial class CharactersMenu : UserControl
     private void CharacterClicked(object? sender, RoleplayCharacter? e)
     {
         if (sender is not CharacterItem characterItem) return;
-        
+
         _logger.LogInformation($"Character {characterItem.CharacterName} is clicked!");
 
         var rpCharacter = characterItem.RoleplayCharacter;
@@ -75,7 +72,8 @@ public partial class CharactersMenu : UserControl
             {
                 var chatArea = await _chatAreaController.CreateChatArea(rpCharacter);
 
-                Dispatcher.Invoke(() => { mainArea.SetMainContent(chatArea); });
+                if (chatArea is not null)
+                    Dispatcher.Invoke(() => { mainArea.SetMainContent(chatArea); });
             });
     }
 }

@@ -4,6 +4,7 @@ using System.Windows.Interop;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Waifu.Controllers;
 using Waifu.Data;
 using Waifu.Views.Index;
 using Waifu.Views.Shared;
@@ -23,12 +24,13 @@ public partial class MainWindow : Window
     private readonly Waifu.Data.Settings _settings;
     private readonly Header _header;
     private readonly CharacterAiApi _characterAiApi;
+    private readonly ChatAreaController _chatAreaController;
 
     public SnackbarMessageQueue SnackbarMessageQueue { get; } = new();
 
     public MainWindow(Welcome welcome, ILogger<MainWindow> logger, StartupCheck startupCheck, MainArea mainArea,
         Waifu.Data.Settings settings,
-        Header header, CharacterAiApi characterAiApi)
+        Header header, CharacterAiApi characterAiApi, ChatAreaController chatAreaController)
     {
         _welcome = welcome;
         _logger = logger;
@@ -37,6 +39,7 @@ public partial class MainWindow : Window
         _settings = settings;
         _header = header;
         _characterAiApi = characterAiApi;
+        _chatAreaController = chatAreaController;
 
         InitializeComponent();
 
@@ -56,6 +59,7 @@ public partial class MainWindow : Window
         };
 
         _characterAiApi.ApiNotificationMessage += (o, s) => { ShowMessage(s.Trim()); };
+        _chatAreaController.ChatAreaMessage += (o, s) => { ShowMessage(s.Trim()); };
 
         SetView(_welcome);
 

@@ -15,5 +15,5 @@ public interface IChatHandler
 
     Task InitializeAsync();
 
-    Task<string?> SendMessageAndGetResultAsync(string message);
+    Task<string?> SendMessageAndGetResultAsync(ChatMessage message);
 }

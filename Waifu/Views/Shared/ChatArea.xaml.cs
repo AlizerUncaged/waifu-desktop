@@ -16,21 +16,18 @@ public partial class ChatArea : UserControl
     private readonly RoleplayCharacter _character;
     private readonly ChatChannel _channel;
     private readonly Messages _messages;
-    private readonly ChatServiceManager _chatServiceManager;
     private readonly Settings _settings;
     private readonly Personas _personas;
     private readonly ChatAreaController _chatAreaController;
     private readonly IChatHandler _chatHandler;
 
     public ChatArea(RoleplayCharacter character, ChatChannel channel, Messages messages,
-        ChatServiceManager chatServiceManager,
         Data.Settings settings, Personas personas,
         ChatAreaController chatAreaController, IChatHandler chatHandler)
     {
         _character = character;
         _channel = channel;
         _messages = messages;
-        _chatServiceManager = chatServiceManager;
         _settings = settings;
         _personas = personas;
         _chatAreaController = chatAreaController;

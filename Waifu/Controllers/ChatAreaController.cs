@@ -11,41 +11,53 @@ namespace Waifu.Controllers;
 public class ChatAreaController
 {
     private readonly Messages _messages;
-    private readonly ChatServiceManager _chatServiceManager;
     private readonly Settings _settings;
     private readonly Personas _personas;
     private readonly ILifetimeScope _lifetimeScope;
-    private readonly IEnumerable<IChatHandler> _chatHandlers;
 
     public ChatAreaController(Messages messages,
-        ChatServiceManager chatServiceManager,
         Settings settings,
         Personas personas,
-        ILifetimeScope lifetimeScope,
-        IEnumerable<IChatHandler> chatHandlers)
+        ILifetimeScope lifetimeScope)
     {
         _messages = messages;
-        _chatServiceManager = chatServiceManager;
         _settings = settings;
         _personas = personas;
         _lifetimeScope = lifetimeScope;
-        _chatHandlers = chatHandlers;
     }
 
-    public async Task<ChatArea> CreateChatArea(RoleplayCharacter roleplayCharacter)
+    public event EventHandler<string> ChatAreaMessage;
+
+    public async Task<ChatArea?> CreateChatArea(RoleplayCharacter roleplayCharacter)
     {
         var channelWithCharacter = await _messages.GetOrCreateChannelWithCharacter(roleplayCharacter);
 
         var chatAreaScope = _lifetimeScope.BeginLifetimeScope(x =>
         {
-            x.RegisterInstance(roleplayCharacter).AsSelf().SingleInstance();
-            x.RegisterInstance(channelWithCharacter).AsSelf().SingleInstance();
+            x.RegisterInstance(roleplayCharacter)
+                .AsSelf()
+                .SingleInstance();
 
-            if (roleplayCharacter.IsCharacterAi && _chatHandlers.FirstOrDefault(x => x is CharacterAiChatHandler) is
-                    { } chatHandler)
-                x.RegisterInstance(chatHandler).AsSelf().SingleInstance();
+            x.RegisterInstance(channelWithCharacter)
+                .AsSelf()
+                .SingleInstance();
+
+            // chat handlers
+            x.RegisterType<CharacterAiChatHandler>().As<IChatHandler>().SingleInstance();
+            // x.RegisterType<LocalLlama>().As<IChatHandler>().SingleInstance();
+
+            x.RegisterType<ChatServiceManager>()
+                .AsSelf()
+                .SingleInstance();
         });
 
+        var chatServiceManager = chatAreaScope.Resolve<ChatServiceManager>();
+
+        if (await chatServiceManager.GetEnabledChatServiceForCharacter(roleplayCharacter) is null)
+        {
+            ChatAreaMessage?.Invoke(this, "No chat service available for character.");
+            return null;
+        }
 
         ChatArea chatArea = default;
 

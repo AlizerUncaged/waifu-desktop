@@ -76,9 +76,13 @@ public partial class App : Application
         builder.RegisterType<Waifu.Data.Settings>()
             .AsSelf();
 
-        builder.RegisterType<CharacterAiChatHandler>()
-            .As<IChatHandler>()
-            .AsSelf();
+        // builder.RegisterType<CharacterAiChatHandler>()
+        //     .As<IChatHandler>()
+        //     .AsSelf();
+
+        // builder.RegisterType<LocalLlama>()
+        //     .As<IChatHandler>()
+        //     .AsSelf();
 
         builder.RegisterType<Views.Index.Settings>()
             .AsSelf();
@@ -89,9 +93,6 @@ public partial class App : Application
         builder.RegisterType<ModelManager>()
             .AsSelf();
 
-        builder.RegisterType<ChatServiceManager>()
-            .AsSelf();
-        
         builder.RegisterType<CharacterAiApi>()
             .AsSelf().SingleInstance();
 
@@ -140,12 +141,11 @@ public partial class App : Application
             }
         });
 
-        
+
         var mainWindow = lifetime.Resolve<MainWindow>();
 
         MainWindow = mainWindow;
 
         mainWindow.Show();
-
     }
 }

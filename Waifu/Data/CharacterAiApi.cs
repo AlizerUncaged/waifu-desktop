@@ -34,6 +34,8 @@ public class CharacterAiApi
         if (isInitialized)
             return;
 
+        _logger.LogDebug("Initializing chrome browser");
+
         var currentSettings = await _settings.GetOrCreateSettings();
 
         var chaiToken = currentSettings.CharacterAiToken;
@@ -43,6 +45,8 @@ public class CharacterAiApi
         await CharacterAiClient.LaunchBrowserAsync();
 
         isInitialized = true;
+        
+        _logger.LogInformation("Chrome browser initialized!");
 
         initSemaphore.Release();
     }
@@ -65,13 +69,21 @@ public class CharacterAiApi
         return true;
     }
 
-
-    public async Task<Character> GetCharacterDataFromId(string id)
+    public async Task<string> GenerateNewChannelAndGetChatIdAsync(string characterId)
     {
         if (!isInitialized)
             await InitializeAsync();
 
-        var character = await CharacterAiClient.GetInfoAsync(id);
+        return await CharacterAiClient.CreateNewChatAsync(characterId);
+    }
+
+
+    public async Task<Character> GetCharacterDataFromId(string characterId)
+    {
+        if (!isInitialized)
+            await InitializeAsync();
+
+        var character = await CharacterAiClient.GetInfoAsync(characterId);
 
         return character;
     }

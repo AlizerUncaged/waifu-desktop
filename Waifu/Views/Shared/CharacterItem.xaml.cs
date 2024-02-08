@@ -46,7 +46,6 @@ public partial class CharacterItem : UserControl
         DependencyProperty.Register(nameof(RoleplayCharacter), typeof(RoleplayCharacter), typeof(CharacterItem),
             new FrameworkPropertyMetadata(null)
             {
-                
             });
 
     #endregion
@@ -73,5 +72,17 @@ public partial class CharacterItem : UserControl
     private void CharacterItemLoaded(object sender, RoutedEventArgs e)
     {
         ToolTipService.SetToolTip(MainGrid, CharacterName);
+
+        Badge.Visibility = Visibility.Collapsed;
+
+        if (RoleplayCharacter.IsCharacterAi)
+            SetBadge("chai");
+    }
+
+    public void SetBadge(string badge)
+    {
+        BadgeText.Text = badge;
+        
+        Badge.Visibility = Visibility.Visible;
     }
 }

@@ -22,19 +22,19 @@ public class ChatServiceManager
     {
         var chatHandler = _chatHandlers.FirstOrDefault(x => x is T);
 
-        _logger.LogInformation($"Chat handler is {chatHandler.GetType().Name}");
+        if (chatHandler is null)
+            return null;
+
+        _logger.LogInformation($"Chat handler requested is {chatHandler.GetType().Name}");
 
         return chatHandler;
     }
 
-    // public async Task<LocalLlama> LoadLlamaAndResult(ChatChannel chatChannel, Waifu.Models.Settings settings,
-    //     PersonaSingle personaSingle,
-    //     RoleplayCharacter roleplayCharacter)
-    // {
-    //     var llamaObj = new LocalLlama(chatChannel, settings, personaSingle, roleplayCharacter);
-    //
-    //     _ = llamaObj.InitializeAsync();
-    //
-    //     return llamaObj;
-    // }
+    public async Task<IChatHandler?> GetEnabledChatServiceForCharacter(RoleplayCharacter roleplayCharacter)
+    {
+        if (roleplayCharacter.IsCharacterAi)
+            return await GetEnabledChatService<CharacterAiChatHandler>();
+
+        return await GetEnabledChatService<LocalLlama>();
+    }
 }

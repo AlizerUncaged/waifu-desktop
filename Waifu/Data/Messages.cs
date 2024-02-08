@@ -6,10 +6,12 @@ namespace Waifu.Data;
 public class Messages
 {
     private readonly ApplicationDbContext _applicationDbContext;
+    private readonly CharacterAiApi _characterAiApi;
 
-    public Messages(ApplicationDbContext applicationDbContext)
+    public Messages(ApplicationDbContext applicationDbContext, CharacterAiApi characterAiApi)
     {
         _applicationDbContext = applicationDbContext;
+        _characterAiApi = characterAiApi;
     }
 
     public async Task<IEnumerable<ChatMessage>> GetMessagesAsync(long channelId, long? currentMessageId = null,
@@ -35,6 +37,7 @@ public class Messages
         return chatMessage;
     }
 
+
     public async Task<ChatChannel> GetOrCreateChannelWithCharacter(RoleplayCharacter character)
     {
         if (await _applicationDbContext.ChatChannels.FirstOrDefaultAsync(x =>
@@ -45,10 +48,21 @@ public class Messages
         var dbRpCharacter =
             await _applicationDbContext.RoleplayCharacters.FirstOrDefaultAsync(x => x.Id == character.Id);
 
-        var channelEntity = _applicationDbContext.ChatChannels.Add(new ChatChannel()
+        var newChannel = new ChatChannel()
         {
             Characters = { dbRpCharacter }
-        });
+        };
+
+        if (character.IsCharacterAi)
+        {
+            // its characterai, automatically generate a chat id
+            var chatId = await _characterAiApi.GenerateNewChannelAndGetChatIdAsync(character.CharacterAiId);
+
+            newChannel.CharacterAiHistoryId = chatId;
+        }
+
+
+        var channelEntity = _applicationDbContext.ChatChannels.Add(newChannel);
 
         await _applicationDbContext.SaveChangesAsync();
 

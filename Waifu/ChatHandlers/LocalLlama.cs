@@ -73,31 +73,36 @@ public class LocalLlama : IChatHandler
         isInitialized = true;
     }
 
-    public async Task<string?> SendMessageAndGetResultAsync(string message)
+    public Task<string?> SendMessageAndGetResultAsync(ChatMessage message)
     {
-        if (!isInitialized)
-            await InitializeAsync();
-
-        await _semaphoreSlim.WaitAsync();
-
-        var messageString = new StringBuilder();
-
-        await foreach (var text in ChatSession.ChatAsync(new ChatHistory.Message(AuthorRole.User, message),
-                           new InferenceParams()
-                           {
-                               Temperature = _settings.Temperature, MaxTokens = _settings.MaxTokens,
-                               TopK = _settings.TopK, TopP = _settings.TopP
-                           }))
-        {
-            messageString.Append(text);
-            PartialMessageGenerated?.Invoke(this, text);
-        }
-
-
-        var completeMessage = messageString.ToString();
-
-        CompleteMessageGenerated?.Invoke(this, completeMessage);
-
-        return completeMessage;
+        throw new NotImplementedException();
     }
+    //
+    // public async Task<string?> SendMessageAndGetResultAsync(string message)
+    // {
+    //     if (!isInitialized)
+    //         await InitializeAsync();
+    //
+    //     await _semaphoreSlim.WaitAsync();
+    //
+    //     var messageString = new StringBuilder();
+    //
+    //     await foreach (var text in ChatSession.ChatAsync(new ChatHistory.Message(AuthorRole.User, message),
+    //                        new InferenceParams()
+    //                        {
+    //                            Temperature = _settings.Temperature, MaxTokens = _settings.MaxTokens,
+    //                            TopK = _settings.TopK, TopP = _settings.TopP
+    //                        }))
+    //     {
+    //         messageString.Append(text);
+    //         PartialMessageGenerated?.Invoke(this, text);
+    //     }
+    //
+    //
+    //     var completeMessage = messageString.ToString();
+    //
+    //     CompleteMessageGenerated?.Invoke(this, completeMessage);
+    //
+    //     return completeMessage;
+    // }
 }
