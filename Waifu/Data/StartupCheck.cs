@@ -39,11 +39,10 @@ public class StartupCheck : ISelfRunning
                 $"Downloading Puppeteer {i.BytesReceived.Bytes().Humanize()}/{Convert.ToInt32(i.TotalBytesToReceive).Bytes().Humanize()}",
                 true);
         };
-        
+
         if (new CharacterAiClient() is { } chaiClient)
         {
             await chaiClient.DownloadBrowserAsync();
-            await chaiClient.LaunchBrowserAsync();
         }
 
         Log("Starting");

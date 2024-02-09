@@ -93,6 +93,8 @@ public partial class App : Application
         
         builder.RegisterType<ProcessUtilities>()
             .AsSelf();
+        builder.RegisterType<ChatServiceManager>()
+            .AsSelf();
 
         builder.RegisterType<ProperShutdownHandler>()
             .AsSelf();

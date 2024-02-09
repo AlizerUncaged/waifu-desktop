@@ -14,30 +14,40 @@ public class ChatAreaController
     private readonly Settings _settings;
     private readonly Personas _personas;
     private readonly ILifetimeScope _lifetimeScope;
+    private readonly ChatServiceManager _chatServiceManager;
 
     public ChatAreaController(Messages messages,
         Settings settings,
         Personas personas,
-        ILifetimeScope lifetimeScope)
+        ILifetimeScope lifetimeScope, ChatServiceManager chatServiceManager)
     {
         _messages = messages;
         _settings = settings;
         _personas = personas;
         _lifetimeScope = lifetimeScope;
+        _chatServiceManager = chatServiceManager;
     }
 
     public event EventHandler<string> ChatAreaMessage;
 
     public async Task<ChatArea?> CreateChatArea(RoleplayCharacter roleplayCharacter)
     {
-        if (!roleplayCharacter.IsCharacterAi)
+        var chatHandlerForUserType = _chatServiceManager.GetEnabledChatServiceForCharacter(roleplayCharacter);
+
+        if (chatHandlerForUserType is null)
         {
-            ChatAreaMessage?.Invoke(this, "Coming soon...");
+            ChatAreaMessage?.Invoke(this, "No chat service available for character.");
+            return null;
+        }
+
+        if (chatHandlerForUserType == typeof(LocalLlama))
+        {
+            ChatAreaMessage?.Invoke(this, "Coming soon.");
             return null;
         }
 
         var channelWithCharacter = await _messages.GetOrCreateChannelWithCharacter(roleplayCharacter);
-
+        var defaultPersona = await _personas.GetOrCreatePersona();
         var chatAreaScope = _lifetimeScope.BeginLifetimeScope(x =>
         {
             x.RegisterInstance(roleplayCharacter)
@@ -48,30 +58,26 @@ public class ChatAreaController
                 .AsSelf()
                 .SingleInstance();
 
+            x.RegisterInstance(defaultPersona)
+                .AsSelf()
+                .SingleInstance();
+
             // chat handlers
-            x.RegisterType<CharacterAiChatHandler>().As<IChatHandler>().SingleInstance();
-            x.RegisterType<LocalLlama>().As<IChatHandler>().SingleInstance();
+            x.RegisterType(chatHandlerForUserType).As<IChatHandler>().SingleInstance();
 
             x.RegisterType<ChatServiceManager>()
                 .AsSelf()
                 .SingleInstance();
         });
 
-        var chatServiceManager = chatAreaScope.Resolve<ChatServiceManager>();
-        var chatHandlerForUser = await chatServiceManager.GetEnabledChatServiceForCharacter(roleplayCharacter);
 
-        if (chatHandlerForUser is null)
-        {
-            ChatAreaMessage?.Invoke(this, "No chat service available for character.");
-            return null;
-        }
+        var chatHandlerForUser = chatAreaScope.Resolve<IChatHandler>();
 
         ChatArea chatArea = default;
 
         Application.Current.Dispatcher.Invoke(() =>
         {
             chatArea = chatAreaScope.Resolve<ChatArea>();
-
             chatHandlerForUser.CompleteMessageGenerated += (sender, message) =>
             {
                 chatArea.AddChatBasedOnIdLocation(message);
