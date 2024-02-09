@@ -11,11 +11,13 @@ public class StartupCheck : ISelfRunning
 {
     private readonly ApplicationDbContext _applicationDbContext;
     private readonly ILogger<StartupCheck> _logger;
+    private readonly Hotkeys _hotkeys;
 
-    public StartupCheck(ApplicationDbContext applicationDbContext, ILogger<StartupCheck> logger)
+    public StartupCheck(ApplicationDbContext applicationDbContext, ILogger<StartupCheck> logger, Hotkeys hotkeys)
     {
         _applicationDbContext = applicationDbContext;
         _logger = logger;
+        _hotkeys = hotkeys;
     }
 
     public async Task<bool> DoesAModelExistAsync()
@@ -45,6 +47,9 @@ public class StartupCheck : ISelfRunning
             await chaiClient.DownloadBrowserAsync();
         }
 
+        Log("Loading hotkeys");
+        await _hotkeys.HookHotkeys();
+        
         Log("Starting");
         OnCheckFinishedSuccessfully?.Invoke(this, EventArgs.Empty);
     }

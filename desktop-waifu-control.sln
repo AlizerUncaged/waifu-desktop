@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PuppeteerLib", "Dependencie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedUtils", "Dependencies\CharacterAI-NET-API-Wrapper\SharedUtils\SharedUtils.csproj", "{9880E9D3-B1EA-45DA-A63A-0A0BAB2F466C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlobalLowLevelHooks", "Dependencies\Global-Low-Level-Key-Board-And-Mouse-Hook\GlobalLowLevelHooks\GlobalLowLevelHooks.csproj", "{77EB5498-54DD-4DCA-AFF6-F9B2C6F97FE3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{9880E9D3-B1EA-45DA-A63A-0A0BAB2F466C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9880E9D3-B1EA-45DA-A63A-0A0BAB2F466C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9880E9D3-B1EA-45DA-A63A-0A0BAB2F466C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77EB5498-54DD-4DCA-AFF6-F9B2C6F97FE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77EB5498-54DD-4DCA-AFF6-F9B2C6F97FE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77EB5498-54DD-4DCA-AFF6-F9B2C6F97FE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77EB5498-54DD-4DCA-AFF6-F9B2C6F97FE3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

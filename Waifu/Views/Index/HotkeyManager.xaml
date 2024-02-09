@@ -16,13 +16,7 @@
                     <Button Click="CancelClicked" Margin="0,0,7,0" BorderThickness="0"
                             Background="{DynamicResource BackgroundLight}">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Padding="0" Margin="0" VerticalAlignment="Center">Cancel</TextBlock>
-                        </StackPanel>
-                    </Button>
-                    <Button Background="{DynamicResource Purple}" BorderThickness="0" Click="SaveChanges">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <materialDesign:PackIcon VerticalAlignment="Center" Margin="0,0,7,0" Kind="FloppyDisk"></materialDesign:PackIcon>
-                            <TextBlock Padding="0" Margin="0" VerticalAlignment="Center">Save</TextBlock>
+                            <TextBlock Padding="0" Margin="0" VerticalAlignment="Center">Close</TextBlock>
                         </StackPanel>
                     </Button>
                 </StackPanel>

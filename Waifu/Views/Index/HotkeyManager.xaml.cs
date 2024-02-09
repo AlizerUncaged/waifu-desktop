@@ -22,16 +22,20 @@ public partial class HotkeyManager : UserControl, IPopup
 
 
     public event EventHandler? CloseTriggered;
+
     public event EventHandler<FrameworkElement>? ReplaceTriggered;
 
     private void CancelClicked(object sender, RoutedEventArgs e)
     {
+        var mainWindow = this.GetCurrentWindow() as MainWindow;
+
+        if (_hotkeyPrev.Any())
+        {
+            mainWindow.ShowMessage("Save your changes first.");
+            return;
+        }
+
         CloseTriggered?.Invoke(this, EventArgs.Empty);
-    }
-
-
-    private void SaveChanges(object sender, RoutedEventArgs e)
-    {
     }
 
     private void StartGetHotkey(object sender, RoutedEventArgs e)
@@ -42,10 +46,15 @@ public partial class HotkeyManager : UserControl, IPopup
 
         if (string.IsNullOrWhiteSpace(hotkeyName)) return;
 
+        var mainWindow = this.GetCurrentWindow() as MainWindow;
+
         _activeTextBlock = this.FindName(hotkeyName + "Keys") as TextBlock;
 
         if (frameworkElement.Content.ToString() == "Save")
         {
+            Keyboard.RemovePreviewKeyDownHandler(mainWindow, KeydownHandler);
+            Keyboard.RemovePreviewKeyUpHandler(mainWindow, KeyupHandler);
+
             _hotkeyPrev.Clear();
 
             frameworkElement.Content = "Change";
@@ -66,11 +75,8 @@ public partial class HotkeyManager : UserControl, IPopup
         frameworkElement.Content = "Save";
 
 
-        if (this.GetCurrentWindow() is MainWindow mainWindow)
-        {
-            Keyboard.AddPreviewKeyDownHandler(mainWindow, KeydownHandler);
-            Keyboard.AddPreviewKeyUpHandler(mainWindow, KeyupHandler);
-        }
+        Keyboard.AddPreviewKeyDownHandler(mainWindow, KeydownHandler);
+        Keyboard.AddPreviewKeyUpHandler(mainWindow, KeyupHandler);
     }
 
     private TextBlock? _activeTextBlock;
