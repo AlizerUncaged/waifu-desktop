@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 using Autofac;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Waifu.ChatHandlers;
 using Waifu.Data;
 using Waifu.Models;
@@ -15,17 +17,19 @@ public class ChatAreaController
     private readonly Personas _personas;
     private readonly ILifetimeScope _lifetimeScope;
     private readonly ChatServiceManager _chatServiceManager;
+    private readonly ILogger<ChatAreaController> _logger;
 
     public ChatAreaController(Messages messages,
         Settings settings,
         Personas personas,
-        ILifetimeScope lifetimeScope, ChatServiceManager chatServiceManager)
+        ILifetimeScope lifetimeScope, ChatServiceManager chatServiceManager, ILogger<ChatAreaController> logger)
     {
         _messages = messages;
         _settings = settings;
         _personas = personas;
         _lifetimeScope = lifetimeScope;
         _chatServiceManager = chatServiceManager;
+        _logger = logger;
     }
 
     public event EventHandler<string> ChatAreaMessage;
@@ -85,6 +89,9 @@ public class ChatAreaController
 
             chatArea.MessageSend += ChatAreaOnMessageSend;
         });
+
+        _logger.LogInformation(
+            $"Initialized chat session.{Environment.NewLine}Channel: {JsonConvert.SerializeObject(channelWithCharacter)}{Environment.NewLine}Character: {JsonConvert.SerializeObject(roleplayCharacter)}{Environment.NewLine}Persona: {JsonConvert.SerializeObject(defaultPersona)}{Environment.NewLine}Chat handler: {chatHandlerForUserType.FullName}");
 
         return chatArea;
     }

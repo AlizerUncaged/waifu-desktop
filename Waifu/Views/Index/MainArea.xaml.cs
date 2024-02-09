@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Autofac;
 using Vulkan;
 using Waifu.Data;
 using Waifu.Models;
@@ -14,16 +15,16 @@ public partial class MainArea : UserControl
     private readonly AtarashiCharacter _atarashiCharacter;
     private readonly Characters _characters;
     private readonly CharactersMenu _charactersMenu;
-    private readonly AtarashiCharacterAi _atarashiCharacterAi;
+    private readonly ILifetimeScope _lifetimeScope;
     private readonly CharacterAiApi _characterAiApi;
 
     public MainArea(AtarashiCharacter atarashiCharacter, Characters characters, CharactersMenu charactersMenu,
-        AtarashiCharacterAi atarashiCharacterAi, CharacterAiApi characterAiApi)
+        ILifetimeScope lifetimeScope, CharacterAiApi characterAiApi)
     {
         _atarashiCharacter = atarashiCharacter;
         _characters = characters;
         _charactersMenu = charactersMenu;
-        _atarashiCharacterAi = atarashiCharacterAi;
+        _lifetimeScope = lifetimeScope;
         _characterAiApi = characterAiApi;
 
         InitializeComponent();
@@ -87,12 +88,15 @@ public partial class MainArea : UserControl
 
     private void NewCharacterAi(object sender, RoutedEventArgs e)
     {
+        // new isntance of this user control always!!!!
+        var atarashiCharacterAi = _lifetimeScope.Resolve<AtarashiCharacterAi>();
+        
         _ = Task.Run(async () =>
         {
             if (await _characterAiApi.CheckCharacterAiToken() is false)
                 return;
 
-            OpenDialog(_atarashiCharacterAi);
+            OpenDialog(atarashiCharacterAi);
         });
     }
 }

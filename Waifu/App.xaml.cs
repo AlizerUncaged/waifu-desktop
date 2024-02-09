@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows;
 using Autofac;
 using LLama.Common;
+using Newtonsoft.Json;
 using Serilog;
 using Serilog.Events;
 using Serilog.Extensions.Autofac.DependencyInjection;
@@ -30,6 +31,12 @@ public partial class App : Application
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
+
+        JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+        {
+            Formatting = Newtonsoft.Json.Formatting.Indented,
+            ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+        };
 
         var logPath = Path.Combine(Constants.DataFolder,
             "log",
@@ -90,7 +97,7 @@ public partial class App : Application
 
         builder.RegisterType<Personas>()
             .AsSelf();
-        
+
         builder.RegisterType<ProcessUtilities>()
             .AsSelf();
         builder.RegisterType<ChatServiceManager>()
@@ -106,7 +113,7 @@ public partial class App : Application
             .AsSelf().SingleInstance();
 
         builder.RegisterType<AtarashiCharacterAi>()
-            .AsSelf();
+            .AsSelf().InstancePerDependency();
 
         builder.RegisterType<HuggingFaceModelApi>()
             .AsSelf();
