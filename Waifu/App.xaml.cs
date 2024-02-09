@@ -75,8 +75,17 @@ public partial class App : Application
         builder.RegisterType<ImageHashing>()
             .AsSelf();
 
-        builder.RegisterType<AtarashiCharacter>()
+        builder.RegisterType<AudioRecorder>()
             .AsSelf();
+
+        builder.RegisterType<HotkeyManager>()
+            .AsSelf().SingleInstance();
+
+        builder.RegisterType<Hotkeys>()
+            .AsSelf().SingleInstance();
+
+        builder.RegisterType<AtarashiCharacter>()
+            .AsSelf().InstancePerDependency();
 
         builder.RegisterType<CharactersMenu>()
             .AsSelf();
@@ -117,6 +126,9 @@ public partial class App : Application
 
         builder.RegisterType<HuggingFaceModelApi>()
             .AsSelf();
+
+        builder.RegisterType<AppWideKeyboardEvents>()
+            .AsSelf().SingleInstance();
 
 
         builder.RegisterType<ChatAreaController>()

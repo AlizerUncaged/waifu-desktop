@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="Waifu.Views.Index.HotkeyManager"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Waifu.Views.Index"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" Loaded="HotkeyManagerLoaded"
+             TextElement.Foreground="{DynamicResource Foreground}"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}"
+             d:DesignHeight="300" d:DesignWidth="400">
+    <Grid Background="{DynamicResource Background}">
+        <DockPanel Margin="7" VerticalAlignment="Stretch" HorizontalAlignment="Center">
+            <Grid DockPanel.Dock="Bottom" VerticalAlignment="Bottom">
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                    <Button Click="CancelClicked" Margin="0,0,7,0" BorderThickness="0"
+                            Background="{DynamicResource BackgroundLight}">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Padding="0" Margin="0" VerticalAlignment="Center">Cancel</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button Background="{DynamicResource Purple}" BorderThickness="0" Click="SaveChanges">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <materialDesign:PackIcon VerticalAlignment="Center" Margin="0,0,7,0" Kind="FloppyDisk"></materialDesign:PackIcon>
+                            <TextBlock Padding="0" Margin="0" VerticalAlignment="Center">Save</TextBlock>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+            <ScrollViewer HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+
+                        <StackPanel>
+                            <TextBlock FontSize="24">
+                                <materialDesign:PackIcon Kind="Keyboard"></materialDesign:PackIcon>
+                                <Run>Manage Hotkeys</Run>
+                            </TextBlock>
+                            <StackPanel Orientation="Vertical" Margin="0,0,0,15">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Margin="0,0,15,0" Orientation="Horizontal" VerticalAlignment="Center">
+                                        <materialDesign:PackIcon VerticalAlignment="Center" Kind="Microphone"></materialDesign:PackIcon>
+                                        <TextBlock VerticalAlignment="Center" Text="Microphone Toggle"></TextBlock>
+                                    </StackPanel>
+                                    <StackPanel VerticalAlignment="Center" Grid.Column="1" Margin="15,0"
+                                                HorizontalAlignment="Right">
+                                        <TextBlock Name="VoiceKeys" FontWeight="Black" Text="CTRL+ALT"></TextBlock>
+                                    </StackPanel>
+                                    <StackPanel VerticalAlignment="Center" Grid.Column="2" HorizontalAlignment="Right">
+                                        <Button Click="StartGetHotkey" Content="Change" Tag="Voice"
+                                                Background="{DynamicResource Purple}" BorderThickness="0">
+
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </DockPanel>
+    </Grid>
+</UserControl>

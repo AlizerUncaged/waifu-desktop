@@ -47,8 +47,8 @@
                 </Grid>
             </Grid>
         </DockPanel>
-        <materialDesign:Snackbar
-            MessageQueue="{Binding SnackbarMessageQueue}">
+        <materialDesign:Snackbar Cursor="Hand" MouseDown="MessageClicked"
+                                 MessageQueue="{Binding SnackbarMessageQueue}">
         </materialDesign:Snackbar>
     </Grid>
 </Window>

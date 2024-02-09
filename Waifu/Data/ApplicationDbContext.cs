@@ -13,6 +13,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<RoleplayCharacter> RoleplayCharacters { get; set; }
 
     public DbSet<Waifu.Models.Settings> Settings { get; set; }
+    
+    public DbSet<Hotkey> Hotkeys { get; set; }
 
     public DbSet<PersonaSingle> Personas { get; set; }
 

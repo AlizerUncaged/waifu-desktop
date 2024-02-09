@@ -8,10 +8,12 @@ namespace Waifu.Views.Index;
 public partial class Settings : UserControl, IPopup
 {
     private readonly ModelManager _manageModels;
+    private readonly HotkeyManager _hotkeyManager;
 
-    public Settings(ModelManager manageModels)
+    public Settings(ModelManager manageModels, HotkeyManager hotkeyManager)
     {
         _manageModels = manageModels;
+        _hotkeyManager = hotkeyManager;
         InitializeComponent();
     }
 
@@ -39,5 +41,10 @@ public partial class Settings : UserControl, IPopup
     {
         if (this.GetCurrentWindow() is MainWindow mainWindow)
             mainWindow.ShowMessage("Coming soon...");
+    }
+
+    private void ManageHotkeysClicked(object sender, RoutedEventArgs e)
+    {
+        ReplaceTriggered?.Invoke(this, _hotkeyManager);
     }
 }

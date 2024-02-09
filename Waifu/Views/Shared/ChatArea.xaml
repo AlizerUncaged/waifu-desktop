@@ -39,7 +39,7 @@
                     <Grid DockPanel.Dock="Bottom" MinHeight="10" Margin="5"
                           VerticalAlignment="Bottom">
                         <DockPanel>
-                            <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Right">
+                            <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
                                 <Button Click="SendMessageButton" BorderThickness="0"
                                         Background="{DynamicResource Purple}">
                                     <Button.Content>

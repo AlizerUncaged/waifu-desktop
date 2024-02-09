@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Interop;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.Logging;
@@ -25,12 +26,13 @@ public partial class MainWindow : Window
     private readonly Header _header;
     private readonly CharacterAiApi _characterAiApi;
     private readonly ChatAreaController _chatAreaController;
+    private readonly Hotkeys _hotkeys;
 
     public SnackbarMessageQueue SnackbarMessageQueue { get; } = new();
 
     public MainWindow(Welcome welcome, ILogger<MainWindow> logger, StartupCheck startupCheck, MainArea mainArea,
         Waifu.Data.Settings settings,
-        Header header, CharacterAiApi characterAiApi, ChatAreaController chatAreaController)
+        Header header, CharacterAiApi characterAiApi, ChatAreaController chatAreaController, Hotkeys hotkeys)
     {
         _welcome = welcome;
         _logger = logger;
@@ -40,6 +42,7 @@ public partial class MainWindow : Window
         _header = header;
         _characterAiApi = characterAiApi;
         _chatAreaController = chatAreaController;
+        _hotkeys = hotkeys;
 
         InitializeComponent();
 
@@ -60,6 +63,7 @@ public partial class MainWindow : Window
 
         _characterAiApi.ApiNotificationMessage += (o, s) => { ShowMessage(s.Trim()); };
         _chatAreaController.ChatAreaMessage += (o, s) => { ShowMessage(s.Trim()); };
+        _hotkeys.HotkeyManageMessage += (o, s) => { ShowMessage(s.Trim()); };
 
         SetView(_welcome);
 
@@ -104,6 +108,18 @@ public partial class MainWindow : Window
 
     public void ShowMessage(string message)
     {
-        Dispatcher.Invoke(() => { SnackbarMessageQueue.Enqueue(message); });
+        Dispatcher.Invoke(() =>
+        {
+            SnackbarMessageQueue.Clear();
+            SnackbarMessageQueue.Enqueue(message);
+        });
+    }
+
+    private void MessageClicked(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is Snackbar snackbar)
+        {
+            snackbar.MessageQueue?.Clear();
+        }
     }
 }

@@ -12,16 +12,14 @@ namespace Waifu.Views.Index;
 
 public partial class MainArea : UserControl
 {
-    private readonly AtarashiCharacter _atarashiCharacter;
     private readonly Characters _characters;
     private readonly CharactersMenu _charactersMenu;
     private readonly ILifetimeScope _lifetimeScope;
     private readonly CharacterAiApi _characterAiApi;
 
-    public MainArea(AtarashiCharacter atarashiCharacter, Characters characters, CharactersMenu charactersMenu,
+    public MainArea(Characters characters, CharactersMenu charactersMenu,
         ILifetimeScope lifetimeScope, CharacterAiApi characterAiApi)
     {
-        _atarashiCharacter = atarashiCharacter;
         _characters = characters;
         _charactersMenu = charactersMenu;
         _lifetimeScope = lifetimeScope;
@@ -83,14 +81,14 @@ public partial class MainArea : UserControl
 
     private void NewLocalCharacter(object sender, RoutedEventArgs e)
     {
-        OpenDialog(_atarashiCharacter);
+        OpenDialog(_lifetimeScope.Resolve<AtarashiCharacter>());
     }
 
     private void NewCharacterAi(object sender, RoutedEventArgs e)
     {
         // new isntance of this user control always!!!!
         var atarashiCharacterAi = _lifetimeScope.Resolve<AtarashiCharacterAi>();
-        
+
         _ = Task.Run(async () =>
         {
             if (await _characterAiApi.CheckCharacterAiToken() is false)

@@ -57,7 +57,6 @@ public class Messages
         {
             // its characterai, automatically generate a chat id
             var chatId = await _characterAiApi.GenerateNewChannelAndGetChatIdAsync(character.CharacterAiId);
-
             newChannel.CharacterAiHistoryId = chatId;
         }
 
@@ -65,6 +64,16 @@ public class Messages
         var channelEntity = _applicationDbContext.ChatChannels.Add(newChannel);
 
         await _applicationDbContext.SaveChangesAsync();
+
+        if (character.IsCharacterAi)
+        {
+            // the chai character must have a greeting
+            _applicationDbContext.ChatMessages.Add(new ChatMessage()
+            {
+                Sender = character.Id, SentByUser = false, Message = character.SampleMessages,
+                ChatChannel = channelEntity.Entity
+            });
+        }
 
         return channelEntity.Entity;
     }
