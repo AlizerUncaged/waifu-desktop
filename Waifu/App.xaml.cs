@@ -12,6 +12,7 @@ using Waifu.ChatHandlers;
 using Waifu.Controllers;
 using Waifu.Data;
 using Waifu.Data.HuggingFace;
+using Waifu.Utilities;
 using Waifu.Views;
 using Waifu.Views.Index;
 using Waifu.Views.Shared;
@@ -88,6 +89,12 @@ public partial class App : Application
             .AsSelf();
 
         builder.RegisterType<Personas>()
+            .AsSelf();
+        
+        builder.RegisterType<ProcessUtilities>()
+            .AsSelf();
+
+        builder.RegisterType<ProperShutdownHandler>()
             .AsSelf();
 
         builder.RegisterType<ModelManager>()

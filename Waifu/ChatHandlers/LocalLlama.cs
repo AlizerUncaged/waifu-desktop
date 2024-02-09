@@ -8,7 +8,7 @@ namespace Waifu.ChatHandlers;
 
 public class LocalLlama : IChatHandler
 {
-    private readonly Settings _settings;
+    private readonly Data.Settings _settings;
     private readonly PersonaSingle _personaSingle;
     private readonly RoleplayCharacter _roleplayCharacter;
 
@@ -17,7 +17,7 @@ public class LocalLlama : IChatHandler
     public event EventHandler<string>? PartialMessageGenerated;
     public ChatChannel ChatChannel { get; set; }
 
-    public ModelParams Parameters { get; }
+    public ModelParams Parameters { get; private set; }
 
     public static LLamaWeights? Weights { get; private set; } = null;
 
@@ -29,19 +29,13 @@ public class LocalLlama : IChatHandler
 
     public event EventHandler ModelLoaded;
 
-    public LocalLlama(ChatChannel chatChannel, Settings settings, PersonaSingle personaSingle,
+    public LocalLlama(ChatChannel chatChannel, Data.Settings settings, PersonaSingle personaSingle,
         RoleplayCharacter roleplayCharacter)
     {
         _settings = settings;
         _personaSingle = personaSingle;
         _roleplayCharacter = roleplayCharacter;
         ChatChannel = chatChannel;
-
-        Parameters = new(Path.GetFullPath(settings.LocalModel))
-        {
-            ContextSize = 1024,
-            Seed = (uint)Random.Shared.Next(), GpuLayerCount = settings.GpuLayerCount
-        };
     }
 
     private SemaphoreSlim _semaphoreSlim = new(1);
@@ -57,6 +51,14 @@ public class LocalLlama : IChatHandler
 
         if (Weights is null) // only load weights once~
             await Task.Run(() => { Weights = LLamaWeights.LoadFromFile(Parameters); });
+
+        var settings = await _settings.GetOrCreateSettings();
+
+        Parameters = new(Path.GetFullPath(settings.LocalModel))
+        {
+            ContextSize = 1024,
+            Seed = (uint)Random.Shared.Next(), GpuLayerCount = settings.GpuLayerCount
+        };
 
         LLamaContext ??= Weights.CreateContext(Parameters);
 

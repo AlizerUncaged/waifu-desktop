@@ -13,12 +13,12 @@ namespace Waifu.Views.Shared;
 public partial class Header : UserControl
 {
     private readonly Views.Index.Settings _settings;
-    private readonly CharacterAiApi _characterAiApi;
+    private readonly ProperShutdownHandler _properShutdownHandler;
 
-    public Header(Views.Index.Settings settings, CharacterAiApi characterAiApi)
+    public Header(Views.Index.Settings settings, ProperShutdownHandler properShutdownHandler)
     {
         _settings = settings;
-        _characterAiApi = characterAiApi;
+        _properShutdownHandler = properShutdownHandler;
         InitializeComponent();
     }
 
@@ -31,9 +31,10 @@ public partial class Header : UserControl
     private void CloseClicked(object sender, MouseButtonEventArgs e)
     {
         // kill puppeteer first
-        _characterAiApi.CharacterAiClient?.EnsureAllChromeInstancesAreKilled();
-
-        Application.Current.Shutdown();
+        _properShutdownHandler.ShutdownProperly().ContinueWith(x =>
+        {
+            Dispatcher.Invoke(() => { Application.Current.Shutdown(); });
+        });
     }
 
     private void MinimizeClicked(object sender, MouseButtonEventArgs e)

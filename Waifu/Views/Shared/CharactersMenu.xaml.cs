@@ -70,6 +70,7 @@ public partial class CharactersMenu : UserControl
         if (this.GetParentType<MainArea>() is { } mainArea)
             _ = Task.Run(async () =>
             {
+                // generate the chatarea context as well as the complete chat handlers
                 var chatArea = await _chatAreaController.CreateChatArea(rpCharacter);
 
                 if (chatArea is not null)

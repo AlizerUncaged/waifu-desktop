@@ -30,6 +30,12 @@ public class ChatAreaController
 
     public async Task<ChatArea?> CreateChatArea(RoleplayCharacter roleplayCharacter)
     {
+        if (!roleplayCharacter.IsCharacterAi)
+        {
+            ChatAreaMessage?.Invoke(this, "Coming soon...");
+            return null;
+        }
+
         var channelWithCharacter = await _messages.GetOrCreateChannelWithCharacter(roleplayCharacter);
 
         var chatAreaScope = _lifetimeScope.BeginLifetimeScope(x =>
@@ -44,7 +50,7 @@ public class ChatAreaController
 
             // chat handlers
             x.RegisterType<CharacterAiChatHandler>().As<IChatHandler>().SingleInstance();
-            // x.RegisterType<LocalLlama>().As<IChatHandler>().SingleInstance();
+            x.RegisterType<LocalLlama>().As<IChatHandler>().SingleInstance();
 
             x.RegisterType<ChatServiceManager>()
                 .AsSelf()

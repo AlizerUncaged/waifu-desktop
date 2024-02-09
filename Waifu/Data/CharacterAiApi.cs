@@ -11,12 +11,12 @@ public class CharacterAiApi
     private readonly Settings _settings;
     private readonly ILogger<CharacterAiApi> _logger;
 
-    public static CharacterAiClient? StaticCharacterAiClient { get; set; }
+    private CharacterAiClient? _staticCharacterAiClient;
 
     public CharacterAiClient? CharacterAiClient
     {
-        get => StaticCharacterAiClient;
-        set { StaticCharacterAiClient = value; }
+        get => _staticCharacterAiClient;
+        set { _staticCharacterAiClient = value; }
     }
 
     public CharacterAiApi(Settings settings, ILogger<CharacterAiApi> logger)

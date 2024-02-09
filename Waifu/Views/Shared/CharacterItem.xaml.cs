@@ -77,12 +77,16 @@ public partial class CharacterItem : UserControl
 
         if (RoleplayCharacter.IsCharacterAi)
             SetBadge("chai");
+        else
+        {
+            SetBadge("llama");
+        }
     }
 
     public void SetBadge(string badge)
     {
         BadgeText.Text = badge;
-        
+
         Badge.Visibility = Visibility.Visible;
     }
 }
