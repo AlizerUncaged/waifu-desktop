@@ -29,7 +29,7 @@ public class HuggingFaceModelDownloader
             var modelStream = await WhisperGgmlDownloader.GetGgmlModelAsync(modelType);
 
             var fileWriter = new FileStream(modelName, FileMode.Create, FileAccess.Write);
-            
+
             var copiedBytes = 0L;
 
             var buffer = new byte[81920]; // Adjust buffer size as needed
@@ -63,16 +63,43 @@ public class HuggingFaceModelDownloader
 public class DownloadProgressData
 {
     public event EventHandler<long> ProgressPercentage;
+    public event EventHandler<long> OptimizedProgressChanged;
 
     public event EventHandler DownloadDone;
 
+    private bool _isDownloading = true;
+    private long _bytesDownloaded = 0;
+
+    public DownloadProgressData()
+    {
+        StartReportingOptimized();
+    }
+
+    public void StartReportingOptimized()
+    {
+        ThreadPool.QueueUserWorkItem(state =>
+        {
+            while (_isDownloading)
+            {
+                // Send optimized progress every 0.5 seconds
+                OptimizedProgressChanged?.Invoke(this, _bytesDownloaded);
+
+                // Sleep for 0.5 seconds
+                Thread.Sleep(500);
+            }
+        });
+    }
+
     public void Report(long percentage)
     {
+        _bytesDownloaded = percentage;
+
         ProgressPercentage?.Invoke(this, percentage);
     }
 
     public void Done()
     {
+        _isDownloading = false;
         DownloadDone?.Invoke(this, EventArgs.Empty);
     }
 }

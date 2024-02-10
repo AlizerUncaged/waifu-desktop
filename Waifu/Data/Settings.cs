@@ -31,6 +31,8 @@ public class Settings
     {
         _applicationDbContext.Settings.RemoveRange(await _applicationDbContext.Settings.ToListAsync());
 
+        await _applicationDbContext.SaveChangesAsync();
+        
         _applicationDbContext.Settings.Add(settings);
 
         await _applicationDbContext.SaveChangesAsync();

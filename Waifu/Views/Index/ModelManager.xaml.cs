@@ -114,15 +114,15 @@ public partial class ModelManager : UserControl, IPopup
 
     private void SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (sender is ComboBox comboBox)
+        if (sender is ComboBox comboBox && WhisperDownloadButton is { } whisperDownloadButton)
         {
             var modelFile = Path.Combine(HuggingFaceModelDownloader.ModelFolder, $"{comboBox.Text}.bin");
             if (File.Exists(modelFile))
             {
-                WhisperDownloadButton.Text = "Downloaded!";
+                whisperDownloadButton.Text = "Downloaded!";
             }
-            else 
-                WhisperDownloadButton.Text = "Download";
+            else
+                whisperDownloadButton.Text = "Download";
         }
     }
 
@@ -141,12 +141,21 @@ public partial class ModelManager : UserControl, IPopup
         if (Enum.TryParse(WhisperModelList.Text, out GgmlType ggmlModel))
         {
             var progressChecker = _huggingFaceModelDownloader.DownloadWhisperModelInBackgroundAndSetAsModel(ggmlModel);
-            progressChecker.ProgressPercentage += (o, l) =>
+            senderButton.Content = "Fetching HuggingFace data...";
+            progressChecker.OptimizedProgressChanged += (o, l) =>
             {
-                Dispatcher.Invoke(() => { senderButton.Content = $"Downloading {l.Bytes().Humanize()}"; });
+                if (l > 0)
+                    Dispatcher.Invoke(() => { senderButton.Content = $"Downloading {l.Bytes().Humanize()}"; });
             };
 
-            progressChecker.DownloadDone += (o, args) => { senderButton.IsEnabled = true; };
+            progressChecker.DownloadDone += (o, args) =>
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    senderButton.Content = "Downloaded!";
+                    senderButton.IsEnabled = true;
+                });
+            };
         }
     }
 }
