@@ -30,6 +30,7 @@
                                 <materialDesign:PackIcon Kind="Keyboard"></materialDesign:PackIcon>
                                 <Run>Manage Hotkeys</Run>
                             </TextBlock>
+                            <TextBlock Text="These hotkeys are global! "></TextBlock>
                             <StackPanel Orientation="Vertical" Margin="0,0,0,15">
                                 <Grid>
                                     <Grid.ColumnDefinitions>

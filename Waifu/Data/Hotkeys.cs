@@ -1,10 +1,12 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
-using GlobalLowLevelHooks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using SharpHook;
+using SharpHook.Native;
 using Waifu.Models;
+using Waifu.Utilities;
 using Waifu.Views;
 
 namespace Waifu.Data;
@@ -12,61 +14,104 @@ namespace Waifu.Data;
 public class Hotkeys
 {
     private readonly ApplicationDbContext _applicationDbContext;
-    private readonly KeyboardHook _keyboardHook = new KeyboardHook();
     private readonly ILogger<Hotkeys> _logger;
+    private static TaskPoolGlobalHook _taskPoolGlobalHook = new();
+
+    private HashSet<KeyCode> _pressedKeys = new();
+    private Dictionary<IEnumerable<KeyCode>, string> _hotkeyActions = new Dictionary<IEnumerable<KeyCode>, string>();
 
     public Hotkeys(ApplicationDbContext applicationDbContext, ILogger<Hotkeys> logger)
     {
         _applicationDbContext = applicationDbContext;
         _logger = logger;
 
-        _keyboardHook.KeyDown += KeyboardHookOnKeyDown;
-        _keyboardHook.KeyUp += KeyboardHookOnKeyUp;
+        _taskPoolGlobalHook.KeyPressed += KeyboardHookOnKeyDown;
+        _taskPoolGlobalHook.KeyReleased += KeyboardHookOnKeyUp;
     }
 
-    private void KeyboardHookOnKeyUp(KeyboardHook.VKeys key)
+    private void KeyboardHookOnKeyUp(object? sender, KeyboardHookEventArgs args)
     {
+        var key = args.Data.KeyCode;
+
+
         if (_pressedKeys.Contains(key))
+        {
             _pressedKeys.Remove(key);
 
-        _logger.LogInformation($"HotKeys Released: {key.ToString()}");
-
-        foreach (var hook in _keyHookDictionary)
-        {
-            if (hook.Value.Contains(key) && CurrentActiveHotkeyName == hook.Key)
+            // Check if released key is part of any hotkey combination
+            foreach (var hotkeyCombination in _hotkeyActions.Keys)
             {
-                HotkeyUp?.Invoke(this, hook.Key);
+                if (hotkeyCombination.Contains(key) && _pressedKeys.Intersect(hotkeyCombination).Count() == 0)
+                {
+                    var hotkeyName = _hotkeyActions[hotkeyCombination];
+
+                    if (!_downHotkeys.Contains(hotkeyName))
+                        continue;
+                    
+
+                    _downHotkeys.Remove(hotkeyName);
+
+                    _logger.LogInformation($"Hotkey up {hotkeyName}");
+
+                    HotkeyUp?.Invoke(this, hotkeyName);
+                }
             }
         }
     }
 
-    private void KeyboardHookOnKeyDown(KeyboardHook.VKeys key)
+
+    private void KeyboardHookOnKeyDown(object? sender, KeyboardHookEventArgs args)
     {
+        var key = args.Data.KeyCode;
+
+
         _pressedKeys.Add(key);
 
-        _logger.LogInformation($"HotKeys Pressed: {key.ToString()}");
-
-        foreach (var hook in _keyHookDictionary)
+        // Check if any hotkey combination is pressed
+        foreach (var hotkeyCombination in _hotkeyActions.Keys)
         {
-            if (hook.Value.All(x => _pressedKeys.Contains(x)))
+            if (hotkeyCombination.All(x => _pressedKeys.Contains(x)))
             {
-                HotkeyDown?.Invoke(this, hook.Key);
+                var hotkeyName = _hotkeyActions[hotkeyCombination];
+
+                if (_downHotkeys.Contains(hotkeyName))
+                    continue;
+
+                _downHotkeys.Add(hotkeyName);
+
+                _logger.LogInformation($"Hotkey down {hotkeyName}");
+
+                HotkeyDown?.Invoke(this, _hotkeyActions[hotkeyCombination]);
             }
         }
     }
 
-    public event EventHandler<string> HotkeyDown;
-    public event EventHandler<string> HotkeyUp;
+    public HashSet<string> _downHotkeys = new();
 
-    public string? CurrentActiveHotkeyName { get; set; }
+    public event EventHandler<string>? HotkeyDown;
+    public event EventHandler<string>? HotkeyUp;
 
-    private List<KeyboardHook.VKeys> _pressedKeys = new();
-
-    private Dictionary<string, IEnumerable<KeyboardHook.VKeys>> _keyHookDictionary = new();
 
     public async Task<IEnumerable<Hotkey>> GetAllHotkeys()
     {
-        return await _applicationDbContext.Hotkeys.ToListAsync();
+        var cacheHotkeyObj = new Dictionary<IEnumerable<KeyCode>, string>();
+
+        var hotkeys = await _applicationDbContext.Hotkeys.ToListAsync(); // auto cache it
+
+        foreach (var hotkey in hotkeys)
+        {
+            var optKeys = hotkey.VirtualKeyCodes.Select(x => x.FromWpfKey());
+
+            _logger.LogInformation(
+                $"Registering hotkey {hotkey.Name}: {string.Join(", ", optKeys.Select(x => $"{x} or {(int)x}"))}");
+
+            cacheHotkeyObj.Add(optKeys,
+                hotkey.Name);
+        }
+
+        _hotkeyActions = cacheHotkeyObj;
+
+        return hotkeys;
     }
 
     private bool _isKeyboardHookInstalled = false;
@@ -76,19 +121,11 @@ public class Hotkeys
         if (!_isKeyboardHookInstalled)
         {
             _isKeyboardHookInstalled = true;
+
             _logger.LogInformation("Keyboard hook installed");
-          _keyboardHook.Install();
         }
 
-        var hotkeys = await GetAllHotkeys();
-
-        foreach (var hotkey in hotkeys)
-        {
-            CurrentActiveHotkeyName = hotkey.Name;
-
-            _keyHookDictionary.TryAdd(hotkey.Name,
-                hotkey.VirtualKeyCodes.Select(x => (KeyboardHook.VKeys)KeyInterop.VirtualKeyFromKey(x)));
-        }
+        _ = _taskPoolGlobalHook.RunAsync();
     }
 
 
@@ -112,6 +149,7 @@ public class Hotkeys
         if (!dontNotify)
             HotkeyManageMessage?.Invoke(this, $"Hotkey for {hotkey.Name} added!");
 
+        await GetAllHotkeys(); // recache hotkeys
         return hotkey;
     }
 

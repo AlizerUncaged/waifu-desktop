@@ -49,7 +49,9 @@ public class StartupCheck : ISelfRunning
 
         Log("Loading hotkeys");
         await _hotkeys.HookHotkeys();
-        
+        // cache hotkeys
+        await _hotkeys.GetAllHotkeys();
+
         Log("Starting");
         OnCheckFinishedSuccessfully?.Invoke(this, EventArgs.Empty);
     }

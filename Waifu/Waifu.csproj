@@ -46,6 +46,7 @@
       <PackageReference Include="Serilog.Extensions.Autofac.DependencyInjection" Version="5.0.0" />
       <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
       <PackageReference Include="Serilog.Sinks.File" Version="5.0.1-dev-00972" />
+      <PackageReference Include="SharpHook" Version="5.2.3" />
       <PackageReference Include="Whisper.net" Version="1.5.0" />
     </ItemGroup>
 
@@ -181,7 +182,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Dependencies\CharacterAI-NET-API-Wrapper\CharacterAI.Client\CharacterAI.Client.csproj" />
-      <ProjectReference Include="..\Dependencies\Global-Low-Level-Key-Board-And-Mouse-Hook\GlobalLowLevelHooks\GlobalLowLevelHooks.csproj" />
     </ItemGroup>
 
 </Project>
