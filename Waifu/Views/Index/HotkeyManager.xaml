@@ -47,7 +47,7 @@
                                         <TextBlock Name="VoiceKeys" FontWeight="Black" Text="CTRL+ALT"></TextBlock>
                                     </StackPanel>
                                     <StackPanel VerticalAlignment="Center" Grid.Column="2" HorizontalAlignment="Right">
-                                        <Button Click="StartGetHotkey" Content="Change" Tag="Voice"
+                                        <Button Click="StartGetHotkey" Content="Edit" Tag="Voice"
                                                 Background="{DynamicResource Purple}" BorderThickness="0">
 
                                         </Button>

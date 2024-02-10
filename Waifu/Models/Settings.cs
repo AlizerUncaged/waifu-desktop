@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Whisper.net.Ggml;
 
 namespace Waifu.Models;
 
@@ -28,6 +29,8 @@ public class Settings
     public int TopK { get; set; } = 50;
 
     public float TopP { get; set; } = 0.9f;
+
+    public GgmlType WhisperModel { get; set; } = GgmlType.Base;
 }
 
 public enum SettingsTarget

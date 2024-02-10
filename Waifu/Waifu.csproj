@@ -48,6 +48,7 @@
       <PackageReference Include="Serilog.Sinks.File" Version="5.0.1-dev-00972" />
       <PackageReference Include="SharpHook" Version="5.2.3" />
       <PackageReference Include="Whisper.net" Version="1.5.0" />
+      <PackageReference Include="Whisper.net.Runtime" Version="1.5.0" />
     </ItemGroup>
 
     <ItemGroup>

@@ -17,7 +17,6 @@ public class Hotkeys
     private readonly ILogger<Hotkeys> _logger;
     private static TaskPoolGlobalHook _taskPoolGlobalHook = new();
 
-    private HashSet<KeyCode> _pressedKeys = new();
     private Dictionary<IEnumerable<KeyCode>, string> _hotkeyActions = new Dictionary<IEnumerable<KeyCode>, string>();
 
     public Hotkeys(ApplicationDbContext applicationDbContext, ILogger<Hotkeys> logger)
@@ -34,20 +33,19 @@ public class Hotkeys
         var key = args.Data.KeyCode;
 
 
-        if (_pressedKeys.Contains(key))
+        if (_pressedIndividualKeys.Contains(key))
         {
-            _pressedKeys.Remove(key);
+            _pressedIndividualKeys.Remove(key);
 
             // Check if released key is part of any hotkey combination
             foreach (var hotkeyCombination in _hotkeyActions.Keys)
             {
-                if (hotkeyCombination.Contains(key) && _pressedKeys.Intersect(hotkeyCombination).Count() == 0)
+                if (hotkeyCombination.Contains(key) && _pressedIndividualKeys.Intersect(hotkeyCombination).Count() == 0)
                 {
                     var hotkeyName = _hotkeyActions[hotkeyCombination];
 
                     if (!_downHotkeys.Contains(hotkeyName))
                         continue;
-                    
 
                     _downHotkeys.Remove(hotkeyName);
 
@@ -65,12 +63,12 @@ public class Hotkeys
         var key = args.Data.KeyCode;
 
 
-        _pressedKeys.Add(key);
+        _pressedIndividualKeys.Add(key);
 
         // Check if any hotkey combination is pressed
         foreach (var hotkeyCombination in _hotkeyActions.Keys)
         {
-            if (hotkeyCombination.All(x => _pressedKeys.Contains(x)))
+            if (hotkeyCombination.All(x => _pressedIndividualKeys.Contains(x)))
             {
                 var hotkeyName = _hotkeyActions[hotkeyCombination];
 
@@ -86,7 +84,8 @@ public class Hotkeys
         }
     }
 
-    public HashSet<string> _downHotkeys = new();
+    private readonly HashSet<KeyCode> _pressedIndividualKeys = new();
+    private readonly HashSet<string> _downHotkeys = new();
 
     public event EventHandler<string>? HotkeyDown;
     public event EventHandler<string>? HotkeyUp;

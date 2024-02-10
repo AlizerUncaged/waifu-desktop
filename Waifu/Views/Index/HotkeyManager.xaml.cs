@@ -57,7 +57,7 @@ public partial class HotkeyManager : UserControl, IPopup
 
             _hotkeyPrev.Clear();
 
-            frameworkElement.Content = "Change";
+            frameworkElement.Content = "Edit";
 
             var keyCodes = ((List<Key>)_activeTextBlock.Tag);
 

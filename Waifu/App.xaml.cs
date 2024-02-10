@@ -126,11 +126,13 @@ public partial class App : Application
 
         builder.RegisterType<HuggingFaceModelApi>()
             .AsSelf();
+        
+        builder.RegisterType<HuggingFaceModelDownloader>()
+            .AsSelf().SingleInstance();
 
         builder.RegisterType<AppWideKeyboardEvents>()
             .AsSelf().SingleInstance();
-
-
+        
         builder.RegisterType<ChatAreaController>()
             .AsSelf().SingleInstance();
 
