@@ -142,8 +142,6 @@ public partial class App : Application
         builder.RegisterType<WhisperHuggingFaceModelDownloader>()
             .AsSelf().SingleInstance();
 
-        builder.RegisterType<AppWideKeyboardEvents>()
-            .AsSelf().SingleInstance();
 
         builder.RegisterType<ChatAreaController>()
             .AsSelf().SingleInstance();

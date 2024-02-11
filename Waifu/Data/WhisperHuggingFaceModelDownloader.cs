@@ -15,32 +15,25 @@ public class WhisperHuggingFaceModelDownloader
 
     public List<DownloadProgressData> CurrentOngoingProgress { get; set; } = new();
 
-    public DownloadProgressData DownloadWhisperModelInBackgroundAndSetAsModel(GgmlType modelType,
+    public DownloadProgressData? DownloadWhisperModelInBackgroundAndSetAsModel(GgmlType modelType,
         bool ignoreIfAlreadyExists = false)
     {
-        
         var progress = new DownloadProgressData();
 
         var modelName = Path.Combine(ModelFolder, $"{modelType}.bin");
 
+        if (ignoreIfAlreadyExists && File.Exists(modelName) && new FileInfo(modelName).Length > 1)
+        {
+            return null;
+        }
+
+        CurrentOngoingProgress.Add(progress);
+
+        Directory.CreateDirectory(ModelFolder);
+
 
         _ = Task.Run(async () =>
         {
-            await Task.Delay(TimeSpan.FromSeconds(1));
-
-            CurrentOngoingProgress.Add(progress);
-
-            Directory.CreateDirectory(ModelFolder);
-
-            if (ignoreIfAlreadyExists && File.Exists(modelName) && new FileInfo(modelName).Length > 1)
-            {
-                progress.Done();
-
-                CurrentOngoingProgress.Remove(progress);
-
-                return;
-            }
-
             var modelStream = await WhisperGgmlDownloader.GetGgmlModelAsync(modelType);
 
             var fileWriter = new FileStream(modelName, FileMode.Create, FileAccess.Write);

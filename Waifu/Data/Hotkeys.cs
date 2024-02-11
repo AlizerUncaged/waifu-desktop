@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
 using Microsoft.EntityFrameworkCore;
@@ -102,6 +103,8 @@ public class Hotkeys
 
     public async Task<IEnumerable<Hotkey>> GetAllHotkeys()
     {
+        var performanceCounter = Stopwatch.StartNew();
+
         var cacheHotkeyObj = new Dictionary<IEnumerable<KeyCode>, string>();
 
         var hotkeys = await _applicationDbContext.Hotkeys.ToListAsync(); // auto cache it
@@ -118,7 +121,9 @@ public class Hotkeys
         }
 
         _hotkeyActions = cacheHotkeyObj;
-
+        
+        _logger.LogInformation($"Took {performanceCounter.ElapsedMilliseconds}ms to load all hotkeys");
+        
         return hotkeys;
     }
 
@@ -135,7 +140,7 @@ public class Hotkeys
 
         // breakpoints are laggy if the hook is on
 
-        _ = _taskPoolGlobalHook.RunAsync();
+        await _taskPoolGlobalHook.RunAsync();
     }
 
 

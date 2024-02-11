@@ -11,12 +11,12 @@
     <UserControl.Resources>
         <converters:FilePathToImageSourceConverter x:Key="FilePathToImageSourceConverter" />
     </UserControl.Resources>
-    <Grid>
+    <Grid Margin="8,0">
         <Border>
             <ItemsControl ItemsSource="{Binding RoleplayCharacters, Mode=OneWay}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <local:CharacterItem  OnActiveRequest="CharacterClicked" OnDeleteRequest="CharacterDelete"
+                        <local:CharacterItem OnActiveRequest="CharacterClicked" OnDeleteRequest="CharacterDelete"
                                              RoleplayCharacter="{Binding}"
                                              Image="{Binding ProfilePictureFilePath, 
                                              Converter={StaticResource FilePathToImageSourceConverter}}"

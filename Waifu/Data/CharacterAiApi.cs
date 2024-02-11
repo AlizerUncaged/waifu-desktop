@@ -2,6 +2,7 @@
 using CharacterAI.Models;
 using Microsoft.Extensions.Logging;
 using Waifu.Models;
+using Waifu.Utilities;
 using Waifu.Views;
 
 namespace Waifu.Data;
@@ -43,12 +44,10 @@ public class CharacterAiApi
 
         _logger.LogDebug("Initializing chrome browser");
 
-        var currentSettings = await _settings.GetOrCreateSettings();
+        // var currentSettings = await _settings.GetOrCreateSettings();
 
-        var chaiToken = currentSettings.CharacterAiToken;
-
-        CharacterAiClient = new CharacterAiClient(chaiToken);
-
+        CharacterAiClient = new CharacterAiClient();
+        await CharacterAiClient.DownloadBrowserAndStoreBrowserPathAsync();
         await CharacterAiClient.LaunchBrowserAsync();
 
         isInitialized = true;
@@ -90,8 +89,9 @@ public class CharacterAiApi
     {
         if (!isInitialized)
             await InitializeAsync();
+        var settings = await _settings.GetOrCreateSettings();
 
-        var character = await CharacterAiClient.GetInfoAsync(characterId);
+        var character = await CharacterAiClient.GetInfoAsync(characterId, authToken: settings.CharacterAiToken);
 
         return character;
     }

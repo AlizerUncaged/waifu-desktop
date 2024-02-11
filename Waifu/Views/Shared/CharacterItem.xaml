@@ -47,13 +47,7 @@
             </ThicknessAnimation>
         </Storyboard>
     </UserControl.Resources>
-    <Grid Height="40" Width="40" Name="MainGrid">
-        <!-- <Grid.ToolTip> -->
-        <!--     <ToolTip Style="{DynamicResource MaterialDesignToolTip}" -->
-        <!--              Content="{Binding CharacterName, RelativeSource={RelativeSource AncestorType=UserControl}}"> -->
-        <!--     </ToolTip> -->
-        <!-- </Grid.ToolTip> -->
-        <!-- <TextBox Text="{Binding CharacterName, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" /> -->
+    <Grid Height="50" Width="50" Name="MainGrid">
         <Ellipse VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Ellipse.Fill>
                 <ImageBrush Stretch="UniformToFill"
@@ -66,7 +60,7 @@
             <Border.RenderTransform>
                 <TranslateTransform X="3" Y="3"></TranslateTransform>
             </Border.RenderTransform>
-            <TextBlock FontSize="9" Text="chai" Name="BadgeText"></TextBlock>
+            <TextBlock FontSize="10" Text="chai" Name="BadgeText"></TextBlock>
         </Border>
     </Grid>
     <UserControl.ContextMenu>
@@ -75,7 +69,7 @@
                 <MenuItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon VerticalAlignment="Center" Margin="0,0,7,0" Kind="Trash"></materialDesign:PackIcon>
-                        <TextBlock Text="Delete" 
+                        <TextBlock Text="Delete"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Center">
                         </TextBlock>

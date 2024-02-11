@@ -86,13 +86,18 @@ public partial class ModelManager : UserControl, IPopup
     {
         var modelName = ModelsList.Text;
         var chaiToken = CharacterAiTokenField.Password;
-
+        var ggmlModelName = WhisperModelList.Text;
         _ = Task.Run(async () =>
         {
-            await _settings.ClearAndAddSettings(new Models.Settings()
-            {
-                LocalModel = modelName, CharacterAiToken = chaiToken
-            });
+            var currentSettings = await _settings.GetOrCreateSettings();
+            
+            currentSettings.CharacterAiToken = chaiToken;
+            currentSettings.LocalModel = modelName;
+            
+            if (Enum.TryParse(ggmlModelName, out GgmlType ggmlType))
+                currentSettings.WhisperModel = ggmlType;
+
+            await _settings.ClearAndAddSettings(currentSettings);
 
             Dispatcher.Invoke(() =>
             {
@@ -140,7 +145,8 @@ public partial class ModelManager : UserControl, IPopup
 
         if (Enum.TryParse(WhisperModelList.Text, out GgmlType ggmlModel))
         {
-            var progressChecker = _whisperHuggingFaceModelDownloader.DownloadWhisperModelInBackgroundAndSetAsModel(ggmlModel);
+            var progressChecker =
+                _whisperHuggingFaceModelDownloader.DownloadWhisperModelInBackgroundAndSetAsModel(ggmlModel);
             senderButton.Content = "Fetching HuggingFace data...";
             progressChecker.OptimizedProgressChanged += (o, l) =>
             {

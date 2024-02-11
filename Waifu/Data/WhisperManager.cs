@@ -38,7 +38,7 @@ public class WhisperManager
     public async Task<string> ProcessRecordingFromBytes(WaveFileWriter recordingStream)
     {
         Transcribing?.Invoke(this, EventArgs.Empty);
-        
+
         var currentSettings = await _settings.GetOrCreateSettings();
         var model = currentSettings.WhisperModel;
         WhisperProcessor whisperFactory;
@@ -61,8 +61,10 @@ public class WhisperManager
 
         StringBuilder stringBuilder = new();
 
-        await foreach (var result in whisperFactory.ProcessAsync(File.Open(recordingStream.Filename, FileMode.Open,
-                           FileAccess.Read, FileShare.ReadWrite)))
+        var wavFile = File.Open(recordingStream.Filename, FileMode.Open,
+            FileAccess.Read, FileShare.ReadWrite);
+
+        await foreach (var result in whisperFactory.ProcessAsync(wavFile))
         {
             stringBuilder.Append(result.Text);
         }
@@ -72,6 +74,13 @@ public class WhisperManager
         _logger.LogDebug($"Read from {recordingStream.Length.Bytes().Humanize()} of recording: {resultComplete}");
 
         TranscribeFinished?.Invoke(this, resultComplete);
+
+        // delete the file after read
+
+        wavFile.Close();
+        await wavFile.DisposeAsync();
+
+        File.Delete(recordingStream.Filename);
 
         return resultComplete;
     }

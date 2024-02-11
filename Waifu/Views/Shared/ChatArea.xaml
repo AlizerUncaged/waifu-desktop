@@ -36,7 +36,9 @@
                                     <TextBlock FontWeight="Bold"
                                                Text="{Binding RoleplayCharacter.CharacterName}">
                                     </TextBlock>
-                                    <TextBlock Opacity="0.5" Text="{Binding RoleplayCharacter.CharacterAiId}"></TextBlock>
+                                    <TextBlock FontWeight="Normal" Opacity="0.5" FontSize="10"
+                                               Text="{Binding RoleplayCharacter.CharacterAiId}">
+                                    </TextBlock>
                                 </StackPanel>
                             </StackPanel>
                         </Grid>

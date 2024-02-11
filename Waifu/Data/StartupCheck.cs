@@ -14,14 +14,19 @@ public class StartupCheck : ISelfRunning
     private readonly ILogger<StartupCheck> _logger;
     private readonly Hotkeys _hotkeys;
     private readonly WhisperHuggingFaceModelDownloader _whisperHuggingFaceModelDownloader;
+    private readonly CharacterAiApi _characterAiApi;
+    private readonly Settings _settings;
 
     public StartupCheck(ApplicationDbContext applicationDbContext, ILogger<StartupCheck> logger, Hotkeys hotkeys,
-        WhisperHuggingFaceModelDownloader whisperHuggingFaceModelDownloader)
+        WhisperHuggingFaceModelDownloader whisperHuggingFaceModelDownloader, CharacterAiApi characterAiApi,
+        Settings settings)
     {
         _applicationDbContext = applicationDbContext;
         _logger = logger;
         _hotkeys = hotkeys;
         _whisperHuggingFaceModelDownloader = whisperHuggingFaceModelDownloader;
+        _characterAiApi = characterAiApi;
+        _settings = settings;
     }
 
     public async Task<bool> DoesAModelExistAsync()
@@ -36,7 +41,7 @@ public class StartupCheck : ISelfRunning
         Log("Updating Database");
         // make sure database is ok
         await _applicationDbContext.Database.MigrateAsync();
-
+        var settings = await _settings.GetOrCreateSettings();
         Log("Checking Puppeteer");
 
         PuppeteerLib.PuppeteerLib.PuppeteerDownloadProcessChangedOptimized += (sender, i) =>
@@ -46,30 +51,37 @@ public class StartupCheck : ISelfRunning
                 true);
         };
 
-        if (new CharacterAiClient() is { } chaiClient)
-        {
-            await chaiClient.DownloadBrowserAsync();
-        }
+
+        await _characterAiApi.InitializeAsync();
+
 
         Log("Loading hotkeys");
-        await _hotkeys.HookHotkeys();
+
+        _ = _hotkeys.HookHotkeys();
+
         // cache hotkeys
         await _hotkeys.GetAllHotkeys();
 
         Log("Downloading Whisper Base");
+
         var whisperAwaiter = new SemaphoreSlim(0, 1);
-        var whisperModel = GgmlType.Base;
+
+        var whisperModel = settings.WhisperModel;
+
         var progressEvent = _whisperHuggingFaceModelDownloader
             .DownloadWhisperModelInBackgroundAndSetAsModel(whisperModel, true);
 
-        progressEvent.OptimizedProgressChanged += (sender, l) =>
+        if (progressEvent is not null)
         {
-            Log($"Downloading Whisper {whisperModel} {l.Bytes().Humanize()}", true);
-        };
+            progressEvent.OptimizedProgressChanged += (sender, l) =>
+            {
+                Log($"Downloading Whisper {whisperModel} {l.Bytes().Humanize()}", true);
+            };
 
-        progressEvent.DownloadDone += (sender, args) => { whisperAwaiter.Release(); };
+            progressEvent.DownloadDone += (sender, args) => { whisperAwaiter.Release(); };
 
-        await whisperAwaiter.WaitAsync();
+            await whisperAwaiter.WaitAsync();
+        }
 
 
         Log("Starting");

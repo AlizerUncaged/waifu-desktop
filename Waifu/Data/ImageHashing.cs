@@ -27,29 +27,30 @@ public class ImageHashing
         }
     }
 
-    // New method
     public async Task<string> StoreImageAsync(string fileName)
     {
-        // Ensure the "Profiles" folder exists
         string profilesFolder = Path.Combine(Environment.CurrentDirectory, Constants.ProfilePicturesFolder);
         Directory.CreateDirectory(profilesFolder);
 
-        // Generate the hash and get the file extension
         string filePath = Path.Combine(Environment.CurrentDirectory, fileName);
         string hash = await GetFileHash(filePath);
         string fileExtension = Path.GetExtension(fileName);
 
-        // Construct the new file name with hash and original file extension
         string newFileName = $"{hash}{fileExtension}";
         string destinationPath = Path.Combine(profilesFolder, newFileName);
 
-        if (File.Exists(destinationPath))
-            File.Delete(destinationPath);
+        try
+        {
+            if (File.Exists(destinationPath))
+                File.Delete(destinationPath);
 
-        // Copy the file to the "Profiles" folder with the new name
-        await FileUtilities.CopyFileAsync(filePath, destinationPath);
+            await FileUtilities.CopyFileAsync(filePath, destinationPath);
+        }
+        catch
+        {
+            // maybe the file is already ok
+        }
 
-        // Return only the new filename (not the full path)
         return newFileName;
     }
 
