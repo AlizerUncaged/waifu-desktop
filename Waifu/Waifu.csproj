@@ -27,6 +27,7 @@
       <PackageReference Include="LLamaSharp.Backend.Cuda12" Version="0.9.1" />
       <PackageReference Include="MaterialDesignColors" Version="3.0.0-ci508" />
       <PackageReference Include="MaterialDesignThemes" Version="5.0.0-ci508" />
+      <PackageReference Include="MdXaml" Version="1.27.0" />
       <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.1" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1">

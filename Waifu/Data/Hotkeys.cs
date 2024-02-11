@@ -19,10 +19,13 @@ public class Hotkeys
 
     private Dictionary<IEnumerable<KeyCode>, string> _hotkeyActions = new Dictionary<IEnumerable<KeyCode>, string>();
 
+    public bool DoWatchHotkey { get; set; } = false;
+
     public Hotkeys(ApplicationDbContext applicationDbContext, ILogger<Hotkeys> logger)
     {
         _applicationDbContext = applicationDbContext;
         _logger = logger;
+
 
         _taskPoolGlobalHook.KeyPressed += KeyboardHookOnKeyDown;
         _taskPoolGlobalHook.KeyReleased += KeyboardHookOnKeyUp;
@@ -30,6 +33,9 @@ public class Hotkeys
 
     private void KeyboardHookOnKeyUp(object? sender, KeyboardHookEventArgs args)
     {
+        if (!DoWatchHotkey)
+            return;
+
         var key = args.Data.KeyCode;
 
 
@@ -60,6 +66,9 @@ public class Hotkeys
 
     private void KeyboardHookOnKeyDown(object? sender, KeyboardHookEventArgs args)
     {
+        if (!DoWatchHotkey)
+            return;
+
         var key = args.Data.KeyCode;
 
 
@@ -123,6 +132,8 @@ public class Hotkeys
 
             _logger.LogInformation("Keyboard hook installed");
         }
+
+        // breakpoints are laggy if the hook is on
 
         _ = _taskPoolGlobalHook.RunAsync();
     }

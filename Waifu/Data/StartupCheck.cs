@@ -13,15 +13,15 @@ public class StartupCheck : ISelfRunning
     private readonly ApplicationDbContext _applicationDbContext;
     private readonly ILogger<StartupCheck> _logger;
     private readonly Hotkeys _hotkeys;
-    private readonly HuggingFaceModelDownloader _huggingFaceModelDownloader;
+    private readonly WhisperHuggingFaceModelDownloader _whisperHuggingFaceModelDownloader;
 
     public StartupCheck(ApplicationDbContext applicationDbContext, ILogger<StartupCheck> logger, Hotkeys hotkeys,
-        HuggingFaceModelDownloader huggingFaceModelDownloader)
+        WhisperHuggingFaceModelDownloader whisperHuggingFaceModelDownloader)
     {
         _applicationDbContext = applicationDbContext;
         _logger = logger;
         _hotkeys = hotkeys;
-        _huggingFaceModelDownloader = huggingFaceModelDownloader;
+        _whisperHuggingFaceModelDownloader = whisperHuggingFaceModelDownloader;
     }
 
     public async Task<bool> DoesAModelExistAsync()
@@ -59,7 +59,7 @@ public class StartupCheck : ISelfRunning
         Log("Downloading Whisper Base");
         var whisperAwaiter = new SemaphoreSlim(0, 1);
         var whisperModel = GgmlType.Base;
-        var progressEvent = _huggingFaceModelDownloader
+        var progressEvent = _whisperHuggingFaceModelDownloader
             .DownloadWhisperModelInBackgroundAndSetAsModel(whisperModel, true);
 
         progressEvent.OptimizedProgressChanged += (sender, l) =>

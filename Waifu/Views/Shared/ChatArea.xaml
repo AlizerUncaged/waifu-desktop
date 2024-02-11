@@ -44,28 +44,51 @@
                 </Border>
             </Grid>
             <Grid>
+                <Grid ZIndex="233" VerticalAlignment="Bottom" Margin="4,0,0,40">
+                    <Grid VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon VerticalAlignment="Center" Kind="Microphone" Margin="0,0,7,0"></materialDesign:PackIcon>
+                            <TextBlock FontWeight="Normal" Text="Press " VerticalAlignment="Center"></TextBlock>
+                            <TextBlock FontWeight="Bold" Name="VoiceHotkeyText" VerticalAlignment="Center"></TextBlock>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
                 <DockPanel>
                     <Grid DockPanel.Dock="Bottom" MinHeight="10" Margin="5"
                           VerticalAlignment="Bottom">
+
                         <DockPanel>
                             <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
-                                <Button Click="SendMessageButton" BorderThickness="0"
+                                <Button Click="SendMessageButton" BorderThickness="0" Name="SendButton"
                                         Background="{DynamicResource Purple}">
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal">
                                             <materialDesign:PackIcon Kind="Send" Margin="0,0,7,0"
                                                                      VerticalAlignment="Center">
                                             </materialDesign:PackIcon>
-                                            <TextBlock Text="Send" VerticalAlignment="Center"></TextBlock>
+                                            <TextBlock Text="Send" Name="SendButtonText" VerticalAlignment="Center"></TextBlock>
                                         </StackPanel>
                                     </Button.Content>
                                 </Button>
                             </StackPanel>
-                            <TextBox PreviewKeyDown="TextBoxTextChanged" VerticalContentAlignment="Center"
-                                     BorderBrush="{DynamicResource BackgroundLight}"
-                                     BorderThickness="2" Name="MessageInput"
-                                     Style="{StaticResource MaterialDesignOutlinedTextBox}" Padding="0,0" Margin="5,0">
-                            </TextBox>
+                            <Grid>
+                                <Border Opacity="0"
+                                        IsHitTestVisible="False"
+                                        Name="VoiceBorder"
+                                        BorderThickness="2"
+                                        CornerRadius="7"
+                                        Margin="5,0"
+                                        Background="{DynamicResource  Purple}">
+                                </Border>
+                                <DockPanel>
+                                    <TextBox PreviewKeyDown="TextBoxTextChanged" VerticalContentAlignment="Center"
+                                             BorderBrush="{DynamicResource BackgroundLight}"
+                                             BorderThickness="2" Name="MessageInput"
+                                             Style="{StaticResource MaterialDesignOutlinedTextBox}" Padding="0,0"
+                                             Margin="5,0">
+                                    </TextBox>
+                                </DockPanel>
+                            </Grid>
                         </DockPanel>
                     </Grid>
                     <ScrollViewer VerticalAlignment="Stretch" Name="ChatScroll">

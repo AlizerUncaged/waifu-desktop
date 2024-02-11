@@ -55,12 +55,10 @@
                                 <Grid VerticalAlignment="Center">
                                     <StackPanel>
                                         <TextBlock TextWrapping="Wrap">
-                                            <Run Text="Name: "></Run>
-                                            <Run Text=" "></Run>
-                                            <Run Text="{Binding Character.Name}"></Run>
+                                            <Run FontWeight="Bold" Text="{Binding Character.Name}"></Run>
                                         </TextBlock>
-                                        <TextBlock TextWrapping="Wrap" Text="{Binding Character.Title}"></TextBlock>
-                                        <TextBlock TextWrapping="Wrap">
+                                        <TextBlock Opacity="0.5" TextWrapping="Wrap" Text="{Binding Character.Title}"></TextBlock>
+                                        <TextBlock Opacity="0.5" TextWrapping="Wrap">
                                             <Run Text="{Binding Character.Interactions}"></Run>
                                             <Run Text=" total interactions"></Run>
                                         </TextBlock>

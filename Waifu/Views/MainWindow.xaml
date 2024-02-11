@@ -11,7 +11,7 @@
         TextOptions.TextFormattingMode="Display"
         TextOptions.TextRenderingMode="ClearType"
         RenderOptions.BitmapScalingMode="HighQuality"
-
+        TextElement.FontSize="14"
         TextElement.Foreground="{DynamicResource Foreground}"
         WindowStartupLocation="CenterScreen"
 

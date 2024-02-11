@@ -49,10 +49,7 @@ public partial class CharactersMenu : UserControl
 
     private void CharactersMenuLoaded(object sender, RoutedEventArgs e)
     {
-        _characters.OnCharacterAdded += (o, character) =>
-        {
-            Dispatcher.Invoke(() => AddCharacter(character));
-        };
+        _characters.OnCharacterAdded += (o, character) => { Dispatcher.Invoke(() => AddCharacter(character)); };
 
         _characters.OnCharacterRemoved += (o, character) =>
         {
@@ -79,5 +76,14 @@ public partial class CharactersMenu : UserControl
                 if (chatArea is not null)
                     Dispatcher.Invoke(() => { mainArea.SetMainContent(chatArea); });
             });
+    }
+
+    private void CharacterDelete(object? sender, RoleplayCharacter? e)
+    {
+        if (sender is not CharacterItem characterItem) return;
+
+        var rpCharacter = characterItem.RoleplayCharacter;
+
+        _ = _characters.RemoveCharacterAsync(rpCharacter);
     }
 }

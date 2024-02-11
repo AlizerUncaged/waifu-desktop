@@ -3,12 +3,12 @@ using Whisper.net.Ggml;
 
 namespace Waifu.Data;
 
-public class HuggingFaceModelDownloader
+public class WhisperHuggingFaceModelDownloader
 {
     private readonly Settings _settings;
     public const string ModelFolder = "Resources/Whisper";
 
-    public HuggingFaceModelDownloader(Settings settings)
+    public WhisperHuggingFaceModelDownloader(Settings settings)
     {
         _settings = settings;
     }
@@ -18,6 +18,7 @@ public class HuggingFaceModelDownloader
     public DownloadProgressData DownloadWhisperModelInBackgroundAndSetAsModel(GgmlType modelType,
         bool ignoreIfAlreadyExists = false)
     {
+        
         var progress = new DownloadProgressData();
 
         var modelName = Path.Combine(ModelFolder, $"{modelType}.bin");
@@ -36,6 +37,8 @@ public class HuggingFaceModelDownloader
                 progress.Done();
 
                 CurrentOngoingProgress.Remove(progress);
+
+                return;
             }
 
             var modelStream = await WhisperGgmlDownloader.GetGgmlModelAsync(modelType);

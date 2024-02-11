@@ -95,7 +95,7 @@ public partial class HotkeyManager : UserControl, IPopup
     public void UpdateKeyBlock()
     {
         if (_activeTextBlock is not null)
-            _activeTextBlock.Text = $"{string.Join("+", _hotkeyPrev.Select(x => x.ToString()))}";
+            _activeTextBlock.Text = _hotkeyPrev.ToHotkeyString();
     }
 
     private bool _isPressing = false;
@@ -139,7 +139,7 @@ public partial class HotkeyManager : UserControl, IPopup
                 {
                     if (this.FindName(hotkey.Name + "Keys") is TextBlock textBlock)
                     {
-                        textBlock.Text = $"{string.Join("+", hotkey.VirtualKeyCodes.Select(x => x.ToString()))}";
+                        textBlock.Text = $"{hotkey.VirtualKeyCodes.ToHotkeyString()}";
                     }
                 });
             }

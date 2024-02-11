@@ -1,6 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
+using MdXaml;
 using Waifu.Models;
 
 namespace Waifu.Views.Shared;
@@ -41,9 +43,25 @@ public partial class MessageItem : UserControl
     public static readonly DependencyProperty ChatMessageProperty =
         DependencyProperty.Register(nameof(ChatMessage), typeof(ChatMessage), typeof(MessageItem));
 
+    private Markdown _engine = new();
+
     private void MessageItemLoaded(object sender, RoutedEventArgs e)
     {
         if (ChatMessage.SentByUser) SetToRight();
+
+        MarkdownView.Markdown = MessageContent;
+        MarkdownView.UpdateLayout();
+
+        this.UpdateLayout();
+
+        if (FindResource("EntranceAnimation") is Storyboard storyboard &&
+            storyboard.Children.OfType<DoubleAnimation>().FirstOrDefault() is { } doubleAnimation)
+        {
+            doubleAnimation.To = MessageGrid.ActualHeight + MarkdownView.ActualHeight;
+
+            ;
+            storyboard.Begin();
+        }
     }
 
     public void SetToRight()
@@ -59,5 +77,9 @@ public partial class MessageItem : UserControl
     private void ItemClicked(object sender, MouseButtonEventArgs e)
     {
         ;
+    }
+
+    private void MessageGridLoaded(object sender, RoutedEventArgs e)
+    {
     }
 }

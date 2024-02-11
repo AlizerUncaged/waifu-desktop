@@ -71,11 +71,11 @@ public partial class MainArea : UserControl
         {
             var roleplayCharacters = await _characters.GetAllRoleplayCharactersAsync();
 
-            Dispatcher.Invoke(() =>
+            foreach (var roleplayCharacter in roleplayCharacters)
             {
-                foreach (var roleplayCharacter in roleplayCharacters)
-                    _charactersMenu?.AddCharacter(roleplayCharacter);
-            });
+                await Task.Delay(TimeSpan.FromSeconds(0.1));
+                Dispatcher.Invoke(() => { _charactersMenu?.AddCharacter(roleplayCharacter); });
+            }
         });
     }
 

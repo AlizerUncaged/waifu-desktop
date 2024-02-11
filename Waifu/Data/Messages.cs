@@ -45,7 +45,7 @@ public class Messages
     public async Task<ChatChannel> GetOrCreateChannelWithCharacter(RoleplayCharacter character)
     {
         var dbContext = _applicationDbContext.GetDbContext();
-        
+
         if (await dbContext.ChatChannels.FirstOrDefaultAsync(x =>
                 x.Characters.Any(y => y.Id == character.Id)) is
             { } channel)
@@ -69,7 +69,6 @@ public class Messages
 
         var channelEntity = dbContext.ChatChannels.Add(newChannel);
 
-        await dbContext.SaveChangesAsync();
 
         if (character.IsCharacterAi)
         {
@@ -80,6 +79,9 @@ public class Messages
                 ChatChannel = channelEntity.Entity
             });
         }
+
+        await dbContext.SaveChangesAsync();
+
 
         return channelEntity.Entity;
     }

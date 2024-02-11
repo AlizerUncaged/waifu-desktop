@@ -18,11 +18,13 @@ public class ChatAreaController
     private readonly ILifetimeScope _lifetimeScope;
     private readonly ChatServiceManager _chatServiceManager;
     private readonly ILogger<ChatAreaController> _logger;
+    private readonly AudioRecorder _audioRecorder;
 
     public ChatAreaController(Messages messages,
         Settings settings,
         Personas personas,
-        ILifetimeScope lifetimeScope, ChatServiceManager chatServiceManager, ILogger<ChatAreaController> logger)
+        ILifetimeScope lifetimeScope, ChatServiceManager chatServiceManager, ILogger<ChatAreaController> logger,
+        AudioRecorder audioRecorder)
     {
         _messages = messages;
         _settings = settings;
@@ -30,6 +32,7 @@ public class ChatAreaController
         _lifetimeScope = lifetimeScope;
         _chatServiceManager = chatServiceManager;
         _logger = logger;
+        _audioRecorder = audioRecorder;
     }
 
     public event EventHandler<string> ChatAreaMessage;

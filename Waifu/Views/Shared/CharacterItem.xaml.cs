@@ -15,6 +15,7 @@ public partial class CharacterItem : UserControl
     }
 
     public event EventHandler<RoleplayCharacter?> OnActiveRequest;
+    public event EventHandler<RoleplayCharacter?> OnDeleteRequest;
 
     #region Character Name Property
 
@@ -66,7 +67,8 @@ public partial class CharacterItem : UserControl
 
     private void ItemClicked(object sender, MouseButtonEventArgs e)
     {
-        OnActiveRequest?.Invoke(this, RoleplayCharacter);
+        if (e.ChangedButton is MouseButton.Left)
+            OnActiveRequest?.Invoke(this, RoleplayCharacter);
     }
 
     private void CharacterItemLoaded(object sender, RoutedEventArgs e)
@@ -88,5 +90,10 @@ public partial class CharacterItem : UserControl
         BadgeText.Text = badge;
 
         Badge.Visibility = Visibility.Visible;
+    }
+
+    private void DeleteCharacter(object sender, RoutedEventArgs e)
+    {
+        OnDeleteRequest?.Invoke(this, RoleplayCharacter);
     }
 }

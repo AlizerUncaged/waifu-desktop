@@ -5,20 +5,37 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Waifu.Views.Shared"
              Loaded="MessageItemLoaded" Margin="7"
+
+             ScrollViewer.CanContentScroll="False"
+             ScrollViewer.VerticalScrollBarVisibility="Disabled"
+             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+
              Background="{DynamicResource Background}" PreviewMouseDown="ItemClicked"
              xmlns:converters="clr-namespace:Waifu.Data.xamlValueConverters"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              TextElement.Foreground="{DynamicResource Foreground}"
              mc:Ignorable="d"
+             xmlns:mdxam="clr-namespace:MdXaml;assembly=MdXaml"
              FontFamily="{DynamicResource MaterialDesignFont}"
              TextOptions.TextFormattingMode="Display"
-             TextOptions.TextRenderingMode="ClearType"
+             TextOptions.TextRenderingMode="ClearType" Name="MessageItemParent"
              RenderOptions.BitmapScalingMode="HighQuality"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <converters:FilePathToImageSourceConverter x:Key="FilePathToImageSourceConverter" />
+        <Storyboard x:Key="EntranceAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="MaxHeight"
+                             Storyboard.TargetName="MessageGrid"
+                             From="0"
+                             Duration="0:0:1">
+                <DoubleAnimation.EasingFunction>
+                    <QuinticEase EasingMode="EaseOut"></QuinticEase>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
     </UserControl.Resources>
-    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center">
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center" Name="MessageGrid" Height="Auto"
+          Loaded="MessageGridLoaded">
         <Grid Name="ChatParent">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*" />
@@ -35,9 +52,11 @@
                 <Border CornerRadius="7" Padding="2" HorizontalAlignment="Left" Name="MainBorder"
                         Background="{DynamicResource BackgroundLight}">
                     <Grid MinHeight="30" Margin="7,0" VerticalAlignment="Center">
-                        <TextBlock TextWrapping="Wrap" VerticalAlignment="Center"
-                                   Text="{Binding MessageContent, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=OneWay}">
-                        </TextBlock>
+
+                        <mdxam:MarkdownScrollViewer IsHitTestVisible="False" VerticalScrollBarVisibility="Disabled"
+                                                    Name="MarkdownView" FontWeight="Normal"
+                                                    VerticalAlignment="Center">
+                        </mdxam:MarkdownScrollViewer>
                     </Grid>
                 </Border>
             </Grid>
@@ -45,4 +64,9 @@
         </Grid>
 
     </Grid>
+    <!-- <UserControl.Triggers> -->
+    <!--     <EventTrigger RoutedEvent="FrameworkElement.Loaded"> -->
+    <!--         <BeginStoryboard Storyboard="{StaticResource EntranceAnimation}" /> -->
+    <!--     </EventTrigger> -->
+    <!-- </UserControl.Triggers> -->
 </UserControl>

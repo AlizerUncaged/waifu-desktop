@@ -27,12 +27,17 @@ public partial class MainWindow : Window
     private readonly CharacterAiApi _characterAiApi;
     private readonly ChatAreaController _chatAreaController;
     private readonly Hotkeys _hotkeys;
+    private readonly AudioRecorder _audioRecorder;
+    private readonly WhisperManager _whisperManager;
+    private readonly WatcherManager _watcherManager;
 
     public SnackbarMessageQueue SnackbarMessageQueue { get; } = new();
 
     public MainWindow(Welcome welcome, ILogger<MainWindow> logger, StartupCheck startupCheck, MainArea mainArea,
         Waifu.Data.Settings settings,
-        Header header, CharacterAiApi characterAiApi, ChatAreaController chatAreaController, Hotkeys hotkeys)
+        Header header, CharacterAiApi characterAiApi, ChatAreaController chatAreaController, Hotkeys hotkeys,
+        AudioRecorder audioRecorder,
+        WhisperManager whisperManager, WatcherManager watcherManager)
     {
         _welcome = welcome;
         _logger = logger;
@@ -43,6 +48,9 @@ public partial class MainWindow : Window
         _characterAiApi = characterAiApi;
         _chatAreaController = chatAreaController;
         _hotkeys = hotkeys;
+        _audioRecorder = audioRecorder;
+        _whisperManager = whisperManager;
+        _watcherManager = watcherManager;
 
         InitializeComponent();
 
@@ -86,7 +94,13 @@ public partial class MainWindow : Window
         if (LayerAboveContent.Children.Contains(child as FrameworkElement))
             return;
 
-        child.CloseTriggered += (sender, args) => { LayerAboveContent.Children.Remove(sender as FrameworkElement); };
+        child.CloseTriggered += (sender, args) =>
+        {
+            LayerAboveContent.Children.Remove(sender as FrameworkElement);
+
+            if (LayerAboveContent.Children.Count <= 0)
+                _watcherManager.EnableAllWatchers();
+        };
 
         child.ReplaceTriggered += (sender, element) =>
         {
@@ -97,6 +111,7 @@ public partial class MainWindow : Window
         };
 
         LayerAboveContent.Children.Add((child as FrameworkElement)!);
+        _watcherManager.DisableAllWatchers(); // we have a popup, dont do any interaction
     }
 
     private void WindowsSizeChanged(object sender, SizeChangedEventArgs e)

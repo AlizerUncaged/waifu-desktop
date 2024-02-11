@@ -228,6 +228,12 @@ public static class StringUtilities
         return (KeyCode)KeyInterop.VirtualKeyFromKey(key);
     }
 
+    public static string ToHotkeyString(this IEnumerable<Key> keys)
+    {
+        return
+            $"{string.Join("+", keys.Select(x => x.ToString()))}";
+    }
+
     public static void OpenAsUrl(this string url)
     {
         try

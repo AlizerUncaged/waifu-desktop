@@ -16,7 +16,7 @@
             <ItemsControl ItemsSource="{Binding RoleplayCharacters, Mode=OneWay}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <local:CharacterItem  OnActiveRequest="CharacterClicked"
+                        <local:CharacterItem  OnActiveRequest="CharacterClicked" OnDeleteRequest="CharacterDelete"
                                              RoleplayCharacter="{Binding}"
                                              Image="{Binding ProfilePictureFilePath, 
                                              Converter={StaticResource FilePathToImageSourceConverter}}"

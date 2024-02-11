@@ -2,11 +2,13 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Microsoft.EntityFrameworkCore;
 using Waifu.ChatHandlers;
 using Waifu.Controllers;
 using Waifu.Data;
 using Waifu.Models;
+using Waifu.Utilities;
 using Settings = Waifu.Data.Settings;
 
 namespace Waifu.Views.Shared;
@@ -20,12 +22,16 @@ public partial class ChatArea : UserControl
     private readonly Personas _personas;
     private readonly ChatAreaController _chatAreaController;
     private readonly IChatHandler _chatHandler;
+    private readonly Hotkeys _hotkeys;
+    private readonly AudioRecorder _audioRecorder;
+    private readonly WhisperManager _whisperManager;
 
     public IChatHandler ChatHandler => _chatHandler;
 
     public ChatArea(RoleplayCharacter character, ChatChannel channel, Messages messages,
         Data.Settings settings, Personas personas,
-        ChatAreaController chatAreaController, IChatHandler chatHandler)
+        ChatAreaController chatAreaController, IChatHandler chatHandler, Hotkeys hotkeys, AudioRecorder audioRecorder,
+        WhisperManager whisperManager)
     {
         _character = character;
         _channel = channel;
@@ -34,10 +40,48 @@ public partial class ChatArea : UserControl
         _personas = personas;
         _chatAreaController = chatAreaController;
         _chatHandler = chatHandler;
+        _hotkeys = hotkeys;
+        _audioRecorder = audioRecorder;
+        _whisperManager = whisperManager;
 
         InitializeComponent();
+
+        _whisperManager.DoTranscribe = true;
+
+        _whisperManager.TranscribeFinished += (sender, s) =>
+        {
+            Dispatcher.Invoke(() =>
+            {
+                SendButton.IsEnabled = true;
+                SendButtonText.Text = "Send";
+                VoiceBorder.Opacity = 0;
+                MessageInput.Text = s;
+                SendMessageFromUi();
+            });
+        };
+
+        audioRecorder.AudioRecordingStarted += (sender, args) =>
+        {
+            Dispatcher.Invoke(() =>
+            {
+                SendButton.IsEnabled = false;
+                SendButtonText.Text = "Listening";
+            });
+        };
+        double maxVoiceLevel = 100;
+        audioRecorder.AudioLevelReceived += (sender, d) =>
+        {
+            Dispatcher.Invoke(() =>
+            {
+                VoiceBorder.Opacity = d / maxVoiceLevel;
+
+                if (d > maxVoiceLevel)
+                    maxVoiceLevel = d;
+            });
+        };
     }
 
+    public Hotkey VoiceHotkey { get; set; }
     public ObservableCollection<ChatMessage> ChatMessages { get; set; } = new();
 
     public RoleplayCharacter RoleplayCharacter => _character;
@@ -66,10 +110,13 @@ public partial class ChatArea : UserControl
 
     public long CurrentMessageId { get; set; } = long.MaxValue;
 
+
     private void ChatAreaLoaded(object sender, RoutedEventArgs e)
     {
         _ = Task.Run(async () =>
         {
+            VoiceHotkey = await _hotkeys.GetOrAddHotkeyAsync("Voice", Key.LeftAlt);
+
             var currentMessages = await _messages.GetMessagesAsync(_channel.Id, CurrentMessageId);
 
             if (currentMessages is null || !currentMessages.Any())
@@ -82,6 +129,8 @@ public partial class ChatArea : UserControl
 
             Dispatcher.Invoke(() =>
             {
+                VoiceHotkeyText.Text = VoiceHotkey.VirtualKeyCodes.ToHotkeyString();
+
                 foreach (var chatMessage in currentMessages.OrderByDescending(x => x.Id))
                     AddChatBasedOnIdLocation(chatMessage);
             });

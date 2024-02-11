@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows;
 using Autofac;
 using LLama.Common;
+using MdXaml;
 using Newtonsoft.Json;
 using Serilog;
 using Serilog.Events;
@@ -45,7 +46,7 @@ public partial class App : Application
         var logConfiguration = new LoggerConfiguration()
             .WriteTo.Console(
                 applyThemeToRedirectedOutput: true,
-                theme: AnsiConsoleTheme.Code, restrictedToMinimumLevel: LogEventLevel.Information,
+                theme: AnsiConsoleTheme.Code, restrictedToMinimumLevel: LogEventLevel.Debug,
                 outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {NewLine}{Exception}"
             ).WriteTo.File(logPath)
             .MinimumLevel.Information();
@@ -72,11 +73,17 @@ public partial class App : Application
         builder.RegisterType<MainArea>()
             .AsSelf();
 
+        builder.RegisterType<WatcherManager>()
+            .AsSelf();
+
         builder.RegisterType<ImageHashing>()
             .AsSelf();
 
-        builder.RegisterType<AudioRecorder>()
+        builder.RegisterType<WhisperManager>()
             .AsSelf();
+
+        builder.RegisterType<AudioRecorder>()
+            .AsSelf().SingleInstance();
 
         builder.RegisterType<HotkeyManager>()
             .AsSelf().SingleInstance();
@@ -110,6 +117,7 @@ public partial class App : Application
         builder.RegisterType<ProcessUtilities>()
             .AsSelf();
 
+
         builder.RegisterType<ApplicationDbContextFactory>()
             .AsSelf().SingleInstance();
 
@@ -131,7 +139,7 @@ public partial class App : Application
         builder.RegisterType<HuggingFaceModelApi>()
             .AsSelf();
 
-        builder.RegisterType<HuggingFaceModelDownloader>()
+        builder.RegisterType<WhisperHuggingFaceModelDownloader>()
             .AsSelf().SingleInstance();
 
         builder.RegisterType<AppWideKeyboardEvents>()

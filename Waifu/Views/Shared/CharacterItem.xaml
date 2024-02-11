@@ -5,30 +5,30 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Waifu.Views.Shared"
              RenderOptions.BitmapScalingMode="HighQuality"
-             mc:Ignorable="d" Margin="0,5"
+             mc:Ignorable="d" Background="Transparent" Padding="0,5"
              TextElement.Foreground="{DynamicResource Foreground}"
-             MouseDown="ItemClicked"
+             MouseDown="ItemClicked" Cursor="Hand"
              Loaded="CharacterItemLoaded"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              x:Name="CharacterItemParent"
              d:DesignHeight="100" d:DesignWidth="100">
     <UserControl.Resources>
         <Storyboard x:Key="EntranceAnimation">
 
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="Margin"
-                                              Storyboard.TargetName="MainGrid">
-                <EasingThicknessKeyFrame KeyTime="0:0:0" Value="0,0,0,15" />
-                <EasingThicknessKeyFrame KeyTime="0:0:0.5" Value="0,0,0,0">
-                    <EasingThicknessKeyFrame.EasingFunction>
-                        <BackEase EasingMode="EaseOut" />
-                    </EasingThicknessKeyFrame.EasingFunction>
-                </EasingThicknessKeyFrame>
-            </ThicknessAnimationUsingKeyFrames>
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" Storyboard.TargetName="CharacterItemParent"
+                                Duration="0:0:1.25" From="0,25"
+                                To="0,0">
+                <ThicknessAnimation.EasingFunction>
+                    <QuinticEase EasingMode="EaseOut"></QuinticEase>
+                </ThicknessAnimation.EasingFunction>
+            </ThicknessAnimation>
+
 
             <DoubleAnimation Storyboard.TargetProperty="Opacity"
                              From="0" To="1" Duration="0:0:0.5" />
         </Storyboard>
         <Storyboard x:Key="HoverAnimation">
-            <ThicknessAnimation Storyboard.TargetProperty="Margin" Storyboard.TargetName="CharacterItemParent"
+            <ThicknessAnimation Storyboard.TargetProperty="Padding" Storyboard.TargetName="CharacterItemParent"
                                 Duration="0:0:0.4"
                                 To="0,10">
                 <ThicknessAnimation.EasingFunction>
@@ -37,7 +37,7 @@
             </ThicknessAnimation>
         </Storyboard>
         <Storyboard x:Key="HoverAnimationBack">
-            <ThicknessAnimation Storyboard.TargetProperty="Margin"
+            <ThicknessAnimation Storyboard.TargetProperty="Padding"
                                 Storyboard.TargetName="CharacterItemParent"
                                 Duration="0:0:0.4"
                                 To="0,5">
@@ -47,7 +47,7 @@
             </ThicknessAnimation>
         </Storyboard>
     </UserControl.Resources>
-    <Grid Height="40" Width="40" Cursor="Hand" Name="MainGrid">
+    <Grid Height="40" Width="40" Name="MainGrid">
         <!-- <Grid.ToolTip> -->
         <!--     <ToolTip Style="{DynamicResource MaterialDesignToolTip}" -->
         <!--              Content="{Binding CharacterName, RelativeSource={RelativeSource AncestorType=UserControl}}"> -->
@@ -69,6 +69,21 @@
             <TextBlock FontSize="9" Text="chai" Name="BadgeText"></TextBlock>
         </Border>
     </Grid>
+    <UserControl.ContextMenu>
+        <ContextMenu Background="{DynamicResource BackgroundLight}">
+            <MenuItem Click="DeleteCharacter" TextElement.Foreground="{DynamicResource Red}">
+                <MenuItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon VerticalAlignment="Center" Margin="0,0,7,0" Kind="Trash"></materialDesign:PackIcon>
+                        <TextBlock Text="Delete" 
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center">
+                        </TextBlock>
+                    </StackPanel>
+                </MenuItem.Header>
+            </MenuItem>
+        </ContextMenu>
+    </UserControl.ContextMenu>
     <UserControl.Triggers>
         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
             <BeginStoryboard Storyboard="{StaticResource EntranceAnimation}" />

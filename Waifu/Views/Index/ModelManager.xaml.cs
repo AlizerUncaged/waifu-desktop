@@ -13,14 +13,14 @@ namespace Waifu.Views.Index;
 public partial class ModelManager : UserControl, IPopup
 {
     private readonly Data.Settings _settings;
-    private readonly HuggingFaceModelDownloader _huggingFaceModelDownloader;
+    private readonly WhisperHuggingFaceModelDownloader _whisperHuggingFaceModelDownloader;
 
     public Models.Settings Settings { get; set; }
 
-    public ModelManager(Data.Settings settings, HuggingFaceModelDownloader huggingFaceModelDownloader)
+    public ModelManager(Data.Settings settings, WhisperHuggingFaceModelDownloader whisperHuggingFaceModelDownloader)
     {
         _settings = settings;
-        _huggingFaceModelDownloader = huggingFaceModelDownloader;
+        _whisperHuggingFaceModelDownloader = whisperHuggingFaceModelDownloader;
 
         foreach (var ggmlValues in
                  Enum.GetValues(typeof(GgmlType)))
@@ -116,7 +116,7 @@ public partial class ModelManager : UserControl, IPopup
     {
         if (sender is ComboBox comboBox && WhisperDownloadButton is { } whisperDownloadButton)
         {
-            var modelFile = Path.Combine(HuggingFaceModelDownloader.ModelFolder, $"{comboBox.Text}.bin");
+            var modelFile = Path.Combine(WhisperHuggingFaceModelDownloader.ModelFolder, $"{comboBox.Text}.bin");
             if (File.Exists(modelFile))
             {
                 whisperDownloadButton.Text = "Downloaded!";
@@ -128,7 +128,7 @@ public partial class ModelManager : UserControl, IPopup
 
     private void DownloadWhisperModel(object sender, RoutedEventArgs e)
     {
-        var modelFile = Path.Combine(HuggingFaceModelDownloader.ModelFolder, $"{WhisperModelList.Text}.bin");
+        var modelFile = Path.Combine(WhisperHuggingFaceModelDownloader.ModelFolder, $"{WhisperModelList.Text}.bin");
         var senderButton = sender as Button;
         senderButton.IsEnabled = false;
 
@@ -140,7 +140,7 @@ public partial class ModelManager : UserControl, IPopup
 
         if (Enum.TryParse(WhisperModelList.Text, out GgmlType ggmlModel))
         {
-            var progressChecker = _huggingFaceModelDownloader.DownloadWhisperModelInBackgroundAndSetAsModel(ggmlModel);
+            var progressChecker = _whisperHuggingFaceModelDownloader.DownloadWhisperModelInBackgroundAndSetAsModel(ggmlModel);
             senderButton.Content = "Fetching HuggingFace data...";
             progressChecker.OptimizedProgressChanged += (o, l) =>
             {

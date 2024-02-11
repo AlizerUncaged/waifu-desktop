@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Forms;
+using Humanizer;
+using Waifu.Data;
 using Waifu.Utilities;
 using UserControl = System.Windows.Controls.UserControl;
 
@@ -9,13 +11,16 @@ public partial class Settings : UserControl, IPopup
 {
     private readonly ModelManager _manageModels;
     private readonly HotkeyManager _hotkeyManager;
+    private readonly WhisperManager _whisperManager;
 
-    public Settings(ModelManager manageModels, HotkeyManager hotkeyManager)
+    public Settings(ModelManager manageModels, HotkeyManager hotkeyManager, WhisperManager whisperManager)
     {
         _manageModels = manageModels;
         _hotkeyManager = hotkeyManager;
+        _whisperManager = whisperManager;
         InitializeComponent();
     }
+
 
     public event EventHandler? CloseTriggered;
 
