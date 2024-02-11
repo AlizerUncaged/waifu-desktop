@@ -97,7 +97,7 @@ public partial class ModelManager : UserControl, IPopup
             Dispatcher.Invoke(() =>
             {
                 if (this.GetCurrentWindow() is MainWindow mainWindow)
-                    mainWindow.ShowMessage("Model successfully added!");
+                    mainWindow.ShowMessage("Changes saved!");
             });
         });
     }

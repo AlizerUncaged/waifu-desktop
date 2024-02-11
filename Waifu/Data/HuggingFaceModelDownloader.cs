@@ -15,16 +15,28 @@ public class HuggingFaceModelDownloader
 
     public List<DownloadProgressData> CurrentOngoingProgress { get; set; } = new();
 
-    public DownloadProgressData DownloadWhisperModelInBackgroundAndSetAsModel(GgmlType modelType)
+    public DownloadProgressData DownloadWhisperModelInBackgroundAndSetAsModel(GgmlType modelType,
+        bool ignoreIfAlreadyExists = false)
     {
         var progress = new DownloadProgressData();
+
         var modelName = Path.Combine(ModelFolder, $"{modelType}.bin");
+
 
         _ = Task.Run(async () =>
         {
+            await Task.Delay(TimeSpan.FromSeconds(1));
+
             CurrentOngoingProgress.Add(progress);
 
             Directory.CreateDirectory(ModelFolder);
+
+            if (ignoreIfAlreadyExists && File.Exists(modelName) && new FileInfo(modelName).Length > 1)
+            {
+                progress.Done();
+
+                CurrentOngoingProgress.Remove(progress);
+            }
 
             var modelStream = await WhisperGgmlDownloader.GetGgmlModelAsync(modelType);
 
@@ -77,15 +89,14 @@ public class DownloadProgressData
 
     public void StartReportingOptimized()
     {
-        ThreadPool.QueueUserWorkItem(state =>
+        _ = Task.Run(async () =>
         {
             while (_isDownloading)
             {
-                // Send optimized progress every 0.5 seconds
-                OptimizedProgressChanged?.Invoke(this, _bytesDownloaded);
+                if (_bytesDownloaded > 0)
+                    OptimizedProgressChanged?.Invoke(this, _bytesDownloaded);
 
-                // Sleep for 0.5 seconds
-                Thread.Sleep(500);
+                await Task.Delay(TimeSpan.FromSeconds(0.2));
             }
         });
     }

@@ -7,17 +7,18 @@
         Background="{DynamicResource Background}"
 
         Icon="/Resources/Images/Icon.ico"
+        
         TextOptions.TextFormattingMode="Display"
         TextOptions.TextRenderingMode="ClearType"
         RenderOptions.BitmapScalingMode="HighQuality"
-        RenderOptions.ClearTypeHint="Enabled"
+
         TextElement.Foreground="{DynamicResource Foreground}"
         WindowStartupLocation="CenterScreen"
 
         WindowStyle="SingleBorderWindow"
         SizeChanged="WindowsSizeChanged"
 
-        FontFamily="{DynamicResource OpenSans}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
         FontWeight="Bold"
 
         Loaded="WindowLoaded"
@@ -28,8 +29,8 @@
         Title="Waifu Control"
         MinHeight="400"
         MinWidth="600"
-        Height="450"
-        Width="800">
+        Height="600"
+        Width="900">
     <WindowChrome.WindowChrome>
         <WindowChrome GlassFrameThickness="0" CaptionHeight="0" UseAeroCaptionButtons="False" ResizeBorderThickness="6" />
     </WindowChrome.WindowChrome>
@@ -39,7 +40,7 @@
             <!-- -->
             <!-- </shared:Header> -->
             <Grid>
-                <Grid Name="Main">
+                <Grid Name="Main" ZIndex="-23">
 
                 </Grid>
                 <Grid Name="LayerAboveContent">

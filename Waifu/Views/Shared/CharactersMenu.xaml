@@ -12,14 +12,18 @@
         <converters:FilePathToImageSourceConverter x:Key="FilePathToImageSourceConverter" />
     </UserControl.Resources>
     <Grid>
-        <ItemsControl ItemsSource="{Binding RoleplayCharacters, Mode=OneWay}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <local:CharacterItem Margin="0,5" OnActiveRequest="CharacterClicked" RoleplayCharacter="{Binding}"
-                                         Image="{Binding ProfilePictureFilePath, Converter={StaticResource FilePathToImageSourceConverter}}"
-                                         CharacterName="{Binding CharacterName}" />
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <Border>
+            <ItemsControl ItemsSource="{Binding RoleplayCharacters, Mode=OneWay}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <local:CharacterItem  OnActiveRequest="CharacterClicked"
+                                             RoleplayCharacter="{Binding}"
+                                             Image="{Binding ProfilePictureFilePath, 
+                                             Converter={StaticResource FilePathToImageSourceConverter}}"
+                                             CharacterName="{Binding CharacterName}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Border>
     </Grid>
 </UserControl>

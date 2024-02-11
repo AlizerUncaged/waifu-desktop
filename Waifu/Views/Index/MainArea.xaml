@@ -56,28 +56,32 @@
     </UserControl.Resources>
     <Grid>
         <DockPanel>
-            <DockPanel DockPanel.Dock="Left"
-                       Background="{DynamicResource BackgroundLight}">
-                <Grid DockPanel.Dock="Bottom" VerticalAlignment="Bottom" HorizontalAlignment="Stretch">
-                    <Border Cursor="Hand" CornerRadius="7" Margin="5" VerticalAlignment="Center" Height="40"
-                            Background="{DynamicResource Background}"
-                            ToolTipService.InitialShowDelay="0" MouseDown="NewCharacter"
-                            HorizontalAlignment="Stretch">
-                        <Border.ToolTip>
-                            <ToolTip Style="{DynamicResource MaterialDesignToolTip}" Content="Add Character"></ToolTip>
-                        </Border.ToolTip>
-                        <materialDesign:PackIcon VerticalAlignment="Center" HorizontalAlignment="Center"
-                                                 Kind="PlusBold">
-                        </materialDesign:PackIcon>
-                    </Border>
-                </Grid>
-                <ScrollViewer MinWidth="50" HorizontalAlignment="Left"
-                              VerticalScrollBarVisibility="Hidden">
-                    <StackPanel Orientation="Vertical" x:Name="CharactersMenuControl">
+            <Border BorderThickness="0,0,2,0" BorderBrush="{DynamicResource Subtle}">
+                <DockPanel DockPanel.Dock="Left"
+                           Background="{DynamicResource BackgroundLight}">
+                    <Grid DockPanel.Dock="Bottom" VerticalAlignment="Bottom" HorizontalAlignment="Stretch">
+                        <Border Cursor="Hand" CornerRadius="7" Margin="5" VerticalAlignment="Center" Height="40"
+                                Background="{DynamicResource Background}"
+                                ToolTipService.InitialShowDelay="0" MouseDown="NewCharacter"
+                                HorizontalAlignment="Stretch">
+                            <Border.ToolTip>
+                                <ToolTip Style="{DynamicResource MaterialDesignToolTip}" Content="Add Character"></ToolTip>
+                            </Border.ToolTip>
+                            <materialDesign:PackIcon VerticalAlignment="Center" HorizontalAlignment="Center"
+                                                     Kind="PlusBold">
+                            </materialDesign:PackIcon>
+                        </Border>
+                    </Grid>
+                    <ScrollViewer MinWidth="50" HorizontalAlignment="Left"
+                                  VerticalScrollBarVisibility="Hidden">
+                        <StackPanel Orientation="Vertical" x:Name="CharactersMenuControl">
 
-                    </StackPanel>
-                </ScrollViewer>
-            </DockPanel>
+                        </StackPanel>
+                    </ScrollViewer>
+
+
+                </DockPanel>
+            </Border>
             <Grid x:Name="MainAreaContent">
                 <StackPanel Opacity="0.75" Orientation="Vertical" VerticalAlignment="Center"
                             HorizontalAlignment="Center">

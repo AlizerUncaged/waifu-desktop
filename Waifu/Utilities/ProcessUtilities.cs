@@ -7,7 +7,6 @@ namespace Waifu.Utilities;
 
 public class ProcessUtilities
 {
-
     public async Task<IEnumerable<Process>> GetProcessesRunningInFolderAsync(string folderPath)
     {
         var allProcesses = Process.GetProcesses();

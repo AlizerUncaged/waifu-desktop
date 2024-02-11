@@ -52,6 +52,7 @@ public partial class MainWindow : Window
 
     private void WindowLoaded(object sender, RoutedEventArgs e)
     {
+        Panel.SetZIndex(_header, 29);
         DockPanel.SetDock(_header, Dock.Top);
         MainDock.Children.Insert(0, _header);
 

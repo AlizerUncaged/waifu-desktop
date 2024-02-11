@@ -6,9 +6,9 @@ namespace Waifu.Data;
 
 public class Settings
 {
-    private readonly ApplicationDbContext _applicationDbContext;
+    private readonly ApplicationDbContextFactory _applicationDbContext;
 
-    public Settings(ApplicationDbContext applicationDbContext)
+    public Settings(ApplicationDbContextFactory applicationDbContext)
     {
         _applicationDbContext = applicationDbContext;
     }
@@ -29,18 +29,21 @@ public class Settings
 
     public async Task ClearAndAddSettings(Waifu.Models.Settings settings)
     {
-        _applicationDbContext.Settings.RemoveRange(await _applicationDbContext.Settings.ToListAsync());
+        var dbContext = _applicationDbContext.GetDbContext();
 
-        await _applicationDbContext.SaveChangesAsync();
-        
-        _applicationDbContext.Settings.Add(settings);
+        dbContext.Settings.RemoveRange(await dbContext.Settings.ToListAsync());
 
-        await _applicationDbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
+
+        dbContext.Settings.Add(settings);
+
+        await dbContext.SaveChangesAsync();
     }
 
     public async Task<Waifu.Models.Settings> GetOrCreateSettings()
     {
-        var existingSettings = await _applicationDbContext.Settings.FirstOrDefaultAsync(x => x.LocalModel != null);
+        var dbContext = _applicationDbContext.GetDbContext();
+        var existingSettings = await dbContext.Settings.FirstOrDefaultAsync(x => x.LocalModel != null);
 
         if (existingSettings is { })
             return existingSettings;
@@ -53,9 +56,9 @@ public class Settings
             LocalModel = modelsInDirectory.FirstOrDefault()
         };
 
-        _applicationDbContext.Settings.Add(settings);
+        dbContext.Settings.Add(settings);
 
-        await _applicationDbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
 
         return settings;
     }

@@ -5,18 +5,54 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Waifu.Views.Shared"
              RenderOptions.BitmapScalingMode="HighQuality"
-             mc:Ignorable="d"
+             mc:Ignorable="d" Margin="0,5"
              TextElement.Foreground="{DynamicResource Foreground}"
              MouseDown="ItemClicked"
              Loaded="CharacterItemLoaded"
+             x:Name="CharacterItemParent"
              d:DesignHeight="100" d:DesignWidth="100">
-    <Grid Height="40" Width="40" Cursor="Hand" Name="MainGrid"
-          ToolTipService.InitialShowDelay="0">
-        <Grid.ToolTip>
-            <ToolTip Style="{DynamicResource MaterialDesignToolTip}"
-                     Content="{Binding CharacterName, RelativeSource={RelativeSource AncestorType=UserControl}}">
-            </ToolTip>
-        </Grid.ToolTip>
+    <UserControl.Resources>
+        <Storyboard x:Key="EntranceAnimation">
+
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="Margin"
+                                              Storyboard.TargetName="MainGrid">
+                <EasingThicknessKeyFrame KeyTime="0:0:0" Value="0,0,0,15" />
+                <EasingThicknessKeyFrame KeyTime="0:0:0.5" Value="0,0,0,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <BackEase EasingMode="EaseOut" />
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+            </ThicknessAnimationUsingKeyFrames>
+
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                             From="0" To="1" Duration="0:0:0.5" />
+        </Storyboard>
+        <Storyboard x:Key="HoverAnimation">
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" Storyboard.TargetName="CharacterItemParent"
+                                Duration="0:0:0.4"
+                                To="0,10">
+                <ThicknessAnimation.EasingFunction>
+                    <QuinticEase EasingMode="EaseOut"></QuinticEase>
+                </ThicknessAnimation.EasingFunction>
+            </ThicknessAnimation>
+        </Storyboard>
+        <Storyboard x:Key="HoverAnimationBack">
+            <ThicknessAnimation Storyboard.TargetProperty="Margin"
+                                Storyboard.TargetName="CharacterItemParent"
+                                Duration="0:0:0.4"
+                                To="0,5">
+                <ThicknessAnimation.EasingFunction>
+                    <QuinticEase EasingMode="EaseOut"></QuinticEase>
+                </ThicknessAnimation.EasingFunction>
+            </ThicknessAnimation>
+        </Storyboard>
+    </UserControl.Resources>
+    <Grid Height="40" Width="40" Cursor="Hand" Name="MainGrid">
+        <!-- <Grid.ToolTip> -->
+        <!--     <ToolTip Style="{DynamicResource MaterialDesignToolTip}" -->
+        <!--              Content="{Binding CharacterName, RelativeSource={RelativeSource AncestorType=UserControl}}"> -->
+        <!--     </ToolTip> -->
+        <!-- </Grid.ToolTip> -->
         <!-- <TextBox Text="{Binding CharacterName, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" /> -->
         <Ellipse VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Ellipse.Fill>
@@ -33,4 +69,15 @@
             <TextBlock FontSize="9" Text="chai" Name="BadgeText"></TextBlock>
         </Border>
     </Grid>
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource EntranceAnimation}" />
+        </EventTrigger>
+        <EventTrigger RoutedEvent="UIElement.MouseEnter">
+            <BeginStoryboard Storyboard="{StaticResource HoverAnimation}" />
+        </EventTrigger>
+        <EventTrigger RoutedEvent="UIElement.MouseLeave">
+            <BeginStoryboard Storyboard="{StaticResource HoverAnimationBack}" />
+        </EventTrigger>
+    </UserControl.Triggers>
 </UserControl>

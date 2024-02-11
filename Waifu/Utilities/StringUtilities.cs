@@ -9,6 +9,7 @@ public static class StringUtilities
 {
     public static KeyCode FromWpfKey(this Key key)
     {
+        // gaming
         switch (key)
         {
             case Key.None:
@@ -222,7 +223,8 @@ public static class StringUtilities
             case Key.MediaPlayPause:
                 return KeyCode.VcMediaPlay;
         }
-        
+
+        // HOW???????????????????
         return (KeyCode)KeyInterop.VirtualKeyFromKey(key);
     }
 
@@ -235,11 +237,13 @@ public static class StringUtilities
         catch
         {
             // hack because of this: https://github.com/dotnet/corefx/issues/10361
+
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 url = url.Replace("&", "^&");
                 Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
             }
+            // we wont reach this far
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 Process.Start("xdg-open", url);

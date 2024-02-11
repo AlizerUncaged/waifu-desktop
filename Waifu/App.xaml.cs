@@ -67,7 +67,7 @@ public partial class App : Application
             .AsSelf();
 
         builder.RegisterType<Messages>()
-            .AsSelf();
+            .AsSelf().InstancePerLifetimeScope();
 
         builder.RegisterType<MainArea>()
             .AsSelf();
@@ -102,13 +102,17 @@ public partial class App : Application
         //     .AsSelf();
 
         builder.RegisterType<Views.Index.Settings>()
-            .AsSelf();
+            .AsSelf().InstancePerLifetimeScope();
 
         builder.RegisterType<Personas>()
-            .AsSelf();
+            .AsSelf().InstancePerLifetimeScope();
 
         builder.RegisterType<ProcessUtilities>()
             .AsSelf();
+
+        builder.RegisterType<ApplicationDbContextFactory>()
+            .AsSelf().SingleInstance();
+
         builder.RegisterType<ChatServiceManager>()
             .AsSelf();
 
@@ -126,13 +130,13 @@ public partial class App : Application
 
         builder.RegisterType<HuggingFaceModelApi>()
             .AsSelf();
-        
+
         builder.RegisterType<HuggingFaceModelDownloader>()
             .AsSelf().SingleInstance();
 
         builder.RegisterType<AppWideKeyboardEvents>()
             .AsSelf().SingleInstance();
-        
+
         builder.RegisterType<ChatAreaController>()
             .AsSelf().SingleInstance();
 
@@ -151,7 +155,7 @@ public partial class App : Application
             .SingleInstance();
 
         builder.RegisterType<ApplicationDbContext>()
-            .InstancePerLifetimeScope();
+            .InstancePerDependency();
 
 
         var container = builder.Build();

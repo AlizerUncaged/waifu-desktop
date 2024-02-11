@@ -5,10 +5,10 @@ namespace Waifu.Data;
 
 public class Messages
 {
-    private readonly ApplicationDbContext _applicationDbContext;
+    private readonly ApplicationDbContextFactory _applicationDbContext;
     private readonly CharacterAiApi _characterAiApi;
 
-    public Messages(ApplicationDbContext applicationDbContext, CharacterAiApi characterAiApi)
+    public Messages(ApplicationDbContextFactory applicationDbContext, CharacterAiApi characterAiApi)
     {
         _applicationDbContext = applicationDbContext;
         _characterAiApi = characterAiApi;
@@ -17,7 +17,7 @@ public class Messages
     public async Task<IEnumerable<ChatMessage>> GetMessagesAsync(long channelId, long? currentMessageId = null,
         int maxBackwards = 15)
     {
-        var messagesBeforeCurrent = await _applicationDbContext.ChatMessages
+        var messagesBeforeCurrent = await _applicationDbContext.GetDbContext().ChatMessages
             .OrderByDescending(x => x.Id)
             .Where(x => x.ChatChannel.Id == channelId && x.Id < currentMessageId)
             .Take(maxBackwards)
@@ -28,11 +28,15 @@ public class Messages
 
     public async Task<ChatMessage> AddMessageAsync(ChatMessage chatMessage)
     {
-        chatMessage.ChatChannel =
-            await _applicationDbContext.ChatChannels.FirstOrDefaultAsync(x => x.Id == chatMessage.ChatChannel.Id);
-        _applicationDbContext.ChatMessages.Add(chatMessage);
+        var dbContext = _applicationDbContext.GetDbContext();
 
-        await _applicationDbContext.SaveChangesAsync();
+        chatMessage.ChatChannel =
+            await dbContext.ChatChannels
+                .FirstOrDefaultAsync(x => x.Id == chatMessage.ChatChannel.Id);
+
+        dbContext.Add(chatMessage);
+
+        await dbContext.SaveChangesAsync();
 
         return chatMessage;
     }
@@ -40,13 +44,15 @@ public class Messages
 
     public async Task<ChatChannel> GetOrCreateChannelWithCharacter(RoleplayCharacter character)
     {
-        if (await _applicationDbContext.ChatChannels.FirstOrDefaultAsync(x =>
+        var dbContext = _applicationDbContext.GetDbContext();
+        
+        if (await dbContext.ChatChannels.FirstOrDefaultAsync(x =>
                 x.Characters.Any(y => y.Id == character.Id)) is
             { } channel)
             return channel;
 
         var dbRpCharacter =
-            await _applicationDbContext.RoleplayCharacters.FirstOrDefaultAsync(x => x.Id == character.Id);
+            await dbContext.RoleplayCharacters.FirstOrDefaultAsync(x => x.Id == character.Id);
 
         var newChannel = new ChatChannel()
         {
@@ -61,14 +67,14 @@ public class Messages
         }
 
 
-        var channelEntity = _applicationDbContext.ChatChannels.Add(newChannel);
+        var channelEntity = dbContext.ChatChannels.Add(newChannel);
 
-        await _applicationDbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
 
         if (character.IsCharacterAi)
         {
             // the chai character must have a greeting
-            _applicationDbContext.ChatMessages.Add(new ChatMessage()
+            dbContext.ChatMessages.Add(new ChatMessage()
             {
                 Sender = character.Id, SentByUser = false, Message = character.SampleMessages,
                 ChatChannel = channelEntity.Entity

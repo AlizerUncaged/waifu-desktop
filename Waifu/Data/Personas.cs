@@ -4,23 +4,25 @@ namespace Waifu.Data;
 
 public class Personas
 {
-    private readonly ApplicationDbContext _applicationDbContext;
+    private readonly ApplicationDbContextFactory _applicationDbContext;
 
-    public Personas(ApplicationDbContext applicationDbContext)
+    public Personas(ApplicationDbContextFactory applicationDbContext)
     {
         _applicationDbContext = applicationDbContext;
     }
 
     public async Task<PersonaSingle> GetOrCreatePersona()
     {
+        var dbContext = _applicationDbContext.GetDbContext();
+        
         var persona = new PersonaSingle()
         {
         };
 
-        _applicationDbContext.Personas.Add(persona);
+        dbContext.Personas.Add(persona);
 
-        await _applicationDbContext.SaveChangesAsync();
-        
+        await dbContext.SaveChangesAsync();
+
         return persona;
     }
 }

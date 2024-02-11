@@ -49,7 +49,10 @@ public partial class CharactersMenu : UserControl
 
     private void CharactersMenuLoaded(object sender, RoutedEventArgs e)
     {
-        _characters.OnCharacterAdded += (o, character) => { Dispatcher.Invoke(() => AddCharacter(character)); };
+        _characters.OnCharacterAdded += (o, character) =>
+        {
+            Dispatcher.Invoke(() => AddCharacter(character));
+        };
 
         _characters.OnCharacterRemoved += (o, character) =>
         {

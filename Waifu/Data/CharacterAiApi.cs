@@ -11,7 +11,7 @@ public class CharacterAiApi
     private readonly Settings _settings;
     private readonly ILogger<CharacterAiApi> _logger;
 
-    private CharacterAiClient? _staticCharacterAiClient;
+    private static CharacterAiClient? _staticCharacterAiClient;
 
     public CharacterAiClient? CharacterAiClient
     {

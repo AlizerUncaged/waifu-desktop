@@ -12,10 +12,9 @@ public class Hotkey
 
     public string Name { get; set; }
 
-    [NotMapped] // This attribute ensures EF doesn't try to map this property to the database
+    [NotMapped] // dont map this to db jesus
     public List<Key> VirtualKeyCodes { get; set; }
 
-    // This property will be mapped to the database
     [Column("VirtualKeyCodes")]
     public string VirtualKeyCodesJson
     {

@@ -10,6 +10,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              TextElement.Foreground="{DynamicResource Foreground}"
              mc:Ignorable="d"
+             FontFamily="{DynamicResource MaterialDesignFont}"
              TextOptions.TextFormattingMode="Display"
              TextOptions.TextRenderingMode="ClearType"
              RenderOptions.BitmapScalingMode="HighQuality"

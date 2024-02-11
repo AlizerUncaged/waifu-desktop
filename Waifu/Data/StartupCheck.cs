@@ -3,6 +3,7 @@ using CharacterAI.Client;
 using Humanizer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Whisper.net.Ggml;
 using ILogger = Serilog.ILogger;
 
 namespace Waifu.Data;
@@ -12,12 +13,15 @@ public class StartupCheck : ISelfRunning
     private readonly ApplicationDbContext _applicationDbContext;
     private readonly ILogger<StartupCheck> _logger;
     private readonly Hotkeys _hotkeys;
+    private readonly HuggingFaceModelDownloader _huggingFaceModelDownloader;
 
-    public StartupCheck(ApplicationDbContext applicationDbContext, ILogger<StartupCheck> logger, Hotkeys hotkeys)
+    public StartupCheck(ApplicationDbContext applicationDbContext, ILogger<StartupCheck> logger, Hotkeys hotkeys,
+        HuggingFaceModelDownloader huggingFaceModelDownloader)
     {
         _applicationDbContext = applicationDbContext;
         _logger = logger;
         _hotkeys = hotkeys;
+        _huggingFaceModelDownloader = huggingFaceModelDownloader;
     }
 
     public async Task<bool> DoesAModelExistAsync()
@@ -35,7 +39,7 @@ public class StartupCheck : ISelfRunning
 
         Log("Checking Puppeteer");
 
-        PuppeteerLib.PuppeteerLib.PuppeteerDownloadProcessChanged += (sender, i) =>
+        PuppeteerLib.PuppeteerLib.PuppeteerDownloadProcessChangedOptimized += (sender, i) =>
         {
             Log(
                 $"Downloading Puppeteer {i.BytesReceived.Bytes().Humanize()}/{Convert.ToInt32(i.TotalBytesToReceive).Bytes().Humanize()}",
@@ -51,6 +55,22 @@ public class StartupCheck : ISelfRunning
         await _hotkeys.HookHotkeys();
         // cache hotkeys
         await _hotkeys.GetAllHotkeys();
+
+        Log("Downloading Whisper Base");
+        var whisperAwaiter = new SemaphoreSlim(0, 1);
+        var whisperModel = GgmlType.Base;
+        var progressEvent = _huggingFaceModelDownloader
+            .DownloadWhisperModelInBackgroundAndSetAsModel(whisperModel, true);
+
+        progressEvent.OptimizedProgressChanged += (sender, l) =>
+        {
+            Log($"Downloading Whisper {whisperModel} {l.Bytes().Humanize()}", true);
+        };
+
+        progressEvent.DownloadDone += (sender, args) => { whisperAwaiter.Release(); };
+
+        await whisperAwaiter.WaitAsync();
+
 
         Log("Starting");
         OnCheckFinishedSuccessfully?.Invoke(this, EventArgs.Empty);
