@@ -85,6 +85,12 @@ public class ChatAreaController
         Application.Current.Dispatcher.Invoke(() =>
         {
             chatArea = chatAreaScope.Resolve<ChatArea>();
+            
+            chatArea.Unloaded += (sender, args) =>
+            {
+                
+            };
+            
             chatHandlerForUser.CompleteMessageGenerated += (sender, message) =>
             {
                 chatArea.AddChatBasedOnIdLocation(message);

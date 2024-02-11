@@ -31,28 +31,7 @@ public class AudioRecorder
         _waveInEvent.WaveFormat = _waveFormat;
         _waveInEvent.DataAvailable += WaveInEventOnDataAvailable;
 
-        _waveInEvent.RecordingStopped += (sender, args) =>
-        {
-            logger.LogInformation($"Recording stopped.");
-
-            _memoryStream.Flush();
-            _memoryStream.Close();
-            _memoryStream.Dispose();
-
-            RecordingReceived?.Invoke(this, _memoryStream);
-
-            //
-            // var newStream = new MemoryStream();
-            //
-            // _memoryStream.CopyTo(newStream);
-            //
-            // // reset our memory stream
-            // _memoryStream.Seek(0, SeekOrigin.Begin);
-            // _memoryStream.SetLength(0);
-            //
-            //
-            // AudioRecordingEnded?.Invoke(this, newStream);
-        };
+        _waveInEvent.RecordingStopped += (sender, args) => { };
         _hotkeys.HotkeyUp += (sender, s) =>
         {
             if (s == "Voice")
@@ -154,10 +133,24 @@ public class AudioRecorder
 
     public void StopRecordingAudio()
     {
+        if (!isRecording)
+            return;
+
+
         isRecording = false;
 
         _waveInEvent.StopRecording();
 
         _audioLevelTimer.Stop();
+
+
+        _logger.LogInformation($"Recording stopped.");
+
+        _memoryStream.Flush();
+        _memoryStream.Close();
+        _memoryStream.Dispose();
+
+
+        RecordingReceived?.Invoke(this, _memoryStream);
     }
 }

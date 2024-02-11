@@ -80,7 +80,7 @@ public partial class App : Application
             .AsSelf();
 
         builder.RegisterType<WhisperManager>()
-            .AsSelf();
+            .AsSelf().SingleInstance();
 
         builder.RegisterType<AudioRecorder>()
             .AsSelf().SingleInstance();
@@ -95,7 +95,7 @@ public partial class App : Application
             .AsSelf().InstancePerDependency();
 
         builder.RegisterType<CharactersMenu>()
-            .AsSelf();
+            .AsSelf().SingleInstance();
 
         builder.RegisterType<Waifu.Data.Settings>()
             .AsSelf();

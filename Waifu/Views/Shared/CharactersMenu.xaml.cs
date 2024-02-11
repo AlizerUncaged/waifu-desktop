@@ -47,6 +47,8 @@ public partial class CharactersMenu : UserControl
 
     public RoleplayCharacter? ActiveCharacter { get; set; }
 
+    public ChatChannel? ActiveChannel { get; set; }
+
     private void CharactersMenuLoaded(object sender, RoutedEventArgs e)
     {
         _characters.OnCharacterAdded += (o, character) => { Dispatcher.Invoke(() => AddCharacter(character)); };
@@ -74,7 +76,10 @@ public partial class CharactersMenu : UserControl
                 var chatArea = await _chatAreaController.CreateChatArea(rpCharacter);
 
                 if (chatArea is not null)
+                {
+                    ActiveChannel = chatArea.ChatChannel;
                     Dispatcher.Invoke(() => { mainArea.SetMainContent(chatArea); });
+                }
             });
     }
 

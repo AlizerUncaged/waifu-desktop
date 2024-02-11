@@ -33,9 +33,12 @@ public class WhisperManager
     public bool DoTranscribe { get; set; } = false;
 
     public event EventHandler<string> TranscribeFinished;
+    public event EventHandler Transcribing;
 
     public async Task<string> ProcessRecordingFromBytes(WaveFileWriter recordingStream)
     {
+        Transcribing?.Invoke(this, EventArgs.Empty);
+        
         var currentSettings = await _settings.GetOrCreateSettings();
         var model = currentSettings.WhisperModel;
         WhisperProcessor whisperFactory;
@@ -59,7 +62,7 @@ public class WhisperManager
         StringBuilder stringBuilder = new();
 
         await foreach (var result in whisperFactory.ProcessAsync(File.Open(recordingStream.Filename, FileMode.Open,
-                           FileAccess.Read)))
+                           FileAccess.Read, FileShare.ReadWrite)))
         {
             stringBuilder.Append(result.Text);
         }

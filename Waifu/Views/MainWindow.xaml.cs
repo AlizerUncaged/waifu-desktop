@@ -77,6 +77,8 @@ public partial class MainWindow : Window
         SetView(_welcome);
 
         _logger.LogDebug("MainWindow loaded completely");
+        
+        _watcherManager.EnableAllWatchers();
     }
 
     /// <summary>

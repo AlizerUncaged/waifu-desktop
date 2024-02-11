@@ -20,6 +20,7 @@ public class Messages
         var messagesBeforeCurrent = await _applicationDbContext.GetDbContext().ChatMessages
             .OrderByDescending(x => x.Id)
             .Where(x => x.ChatChannel.Id == channelId && x.Id < currentMessageId)
+            .Include(x => x.ChatChannel)
             .Take(maxBackwards)
             .ToListAsync();
 
