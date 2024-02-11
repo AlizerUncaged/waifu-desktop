@@ -20,7 +20,7 @@ public class ProcessUtilities
                     string processPath = p.MainModule.FileName;
 
                     return Path.GetDirectoryName(processPath)
-                        .StartsWith(folderPath, StringComparison.OrdinalIgnoreCase);
+                        .StartsWith(Path.GetFullPath(folderPath), StringComparison.OrdinalIgnoreCase);
                 }
                 catch (Exception)
                 {

@@ -59,7 +59,6 @@ public partial class MessageItem : UserControl
         {
             doubleAnimation.To = MessageGrid.ActualHeight + MarkdownView.ActualHeight;
 
-            ;
             storyboard.Begin();
         }
     }

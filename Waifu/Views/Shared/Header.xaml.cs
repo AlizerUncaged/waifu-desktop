@@ -33,7 +33,7 @@ public partial class Header : UserControl
         // kill puppeteer first
         _properShutdownHandler.ShutdownProperly().ContinueWith(x =>
         {
-            Dispatcher.Invoke(() => { Application.Current.Shutdown(); });
+            Dispatcher.Invoke(() => { Environment.Exit(Environment.ExitCode); });
         });
     }
 

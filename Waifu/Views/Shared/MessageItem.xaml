@@ -52,7 +52,6 @@
                 <Border CornerRadius="7" Padding="2" HorizontalAlignment="Left" Name="MainBorder"
                         Background="{DynamicResource BackgroundLight}">
                     <Grid MinHeight="30" Margin="7,0" VerticalAlignment="Center">
-
                         <mdxam:MarkdownScrollViewer IsHitTestVisible="False" VerticalScrollBarVisibility="Disabled"
                                                     Name="MarkdownView" FontWeight="Normal"
                                                     VerticalAlignment="Center">
