@@ -121,9 +121,9 @@ public class Hotkeys
         }
 
         _hotkeyActions = cacheHotkeyObj;
-        
+
         _logger.LogInformation($"Took {performanceCounter.ElapsedMilliseconds}ms to load all hotkeys");
-        
+
         return hotkeys;
     }
 

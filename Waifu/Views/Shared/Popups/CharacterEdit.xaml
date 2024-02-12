@@ -1,0 +1,71 @@
+﻿<UserControl x:Class="Waifu.Views.Shared.Popups.CharacterEdit"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Waifu.Views.Shared.Popups"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" Loaded="CharacterEditLoaded" HorizontalAlignment="Stretch"
+             TextElement.Foreground="{DynamicResource Foreground}"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Border MaxWidth="600" CornerRadius="15" Background="{DynamicResource Background}">
+            <Grid Margin="15">
+                <StackPanel>
+                    <StackPanel Margin="0,0,0,15">
+                        <TextBlock FontSize="24">
+                            <!-- <materialDesign:PackIcon Kind="Stadium"></materialDesign:PackIcon> -->
+                            <Run
+                                Text="{Binding RoleplayCharacter.CharacterName, Mode=OneWay}">
+                            </Run>
+                        </TextBlock>
+                        <TextBlock TextWrapping="Wrap" FontWeight="Normal"
+                                   Text="Edit this character.">
+                        </TextBlock>
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,15" Orientation="Vertical" Name="CustomModelOptions">
+                        <TextBlock FontWeight="Black">
+                            <materialDesign:PackIcon Kind="VoiceChat"></materialDesign:PackIcon>
+                            <Run Text="Elevenlabs Voice"></Run>
+                        </TextBlock>
+                        <TextBlock FontWeight="Normal" Margin="0,0,0,7" TextWrapping="Wrap"
+                                   Text="Select your preferred Elevenlabs voice">
+                        </TextBlock>
+                        <ComboBox Background="Transparent" PreviewMouseDown="VoiceSelectionClicked" Margin="0,0,0,15"
+                                  SelectionChanged="VoiceSelectionChanged" DropDownClosed="RealSelectionChanged"
+                                  Name="VoiceList"
+                                  Padding="5" SelectedIndex="0"
+                                  Style="{StaticResource MaterialDesignOutlinedComboBox}">
+                        </ComboBox>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Click="RefreshVoicesClicked" BorderThickness="0" Margin="0,0,7,0"
+                                    Background="{DynamicResource Purple}">
+                                Refresh Voices
+                            </Button>
+                            <ProgressBar IsIndeterminate="True" Value="50" Margin="0,0,7,0"
+                                         VerticalAlignment="Center" Visibility="Collapsed"
+                                         HorizontalAlignment="Center" Name="SearchProgressBar"
+                                         Style="{StaticResource MaterialDesignCircularProgressBar}">
+                            </ProgressBar>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                        <Button Click="CancelClicked"
+                                Background="{DynamicResource BackgroundLight}" BorderThickness="0"
+                                HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,15,0">
+                            <TextBlock>Cancel</TextBlock>
+                        </Button>
+                        <Button Click="SaveCharacter" BorderThickness="0" Background="{DynamicResource Purple}"
+                                HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,15,0">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <materialDesign:PackIcon VerticalAlignment="Center" Margin="0,0,7,0" Kind="Add"></materialDesign:PackIcon>
+                                <TextBlock VerticalAlignment="Center">Save</TextBlock>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+    </Grid>
+</UserControl>

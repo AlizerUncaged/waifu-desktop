@@ -9,6 +9,7 @@
              xmlns:shared="clr-namespace:Waifu.Views.Shared"
              Loaded="ChatAreaLoaded" Unloaded="ChatAreaDisposed"
              xmlns:converters="clr-namespace:Waifu.Data.xamlValueConverters"
+             xmlns:popups="clr-namespace:Waifu.Views.Shared.Popups"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
              DataContext="{Binding RelativeSource={RelativeSource Self}}"
@@ -23,24 +24,41 @@
                         BorderBrush="{DynamicResource Subtle}">
                     <Grid>
                         <Grid>
-                            <StackPanel Orientation="Horizontal" Margin="5,5">
-                                <materialDesign:PackIcon VerticalAlignment="Center" Kind="Chat" Margin="10,0,7,0"></materialDesign:PackIcon>
-                                <Ellipse Height="35" Width="35" VerticalAlignment="Center" Margin="0,0,7,0"
-                                         HorizontalAlignment="Stretch">
-                                    <Ellipse.Fill>
-                                        <ImageBrush Stretch="UniformToFill"
-                                                    ImageSource="{Binding RoleplayCharacter.ProfilePictureFilePath, Converter={StaticResource FilePathToImageSourceConverter}}" />
-                                    </Ellipse.Fill>
-                                </Ellipse>
-                                <StackPanel VerticalAlignment="Center" Orientation="Vertical">
-                                    <TextBlock FontWeight="Bold"
-                                               Text="{Binding RoleplayCharacter.CharacterName}">
-                                    </TextBlock>
-                                    <TextBlock FontWeight="Normal" Opacity="0.5" FontSize="10"
-                                               Text="{Binding RoleplayCharacter.CharacterAiId}">
-                                    </TextBlock>
+                            <DockPanel>
+                                <StackPanel Orientation="Horizontal" Margin="5,5">
+                                    <materialDesign:PackIcon VerticalAlignment="Center" Kind="Chat" Margin="10,0,7,0">
+                                        <materialDesign:PackIcon.RenderTransform>
+                                            <ScaleTransform CenterX="0.5" CenterY="2" ScaleX="1.3" ScaleY="1.3" />
+                                        </materialDesign:PackIcon.RenderTransform>
+                                    </materialDesign:PackIcon>
+                                    <Ellipse Height="35" Width="35" VerticalAlignment="Center" Margin="0,0,7,0"
+                                             HorizontalAlignment="Stretch">
+                                        <Ellipse.Fill>
+                                            <ImageBrush Stretch="UniformToFill"
+                                                        ImageSource="{Binding RoleplayCharacter.ProfilePictureFilePath, Converter={StaticResource FilePathToImageSourceConverter}}" />
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                    <StackPanel VerticalAlignment="Center" Orientation="Vertical">
+                                        <TextBlock FontWeight="Bold"
+                                                   Text="{Binding RoleplayCharacter.CharacterName}">
+                                        </TextBlock>
+                                        <TextBlock FontWeight="Normal" Opacity="0.5" FontSize="10"
+                                                   Text="{Binding RoleplayCharacter.CharacterAiId}">
+                                        </TextBlock>
+                                    </StackPanel>
                                 </StackPanel>
-                            </StackPanel>
+                                <Grid VerticalAlignment="Center" Cursor="Hand" HorizontalAlignment="Right"
+                                      Margin="15,5">
+                                    <materialDesign:PackIcon Background="Transparent"
+                                                             PreviewMouseDown="CharacterSettingsClicked"
+                                                             Kind="Settings" VerticalAlignment="Center">
+                                        <materialDesign:PackIcon.RenderTransform>
+                                            <ScaleTransform CenterX="0.5" CenterY="2" ScaleX="1.3" ScaleY="1.3" />
+                                        </materialDesign:PackIcon.RenderTransform>
+                                    </materialDesign:PackIcon>
+                                </Grid>
+                            </DockPanel>
+
                         </Grid>
                     </Grid>
                 </Border>
@@ -109,5 +127,9 @@
                 </DockPanel>
             </Grid>
         </DockPanel>
+        <Grid Name="LayerAboveContent">
+            <Grid x:Name="DialogArea">
+            </Grid>
+        </Grid>
     </Grid>
 </UserControl>

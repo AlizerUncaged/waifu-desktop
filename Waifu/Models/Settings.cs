@@ -20,6 +20,13 @@ public class Settings
 
     public string? CharacterAiToken { get; set; }
 
+    public string? ElevenlabsApiKey { get; set; }
+
+    public int AudioPlayerDeviceId { get; set; } = -1;
+
+    public bool EnableElevenlabs { get; set; } = true;
+
+
     public int GpuLayerCount { get; set; } = 35;
 
     public float Temperature { get; set; } = 0.6f;

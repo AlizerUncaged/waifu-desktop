@@ -131,6 +131,9 @@ namespace Waifu.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ElevenlabsSelectedVoice")
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("IsCharacterAi")
                         .HasColumnType("INTEGER");
 
@@ -153,8 +156,17 @@ namespace Waifu.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("AudioPlayerDeviceId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("CharacterAiToken")
                         .HasColumnType("TEXT");
+
+                    b.Property<string>("ElevenlabsApiKey")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("EnableElevenlabs")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("GpuLayerCount")
                         .HasColumnType("INTEGER");

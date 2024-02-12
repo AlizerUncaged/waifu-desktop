@@ -5,6 +5,7 @@ using System.Windows;
 using Autofac;
 using LLama.Common;
 using MdXaml;
+using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using Serilog;
 using Serilog.Events;
@@ -116,12 +117,14 @@ public partial class App : Application
 
         builder.RegisterType<ProcessUtilities>()
             .AsSelf();
-
+        
 
         builder.RegisterType<ApplicationDbContextFactory>()
             .AsSelf().SingleInstance();
 
         builder.RegisterType<ChatServiceManager>()
+            .AsSelf();
+        builder.RegisterType<AudioPlayer>()
             .AsSelf();
 
         builder.RegisterType<ProperShutdownHandler>()
@@ -146,8 +149,15 @@ public partial class App : Application
         builder.RegisterType<ChatAreaController>()
             .AsSelf().SingleInstance();
 
+        builder.RegisterType<ElevenlabsVoiceGenerator>()
+            .AsSelf().As<IVoiceGenerator>().SingleInstance();
+
         builder.RegisterType<ChatArea>()
             .InstancePerLifetimeScope()
+            .AsSelf();
+
+        builder.RegisterType<CharacterEdit>()
+            .InstancePerDependency()
             .AsSelf();
 
         builder.RegisterType<Characters>()

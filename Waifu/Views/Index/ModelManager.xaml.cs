@@ -54,6 +54,7 @@ public partial class ModelManager : UserControl, IPopup
             Dispatcher.Invoke(() =>
             {
                 CharacterAiTokenField.Password = settings.CharacterAiToken;
+                ElevenlabsTokenField.Password = settings.ElevenlabsApiKey;
                 WhisperModelList.Text = settings.WhisperModel.ToString();
             });
         });
@@ -84,16 +85,19 @@ public partial class ModelManager : UserControl, IPopup
 
     private void ModelSave(object sender, RoutedEventArgs e)
     {
-        var modelName = ModelsList.Text;
-        var chaiToken = CharacterAiTokenField.Password;
-        var ggmlModelName = WhisperModelList.Text;
+        string modelName = ModelsList.Text,
+            chaiToken = CharacterAiTokenField.Password,
+            ggmlModelName = WhisperModelList.Text,
+            elevenLabsToken = ElevenlabsTokenField.Password;
+
         _ = Task.Run(async () =>
         {
             var currentSettings = await _settings.GetOrCreateSettings();
-            
+
             currentSettings.CharacterAiToken = chaiToken;
             currentSettings.LocalModel = modelName;
-            
+            currentSettings.ElevenlabsApiKey = elevenLabsToken;
+
             if (Enum.TryParse(ggmlModelName, out GgmlType ggmlType))
                 currentSettings.WhisperModel = ggmlType;
 

@@ -23,6 +23,9 @@ public partial class MainWindow : Window
     private readonly StartupCheck _startupCheck;
     private readonly MainArea _mainArea;
     private readonly Waifu.Data.Settings _settings;
+    
+    public Waifu.Data.Settings Settings => _settings;
+    
     private readonly Header _header;
     private readonly CharacterAiApi _characterAiApi;
     private readonly ChatAreaController _chatAreaController;
@@ -30,14 +33,25 @@ public partial class MainWindow : Window
     private readonly AudioRecorder _audioRecorder;
     private readonly WhisperManager _whisperManager;
     private readonly WatcherManager _watcherManager;
+    private readonly ElevenlabsVoiceGenerator _elevenlabsVoiceGenerator;
+
+    public ElevenlabsVoiceGenerator ElevenlabsVoiceGenerator => _elevenlabsVoiceGenerator;
 
     public SnackbarMessageQueue SnackbarMessageQueue { get; } = new();
 
-    public MainWindow(Welcome welcome, ILogger<MainWindow> logger, StartupCheck startupCheck, MainArea mainArea,
+    public MainWindow(Welcome welcome,
+        ILogger<MainWindow> logger,
+        StartupCheck startupCheck,
+        MainArea mainArea,
         Waifu.Data.Settings settings,
-        Header header, CharacterAiApi characterAiApi, ChatAreaController chatAreaController, Hotkeys hotkeys,
+        Header header,
+        CharacterAiApi characterAiApi,
+        ChatAreaController chatAreaController,
+        Hotkeys hotkeys,
         AudioRecorder audioRecorder,
-        WhisperManager whisperManager, WatcherManager watcherManager)
+        WhisperManager whisperManager, 
+        WatcherManager watcherManager,
+        ElevenlabsVoiceGenerator elevenlabsVoiceGenerator)
     {
         _welcome = welcome;
         _logger = logger;
@@ -51,6 +65,7 @@ public partial class MainWindow : Window
         _audioRecorder = audioRecorder;
         _whisperManager = whisperManager;
         _watcherManager = watcherManager;
+        _elevenlabsVoiceGenerator = elevenlabsVoiceGenerator;
 
         InitializeComponent();
 

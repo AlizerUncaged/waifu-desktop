@@ -60,7 +60,7 @@ public partial class AtarashiCharacterAi : UserControl, IPopup, INotifyPropertyC
                     CharacterAiTargetPersona = Character.Tgt
                 };
 
-                await _characters.AddCharacterAsync(character);
+                await _characters.AddOrUpdateCharacterAsync(character);
 
                 Dispatcher.Invoke(() => { CloseTriggered?.Invoke(this, EventArgs.Empty); });
             });

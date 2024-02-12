@@ -72,7 +72,7 @@ public partial class AtarashiCharacter : UserControl, IPopup
 
                 character.ProfilePictureHash = $".\\{fileHash}";
 
-                await _characters.AddCharacterAsync(character);
+                await _characters.AddOrUpdateCharacterAsync(character);
 
                 this.Dispatcher.Invoke(CharacterSaved);
             }

@@ -18,8 +18,23 @@ public class Characters
 
     public async Task<int> CountCharactersAsync() => await _applicationDbContext.RoleplayCharacters.CountAsync();
 
-    public async Task AddCharacterAsync(RoleplayCharacter roleplayCharacter)
+    public async Task<RoleplayCharacter?> RefreshRoleplayCharacterAsync(RoleplayCharacter roleplayCharacter)
+        => await _applicationDbContext.RoleplayCharacters.FirstOrDefaultAsync(x => x.Id == roleplayCharacter.Id);
+
+    public async Task AddOrUpdateCharacterAsync(RoleplayCharacter roleplayCharacter)
     {
+        if (await _applicationDbContext.RoleplayCharacters.FirstOrDefaultAsync(x => x.Id == roleplayCharacter.Id) is
+            { } existingRoleplayCharacter)
+        {
+            roleplayCharacter.Id = existingRoleplayCharacter.Id;
+
+            _applicationDbContext.RoleplayCharacters.Update(roleplayCharacter);
+
+            await _applicationDbContext.SaveChangesAsync();
+
+            return;
+        }
+
         _applicationDbContext.RoleplayCharacters.Add(roleplayCharacter);
 
         await _applicationDbContext.SaveChangesAsync();

@@ -49,6 +49,21 @@
                                 </PasswordBox>
                             </StackPanel>
 
+                            <StackPanel Orientation="Vertical" Margin="0,0,0,15">
+                                <TextBlock FontWeight="Black">
+                                    <materialDesign:PackIcon Kind="VoiceChat"></materialDesign:PackIcon>
+                                    <Run Text="Elevenlabs Token"></Run>
+                                </TextBlock>
+                                <TextBlock Margin="0,0,0,7" Text="You Elevenlabs token for the API key"></TextBlock>
+                                <PasswordBox
+                                    Name="ElevenlabsTokenField"
+                                    materialDesign:HintAssist.Hint="elevenlabs token"
+                                    Padding="7"
+                                    materialDesign:HintAssist.IsFloating="False"
+                                    Style="{StaticResource MaterialDesignOutlinedPasswordBox}">
+                                </PasswordBox>
+                            </StackPanel>
+
                             <StackPanel Margin="0,0,0,15" Orientation="Vertical" Name="CustomModelOptions">
                                 <TextBlock Margin="0,0,0,7" Text="Set your preferred model."></TextBlock>
 

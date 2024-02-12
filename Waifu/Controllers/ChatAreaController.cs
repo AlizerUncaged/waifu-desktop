@@ -18,12 +18,16 @@ public class ChatAreaController
     private readonly ILifetimeScope _lifetimeScope;
     private readonly ChatServiceManager _chatServiceManager;
     private readonly ILogger<ChatAreaController> _logger;
+    private readonly IVoiceGenerator _voiceGenerator;
     private readonly AudioRecorder _audioRecorder;
 
     public ChatAreaController(Messages messages,
         Settings settings,
         Personas personas,
-        ILifetimeScope lifetimeScope, ChatServiceManager chatServiceManager, ILogger<ChatAreaController> logger,
+        ILifetimeScope lifetimeScope,
+        ChatServiceManager chatServiceManager,
+        ILogger<ChatAreaController> logger,
+        IVoiceGenerator voiceGenerator,
         AudioRecorder audioRecorder)
     {
         _messages = messages;
@@ -32,6 +36,7 @@ public class ChatAreaController
         _lifetimeScope = lifetimeScope;
         _chatServiceManager = chatServiceManager;
         _logger = logger;
+        _voiceGenerator = voiceGenerator;
         _audioRecorder = audioRecorder;
     }
 
@@ -70,7 +75,7 @@ public class ChatAreaController
                 .SingleInstance();
 
             // chat handlers
-            x.RegisterType(chatHandlerForUserType).As<IChatHandler>().SingleInstance();
+            x.RegisterType(chatHandlerForUserType).As<IChatHandler>().SingleInstance().AsSelf();
 
             x.RegisterType<ChatServiceManager>()
                 .AsSelf()
@@ -80,17 +85,14 @@ public class ChatAreaController
 
         var chatHandlerForUser = chatAreaScope.Resolve<IChatHandler>();
 
-        ChatArea chatArea = default;
+        ChatArea? chatArea = default;
 
         Application.Current.Dispatcher.Invoke(() =>
         {
             chatArea = chatAreaScope.Resolve<ChatArea>();
-            
-            chatArea.Unloaded += (sender, args) =>
-            {
-                
-            };
-            
+
+            chatArea.Unloaded += (sender, args) => { };
+
             chatHandlerForUser.CompleteMessageGenerated += (sender, message) =>
             {
                 chatArea.AddChatBasedOnIdLocation(message);

@@ -20,6 +20,7 @@
     <ItemGroup>
       <PackageReference Include="Autofac" Version="7.1.0" />
       <PackageReference Include="CachedImage" Version="0.1.15" />
+      <PackageReference Include="ElevenLabs-DotNet" Version="2.1.0" />
       <PackageReference Include="HardwareInformation" Version="6.0.0-rc2" />
       <PackageReference Include="Humanizer" Version="2.14.1" />
       <PackageReference Include="LLamaSharp" Version="0.9.1" />

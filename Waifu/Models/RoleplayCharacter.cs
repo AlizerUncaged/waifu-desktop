@@ -13,6 +13,9 @@ public class RoleplayCharacter
 
     public string SampleMessages { get; set; } = string.Empty;
 
+    // optional
+    public string? ElevenlabsSelectedVoice { get; set; } = null;
+
     public string Description { get; set; } = string.Empty;
 
     public string ProfilePictureHash { get; set; } = "default.jpg";

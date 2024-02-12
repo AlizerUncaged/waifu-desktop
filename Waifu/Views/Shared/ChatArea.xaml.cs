@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
+using Autofac;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Waifu.ChatHandlers;
@@ -10,13 +11,14 @@ using Waifu.Controllers;
 using Waifu.Data;
 using Waifu.Models;
 using Waifu.Utilities;
+using Waifu.Views.Shared.Popups;
 using Settings = Waifu.Data.Settings;
 
 namespace Waifu.Views.Shared;
 
 public partial class ChatArea : UserControl
 {
-    private readonly RoleplayCharacter _character;
+    private RoleplayCharacter _character;
     private readonly ChatChannel _channel;
     private readonly Messages _messages;
     private readonly Settings _settings;
@@ -28,14 +30,26 @@ public partial class ChatArea : UserControl
     private readonly WhisperManager _whisperManager;
     private readonly CharactersMenu _charactersMenu;
     private readonly ILogger<ChatArea> _logger;
+    private readonly Characters _characters;
+    private readonly ILifetimeScope _lifetimeScope;
+    private readonly IVoiceGenerator _voiceGenerator;
+    private readonly AudioPlayer _audioPlayer;
 
     public IChatHandler ChatHandler => _chatHandler;
 
     public ChatArea(RoleplayCharacter character, ChatChannel channel, Messages messages,
         Data.Settings settings, Personas personas,
-        ChatAreaController chatAreaController, IChatHandler chatHandler, Hotkeys hotkeys, AudioRecorder audioRecorder,
-        WhisperManager whisperManager, CharactersMenu charactersMenu, ILogger<ChatArea> logger)
+        ChatAreaController chatAreaController, IChatHandler chatHandler,
+        Hotkeys hotkeys,
+        AudioRecorder audioRecorder,
+        WhisperManager whisperManager,
+        CharactersMenu charactersMenu, ILogger<ChatArea> logger,
+        ElevenlabsVoiceGenerator elevenlabsVoiceGenerator,
+        Characters characters,
+        ILifetimeScope lifetimeScope,
+        IVoiceGenerator voiceGenerator, AudioPlayer audioPlayer)
     {
+        ElevenlabsVoiceGenerator = elevenlabsVoiceGenerator;
         _character = character;
         _channel = channel;
         _messages = messages;
@@ -48,16 +62,31 @@ public partial class ChatArea : UserControl
         _whisperManager = whisperManager;
         _charactersMenu = charactersMenu;
         _logger = logger;
+        _characters = characters;
+        _lifetimeScope = lifetimeScope;
+        _voiceGenerator = voiceGenerator;
+        _audioPlayer = audioPlayer;
 
         InitializeComponent();
 
         _whisperManager.DoTranscribe = true;
-
+        _chatHandler.CompleteMessageGenerated += ChatHandlerOnCompleteMessageGenerated;
         _whisperManager.TranscribeFinished += WhisperManagerOnTranscribeFinished;
         _whisperManager.Transcribing += WhisperManagerOnTranscribing;
         audioRecorder.AudioRecordingStarted += AudioRecorderOnAudioRecordingStarted;
 
         audioRecorder.AudioLevelReceived += AudioRecorderOnAudioLevelReceived;
+    }
+
+    private void ChatHandlerOnCompleteMessageGenerated(object? sender, ChatMessage e)
+    {
+        ;
+        _ = Task.Run(async () =>
+        {
+            var generateVoice =
+                await _voiceGenerator.GenerateVoiceAsync(e.Message, RoleplayCharacter.ElevenlabsSelectedVoice);
+            await _audioPlayer.PlayMp3FromByteArrayAsync(generateVoice.ToArray());
+        });
     }
 
     private void WhisperManagerOnTranscribing(object? sender, EventArgs e)
@@ -106,7 +135,14 @@ public partial class ChatArea : UserControl
     public Hotkey VoiceHotkey { get; set; }
     public ObservableCollection<ChatMessage> ChatMessages { get; set; } = new();
 
-    public RoleplayCharacter RoleplayCharacter => _character;
+    public RoleplayCharacter RoleplayCharacter
+    {
+        get => _character;
+        set => _character = value;
+    }
+
+    public ElevenlabsVoiceGenerator ElevenlabsVoiceGenerator { get; set; }
+
     public ChatChannel ChatChannel => _channel;
 
     public event EventHandler<string> MessageSend;
@@ -199,12 +235,37 @@ public partial class ChatArea : UserControl
 
     private void ChatAreaDisposed(object sender, RoutedEventArgs e)
     {
-        _logger.LogInformation($"ChatArea {this.GetHashCode()} is being disposed!");
-
+        _chatHandler.CompleteMessageGenerated -= ChatHandlerOnCompleteMessageGenerated;
         _whisperManager.Transcribing -= WhisperManagerOnTranscribing;
         _whisperManager.TranscribeFinished -= WhisperManagerOnTranscribeFinished;
         _audioRecorder.AudioRecordingStarted -= AudioRecorderOnAudioRecordingStarted;
         _audioRecorder.AudioLevelReceived -= AudioRecorderOnAudioLevelReceived;
         _chatAreaController.MessageFromCurrentUser -= ChatAreaControllerOnMessageFromCurrentUser;
+
+        _logger.LogInformation($"ChatArea {this.GetHashCode()} is being disposed!");
+    }
+
+    private void CharacterSettingsClicked(object sender, MouseButtonEventArgs e)
+    {
+        var characterEditor = _lifetimeScope.Resolve<CharacterEdit>();
+
+        _ = Task.Run(async () =>
+        {
+            RoleplayCharacter = await _characters.RefreshRoleplayCharacterAsync(RoleplayCharacter);
+
+            Dispatcher.Invoke(() =>
+            {
+                characterEditor.RoleplayCharacter = RoleplayCharacter;
+
+                DialogArea.Children.Add(characterEditor);
+
+                characterEditor.RoleplayCharacterChanged += (o, character) =>
+                {
+                    _ = Task.Run(async () => { await _characters.AddOrUpdateCharacterAsync(character); });
+                };
+
+                characterEditor.CloseTriggered += (o, args) => { DialogArea.Children.Clear(); };
+            });
+        });
     }
 }
