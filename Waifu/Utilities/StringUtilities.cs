@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using System.Windows.Input;
 using SharpHook.Native;
 
@@ -7,6 +8,17 @@ namespace Waifu.Utilities;
 
 public static class StringUtilities
 {
+    public static string RemoveSpecialCharacters(this string str)
+    {
+        // Define regex pattern to match special characters except space
+        string pattern = @"[^a-zA-Z0-9\. ]"; // Added space character to the pattern
+
+        // Replace special characters with empty string
+        string result = Regex.Replace(str, pattern, "");
+
+        return result;
+    }
+
     public static KeyCode FromWpfKey(this Key key)
     {
         // gaming

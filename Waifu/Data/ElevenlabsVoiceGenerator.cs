@@ -4,6 +4,7 @@ using ElevenLabs.TextToSpeech;
 using ElevenLabs.Voices;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using Waifu.Utilities;
 
 namespace Waifu.Data;
 
@@ -56,10 +57,8 @@ public class ElevenlabsVoiceGenerator : IVoiceGenerator
         if (VoicesCache is null)
             await GetElevenlabsVoices();
 
-        var currentSettings = await _settings.GetOrCreateSettings();
 
-
-        Voice? actualVoice = null;
+        Voice? actualVoice;
         if (!string.IsNullOrWhiteSpace(voice))
         {
             // voice exists
@@ -72,7 +71,7 @@ public class ElevenlabsVoiceGenerator : IVoiceGenerator
         }
 
 
-        var voiceClip = await api.TextToSpeechEndpoint.TextToSpeechAsync(text, actualVoice,
+        var voiceClip = await api.TextToSpeechEndpoint.TextToSpeechAsync(text.RemoveSpecialCharacters(), actualVoice,
             partialClipCallback: async (partialClip) =>
             {
                 // Write the incoming data to the output file stream.

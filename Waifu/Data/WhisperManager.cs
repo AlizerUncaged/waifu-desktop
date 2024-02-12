@@ -46,6 +46,7 @@ public class WhisperManager
         if (WhisperFactories.TryGetValue(model, out var foundWhisperFactory))
         {
             whisperFactory = foundWhisperFactory;
+            _logger.LogInformation($"Reusing the same whisper factory {whisperFactory.GetHashCode()}");
         }
         else
         {
