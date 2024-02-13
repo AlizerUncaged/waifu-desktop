@@ -4,5 +4,5 @@ namespace Waifu;
 
 public interface IVoiceGenerator
 {
-    Task<IEnumerable<byte>> GenerateVoiceAsync(string text, string voice);
+    Task<IEnumerable<byte>?> GenerateVoiceAsync(string text, string voice);
 }

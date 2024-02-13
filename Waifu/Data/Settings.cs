@@ -37,16 +37,21 @@ public class Settings
 
         dbContext.Settings.Add(settings);
 
+        CachedSettings = settings;
+
         await dbContext.SaveChangesAsync();
     }
+
+    public Waifu.Models.Settings? CachedSettings { get; private set; }
 
     public async Task<Waifu.Models.Settings> GetOrCreateSettings()
     {
         var dbContext = _applicationDbContext.GetDbContext();
-        var existingSettings = await dbContext.Settings.FirstOrDefaultAsync(x => x.LocalModel != null);
 
-        if (existingSettings is { })
-            return existingSettings;
+        CachedSettings = await dbContext.Settings.FirstOrDefaultAsync(x => x.LocalModel != null);
+
+        if (CachedSettings is { })
+            return CachedSettings;
 
         var modelsInDirectory = GetModelsOnDirectory();
 

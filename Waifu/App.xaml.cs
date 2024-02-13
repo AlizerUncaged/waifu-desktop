@@ -99,7 +99,7 @@ public partial class App : Application
             .AsSelf().SingleInstance();
 
         builder.RegisterType<Waifu.Data.Settings>()
-            .AsSelf();
+            .AsSelf().SingleInstance();
 
         // builder.RegisterType<CharacterAiChatHandler>()
         //     .As<IChatHandler>()

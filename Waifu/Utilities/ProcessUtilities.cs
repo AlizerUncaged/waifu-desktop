@@ -22,7 +22,7 @@ public class ProcessUtilities
                     return Path.GetDirectoryName(processPath)
                         .StartsWith(Path.GetFullPath(folderPath), StringComparison.OrdinalIgnoreCase);
                 }
-                catch (Exception)
+                catch (Exception)     
                 {
                     return false;
                 }

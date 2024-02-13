@@ -80,13 +80,20 @@ public partial class ChatArea : UserControl
 
     private void ChatHandlerOnCompleteMessageGenerated(object? sender, ChatMessage e)
     {
-        ;
-        _ = Task.Run(async () =>
-        {
-            var generateVoice =
-                await _voiceGenerator.GenerateVoiceAsync(e.Message, RoleplayCharacter.ElevenlabsSelectedVoice);
-            await _audioPlayer.PlayMp3FromByteArrayAsync(generateVoice.ToArray());
-        });
+        if (_settings.CachedSettings is { EnableElevenlabs: true })
+            _ = Task.Run(async () =>
+            {
+                var generateVoice =
+                    await _voiceGenerator.GenerateVoiceAsync(e.Message, RoleplayCharacter.ElevenlabsSelectedVoice);
+
+                if (generateVoice is null)
+                    return;
+
+                var voiceWaveArray = generateVoice.ToArray();
+
+                if (voiceWaveArray.Any())
+                    await _audioPlayer.PlayMp3FromByteArrayAsync(voiceWaveArray);
+            });
     }
 
     private void WhisperManagerOnTranscribing(object? sender, EventArgs e)
@@ -173,7 +180,7 @@ public partial class ChatArea : UserControl
     {
         _ = Task.Run(async () =>
         {
-            VoiceHotkey = await _hotkeys.GetOrAddHotkeyAsync("Voice", Key.LeftAlt);
+            VoiceHotkey = await _hotkeys.GetOrAddHotkeyAsync("Voice", Key.LeftAlt, Key.LeftCtrl);
 
             var currentMessages = await _messages.GetMessagesAsync(_channel.Id, CurrentMessageId);
 

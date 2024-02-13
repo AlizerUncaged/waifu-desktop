@@ -29,7 +29,8 @@ public class ElevenlabsVoiceGenerator : IVoiceGenerator
     {
         var currentSettings = await _settings.GetOrCreateSettings();
 
-        api = new ElevenLabsClient(currentSettings.ElevenlabsApiKey);
+        if (!string.IsNullOrWhiteSpace(currentSettings.ElevenlabsApiKey))
+            api = new ElevenLabsClient(currentSettings.ElevenlabsApiKey);
     }
 
     public IEnumerable<Voice>? VoicesCache { get; set; }
@@ -38,6 +39,11 @@ public class ElevenlabsVoiceGenerator : IVoiceGenerator
     {
         if (api is null)
             await InitializeClient();
+
+        var settings = await _settings.GetOrCreateSettings();
+
+        if (string.IsNullOrWhiteSpace(settings.ElevenlabsApiKey))
+            return Enumerable.Empty<string>();
 
         var voices = await api.VoicesEndpoint.GetAllVoicesAsync();
 
@@ -49,13 +55,19 @@ public class ElevenlabsVoiceGenerator : IVoiceGenerator
 
     private ElevenLabsClient? api = null;
 
-    public async Task<IEnumerable<byte>> GenerateVoiceAsync(string text, string voice)
+
+    public async Task<IEnumerable<byte>?> GenerateVoiceAsync(string text, string voice)
     {
         if (api is null)
             await InitializeClient();
 
         if (VoicesCache is null)
             await GetElevenlabsVoices();
+
+        var settings = await _settings.GetOrCreateSettings();
+
+        if (!settings.EnableElevenlabs || string.IsNullOrWhiteSpace(settings.ElevenlabsApiKey))
+            return null;
 
 
         Voice? actualVoice;
@@ -78,8 +90,10 @@ public class ElevenlabsVoiceGenerator : IVoiceGenerator
                 // Alternatively you can play this clip data directly.
                 // await memoryStream.WriteAsync(partialClip.ClipData);
             });
+        var voiceClipData = voiceClip.ClipData.ToArray();
 
+        _logger.LogInformation($"Generated voice of {voiceClipData.Length}");
 
-        return voiceClip.ClipData.ToArray();
+        return voiceClipData;
     }
 }

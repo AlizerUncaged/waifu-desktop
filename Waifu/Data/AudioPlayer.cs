@@ -23,7 +23,7 @@ public class AudioPlayer
             {
                 using (WaveOutEvent waveOut = new WaveOutEvent())
                 {
-                    if (audioOutDeviceId != -1)
+                    if (audioOutDeviceId >= 0)
                     {
                         waveOut.DeviceNumber = audioOutDeviceId;
                     }
