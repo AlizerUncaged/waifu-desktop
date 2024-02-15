@@ -23,9 +23,9 @@ public partial class MainWindow : Window
     private readonly StartupCheck _startupCheck;
     private readonly MainArea _mainArea;
     private readonly Waifu.Data.Settings _settings;
-    
+
     public Waifu.Data.Settings Settings => _settings;
-    
+
     private readonly Header _header;
     private readonly CharacterAiApi _characterAiApi;
     private readonly ChatAreaController _chatAreaController;
@@ -34,6 +34,7 @@ public partial class MainWindow : Window
     private readonly WhisperManager _whisperManager;
     private readonly WatcherManager _watcherManager;
     private readonly ElevenlabsVoiceGenerator _elevenlabsVoiceGenerator;
+    private readonly EventMaster _eventMaster;
 
     public ElevenlabsVoiceGenerator ElevenlabsVoiceGenerator => _elevenlabsVoiceGenerator;
 
@@ -49,9 +50,9 @@ public partial class MainWindow : Window
         ChatAreaController chatAreaController,
         Hotkeys hotkeys,
         AudioRecorder audioRecorder,
-        WhisperManager whisperManager, 
+        WhisperManager whisperManager,
         WatcherManager watcherManager,
-        ElevenlabsVoiceGenerator elevenlabsVoiceGenerator)
+        ElevenlabsVoiceGenerator elevenlabsVoiceGenerator, EventMaster eventMaster)
     {
         _welcome = welcome;
         _logger = logger;
@@ -66,6 +67,7 @@ public partial class MainWindow : Window
         _whisperManager = whisperManager;
         _watcherManager = watcherManager;
         _elevenlabsVoiceGenerator = elevenlabsVoiceGenerator;
+        _eventMaster = eventMaster;
 
         InitializeComponent();
 
@@ -86,13 +88,14 @@ public partial class MainWindow : Window
         };
 
         _characterAiApi.ApiNotificationMessage += (o, s) => { ShowMessage(s.Trim()); };
-        _chatAreaController.ChatAreaMessage += (o, s) => { ShowMessage(s.Trim()); };
-        _hotkeys.HotkeyManageMessage += (o, s) => { ShowMessage(s.Trim()); };
+        
+        _eventMaster.ErrorReceived += (o, s) => { ShowMessage(s.Trim()); };
+        _eventMaster.InfoReceived += (o, s) => { ShowMessage(s.Trim()); };
 
         SetView(_welcome);
 
         _logger.LogDebug("MainWindow loaded completely");
-        
+
         _watcherManager.EnableAllWatchers();
     }
 

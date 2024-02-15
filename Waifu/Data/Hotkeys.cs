@@ -16,16 +16,18 @@ public class Hotkeys
 {
     private readonly ApplicationDbContext _applicationDbContext;
     private readonly ILogger<Hotkeys> _logger;
+    private readonly EventMaster _eventMaster;
     private static TaskPoolGlobalHook _taskPoolGlobalHook = new();
 
     private Dictionary<IEnumerable<KeyCode>, string> _hotkeyActions = new Dictionary<IEnumerable<KeyCode>, string>();
 
     public bool DoWatchHotkey { get; set; } = false;
 
-    public Hotkeys(ApplicationDbContext applicationDbContext, ILogger<Hotkeys> logger)
+    public Hotkeys(ApplicationDbContext applicationDbContext, ILogger<Hotkeys> logger, EventMaster eventMaster)
     {
         _applicationDbContext = applicationDbContext;
         _logger = logger;
+        _eventMaster = eventMaster;
 
 
         _taskPoolGlobalHook.KeyPressed += KeyboardHookOnKeyDown;
@@ -144,8 +146,6 @@ public class Hotkeys
     }
 
 
-    public event EventHandler<string> HotkeyManageMessage;
-
     public async Task<Hotkey> AddOrUpdateHotkeyAsync(Hotkey hotkey, bool dontNotify = true)
     {
         var existingHotkey = await _applicationDbContext.Hotkeys.FirstOrDefaultAsync(x => x.Name == hotkey.Name);
@@ -162,7 +162,7 @@ public class Hotkeys
         await _applicationDbContext.SaveChangesAsync();
 
         if (!dontNotify)
-            HotkeyManageMessage?.Invoke(this, $"Hotkey for {hotkey.Name} added!");
+            _eventMaster.TriggerInfo("Hotkey for {hotkey.Name} added!");
 
         await GetAllHotkeys(); // recache hotkeys
         return hotkey;

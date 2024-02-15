@@ -12,12 +12,14 @@ public class ElevenlabsVoiceGenerator : IVoiceGenerator
 {
     private readonly ILogger<ElevenlabsVoiceGenerator> _logger;
     private readonly Settings _settings;
+    private readonly EventMaster _eventMaster;
 
-    public ElevenlabsVoiceGenerator(ILogger<ElevenlabsVoiceGenerator> logger, Settings settings
+    public ElevenlabsVoiceGenerator(ILogger<ElevenlabsVoiceGenerator> logger, Settings settings, EventMaster eventMaster
     )
     {
         _logger = logger;
         _settings = settings;
+        _eventMaster = eventMaster;
     }
 
     public async Task<bool> CheckElevenlabsTokenAsync()
@@ -82,18 +84,31 @@ public class ElevenlabsVoiceGenerator : IVoiceGenerator
             actualVoice = VoicesCache.FirstOrDefault();
         }
 
+        if (actualVoice is null)
+            return null;
 
-        var voiceClip = await api.TextToSpeechEndpoint.TextToSpeechAsync(text.RemoveSpecialCharacters(), actualVoice,
-            partialClipCallback: async (partialClip) =>
-            {
-                // Write the incoming data to the output file stream.
-                // Alternatively you can play this clip data directly.
-                // await memoryStream.WriteAsync(partialClip.ClipData);
-            });
-        var voiceClipData = voiceClip.ClipData.ToArray();
 
-        _logger.LogInformation($"Generated voice of {voiceClipData.Length}");
+        try
+        {
+            var voiceClip = await api.TextToSpeechEndpoint.TextToSpeechAsync(text.RemoveSpecialCharacters(),
+                actualVoice,
+                partialClipCallback: async (partialClip) =>
+                {
+                    // Write the incoming data to the output file stream.
+                    // Alternatively you can play this clip data directly.
+                    // await memoryStream.WriteAsync(partialClip.ClipData);
+                });
+            var voiceClipData = voiceClip.ClipData.ToArray();
 
-        return voiceClipData;
+            _logger.LogInformation($"Generated voice of {voiceClipData.Length}");
+            return voiceClipData;
+        }
+        catch (Exception ex)
+        {
+            _eventMaster.TriggerError($"{ex.Message}");
+            _logger.LogError(ex.ToString());
+        }
+
+        return null;
     }
 }

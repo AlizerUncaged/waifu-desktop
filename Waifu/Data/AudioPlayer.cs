@@ -13,8 +13,23 @@ public class AudioPlayer
         _settings = settings;
     }
 
-    public async Task PlayMp3FromByteArrayAsync(byte[] mp3Data)
+    public static List<WaveOutEvent> WaveOutEvents = new();
+
+    public static void StopWaveOutEvent(WaveOutEvent waveOutEvent)
     {
+        waveOutEvent.Stop();
+        if (WaveOutEvents.Contains(waveOutEvent))
+            WaveOutEvents.Remove(waveOutEvent);
+    }
+
+    public async Task PlayMp3FromByteArrayAsync(byte[] mp3Data, bool stopOtherWaveOutEvents = true)
+    {
+        if (stopOtherWaveOutEvents)
+            foreach (var waveOut in WaveOutEvents)
+            {
+                StopWaveOutEvent(waveOut);
+            }
+
         var currentSettings = await _settings.GetOrCreateSettings();
         int audioOutDeviceId = currentSettings.AudioPlayerDeviceId;
         using (MemoryStream mp3Stream = new MemoryStream(mp3Data))
@@ -23,6 +38,8 @@ public class AudioPlayer
             {
                 using (WaveOutEvent waveOut = new WaveOutEvent())
                 {
+                    WaveOutEvents.Add(waveOut);
+
                     if (audioOutDeviceId >= 0)
                     {
                         waveOut.DeviceNumber = audioOutDeviceId;
@@ -43,6 +60,8 @@ public class AudioPlayer
                         {
                             await Task.Delay(TimeSpan.FromSeconds(1));
                         }
+
+                        WaveOutEvents.Remove(waveOut);
                     });
                 }
             }

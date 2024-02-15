@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Waifu.ChatHandlers;
 using Waifu.Controllers;
 using Waifu.Data;
+using Waifu.Data.Args;
 using Waifu.Models;
 using Waifu.Utilities;
 using Waifu.Views.Shared.Popups;
@@ -34,6 +35,7 @@ public partial class ChatArea : UserControl
     private readonly ILifetimeScope _lifetimeScope;
     private readonly IVoiceGenerator _voiceGenerator;
     private readonly AudioPlayer _audioPlayer;
+    private readonly AudioLevelCalculator _audioLevelCalculator;
 
     public IChatHandler ChatHandler => _chatHandler;
 
@@ -47,7 +49,8 @@ public partial class ChatArea : UserControl
         ElevenlabsVoiceGenerator elevenlabsVoiceGenerator,
         Characters characters,
         ILifetimeScope lifetimeScope,
-        IVoiceGenerator voiceGenerator, AudioPlayer audioPlayer)
+        IVoiceGenerator voiceGenerator,
+        AudioPlayer audioPlayer, AudioLevelCalculator audioLevelCalculator)
     {
         ElevenlabsVoiceGenerator = elevenlabsVoiceGenerator;
         _character = character;
@@ -66,6 +69,7 @@ public partial class ChatArea : UserControl
         _lifetimeScope = lifetimeScope;
         _voiceGenerator = voiceGenerator;
         _audioPlayer = audioPlayer;
+        _audioLevelCalculator = audioLevelCalculator;
 
         InitializeComponent();
 
@@ -74,8 +78,26 @@ public partial class ChatArea : UserControl
         _whisperManager.TranscribeFinished += WhisperManagerOnTranscribeFinished;
         _whisperManager.Transcribing += WhisperManagerOnTranscribing;
         audioRecorder.AudioRecordingStarted += AudioRecorderOnAudioRecordingStarted;
+        audioRecorder.AudioRecordingStopped += AudioRecorderOnAudioRecordingStopped;
+        audioLevelCalculator.AudioLevelCalculated += AudioRecorderOnAudioLevelReceived;
+    }
 
-        audioRecorder.AudioLevelReceived += AudioRecorderOnAudioLevelReceived;
+    private void AudioRecorderOnAudioRecordingStopped(object? sender, int e)
+    {
+        Dispatcher.Invoke(() => { MessageSendBorder.Opacity = 0; });
+    }
+
+    private void AudioRecorderOnAudioLevelReceived(object? sender, AudioLevelData e)
+    {
+        Dispatcher.Invoke(() =>
+        {
+            var audioLevel = e.AudioLevel;
+
+            MessageSendBorder.Opacity = audioLevel / _maxVoiceLevel;
+
+            // if (audioLevel > _maxVoiceLevel)
+            //     _maxVoiceLevel = audioLevel;
+        });
     }
 
     private void ChatHandlerOnCompleteMessageGenerated(object? sender, ChatMessage e)
@@ -107,16 +129,6 @@ public partial class ChatArea : UserControl
 
     private double _maxVoiceLevel = 100;
 
-    private void AudioRecorderOnAudioLevelReceived(object? sender, double e)
-    {
-        Dispatcher.Invoke(() =>
-        {
-            VoiceBorder.Opacity = e / _maxVoiceLevel;
-
-            if (e > _maxVoiceLevel)
-                _maxVoiceLevel = e;
-        });
-    }
 
     private void AudioRecorderOnAudioRecordingStarted(object? sender, EventArgs e)
     {
@@ -156,7 +168,7 @@ public partial class ChatArea : UserControl
 
     public void SendMessageFromUi()
     {
-        MessageSend?.Invoke(this, MessageInput.Text);
+        MessageSend?.Invoke(this, MessageInput.Text.Clone() as string);
 
         // clear text
         MessageInput.Text = string.Empty;
@@ -246,8 +258,9 @@ public partial class ChatArea : UserControl
         _whisperManager.Transcribing -= WhisperManagerOnTranscribing;
         _whisperManager.TranscribeFinished -= WhisperManagerOnTranscribeFinished;
         _audioRecorder.AudioRecordingStarted -= AudioRecorderOnAudioRecordingStarted;
-        _audioRecorder.AudioLevelReceived -= AudioRecorderOnAudioLevelReceived;
+        _audioLevelCalculator.AudioLevelCalculated -= AudioRecorderOnAudioLevelReceived;
         _chatAreaController.MessageFromCurrentUser -= ChatAreaControllerOnMessageFromCurrentUser;
+        _audioRecorder.AudioRecordingStopped -= AudioRecorderOnAudioRecordingStopped;
 
         _logger.LogInformation($"ChatArea {this.GetHashCode()} is being disposed!");
     }

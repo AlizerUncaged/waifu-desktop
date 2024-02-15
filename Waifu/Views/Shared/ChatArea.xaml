@@ -101,12 +101,19 @@
                                         Background="{DynamicResource  Purple}">
                                 </Border>
                                 <DockPanel>
-                                    <TextBox PreviewKeyDown="TextBoxTextChanged" VerticalContentAlignment="Center"
-                                             BorderBrush="{DynamicResource BackgroundLight}"
-                                             BorderThickness="2" Name="MessageInput"
-                                             Style="{StaticResource MaterialDesignOutlinedTextBox}" Padding="0,0"
-                                             Margin="5,0">
-                                    </TextBox>
+                                    <Grid>
+                                        <TextBox Margin="5,0" PreviewKeyDown="TextBoxTextChanged"
+                                                 VerticalContentAlignment="Center"
+                                                 BorderBrush="{DynamicResource BackgroundLight}"
+                                                 BorderThickness="2" Name="MessageInput"
+                                                 Style="{StaticResource MaterialDesignOutlinedTextBox}" Padding="0,0">
+                                        </TextBox>
+                                        <Border Name="MessageSendBorder" Margin="5,0" CornerRadius="5" BorderBrush="{DynamicResource Purple}"
+                                                BorderThickness="2" IsHitTestVisible="False"
+                                                Padding="0">
+                                        </Border>
+                                    </Grid>
+
                                 </DockPanel>
                             </Grid>
                         </DockPanel>

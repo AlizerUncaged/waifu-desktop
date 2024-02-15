@@ -48,7 +48,8 @@ public partial class App : Application
             .WriteTo.Console(
                 applyThemeToRedirectedOutput: true,
                 theme: AnsiConsoleTheme.Code, restrictedToMinimumLevel: LogEventLevel.Debug,
-                outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {NewLine}{Exception}"
+                outputTemplate:
+                "[{Timestamp:HH:mm:ss} {Level:u3}] ({SourceContext}.{Method})  {Message:lj} {NewLine}{Exception}"
             ).WriteTo.File(logPath)
             .MinimumLevel.Information();
 
@@ -67,6 +68,9 @@ public partial class App : Application
 
         builder.RegisterType<Header>()
             .AsSelf();
+        
+        builder.RegisterType<EventMaster>()
+            .AsSelf().SingleInstance();
 
         builder.RegisterType<Messages>()
             .AsSelf().InstancePerLifetimeScope();
@@ -84,6 +88,9 @@ public partial class App : Application
             .AsSelf().SingleInstance();
 
         builder.RegisterType<AudioRecorder>()
+            .AsSelf().SingleInstance();
+
+        builder.RegisterType<AudioLevelCalculator>()
             .AsSelf().SingleInstance();
 
         builder.RegisterType<HotkeyManager>()
@@ -117,7 +124,7 @@ public partial class App : Application
 
         builder.RegisterType<ProcessUtilities>()
             .AsSelf();
-        
+
 
         builder.RegisterType<ApplicationDbContextFactory>()
             .AsSelf().SingleInstance();

@@ -14,10 +14,6 @@ public partial class MessageItem : UserControl
         InitializeComponent();
     }
 
-    public void AddMessageContent(string partialMessage)
-    {
-        MessageContent += partialMessage;
-    }
 
     public String MessageContent
     {

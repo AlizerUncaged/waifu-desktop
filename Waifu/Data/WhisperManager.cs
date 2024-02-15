@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.Text;
 using Humanizer;
 using Microsoft.Extensions.Logging;
@@ -35,8 +36,9 @@ public class WhisperManager
     public event EventHandler<string> TranscribeFinished;
     public event EventHandler Transcribing;
 
-    public async Task<string> ProcessRecordingFromBytes(WaveFileWriter recordingStream)
+    public async Task<string> ProcessRecordingFromBytes(byte[] recordingStream)
     {
+        var performanceCounter = Stopwatch.StartNew();
         Transcribing?.Invoke(this, EventArgs.Empty);
 
         var currentSettings = await _settings.GetOrCreateSettings();
@@ -62,10 +64,12 @@ public class WhisperManager
 
         StringBuilder stringBuilder = new();
 
-        var wavFile = File.Open(recordingStream.Filename, FileMode.Open,
-            FileAccess.Read, FileShare.ReadWrite);
 
-        await foreach (var result in whisperFactory.ProcessAsync(wavFile))
+        _logger.LogInformation($"Took {performanceCounter.ElapsedMilliseconds}ms to write wave data");
+
+        var audioStream = new MemoryStream(recordingStream);
+
+        await foreach (var result in whisperFactory.ProcessAsync(audioStream))
         {
             stringBuilder.Append(result.Text);
         }
@@ -76,12 +80,6 @@ public class WhisperManager
 
         TranscribeFinished?.Invoke(this, resultComplete);
 
-        // delete the file after read
-
-        wavFile.Close();
-        await wavFile.DisposeAsync();
-
-        File.Delete(recordingStream.Filename);
 
         return resultComplete;
     }

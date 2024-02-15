@@ -20,6 +20,7 @@ public class ChatAreaController
     private readonly ILogger<ChatAreaController> _logger;
     private readonly IVoiceGenerator _voiceGenerator;
     private readonly AudioRecorder _audioRecorder;
+    private readonly EventMaster _eventMaster;
 
     public ChatAreaController(Messages messages,
         Settings settings,
@@ -28,7 +29,7 @@ public class ChatAreaController
         ChatServiceManager chatServiceManager,
         ILogger<ChatAreaController> logger,
         IVoiceGenerator voiceGenerator,
-        AudioRecorder audioRecorder)
+        AudioRecorder audioRecorder, EventMaster eventMaster)
     {
         _messages = messages;
         _settings = settings;
@@ -38,9 +39,9 @@ public class ChatAreaController
         _logger = logger;
         _voiceGenerator = voiceGenerator;
         _audioRecorder = audioRecorder;
+        _eventMaster = eventMaster;
     }
 
-    public event EventHandler<string> ChatAreaMessage;
 
     public async Task<ChatArea?> CreateChatArea(RoleplayCharacter roleplayCharacter)
     {
@@ -48,13 +49,13 @@ public class ChatAreaController
 
         if (chatHandlerForUserType is null)
         {
-            ChatAreaMessage?.Invoke(this, "No chat service available for character.");
+            _eventMaster.TriggerInfo("No chat service available for character");
             return null;
         }
 
         if (chatHandlerForUserType == typeof(LocalLlama))
         {
-            ChatAreaMessage?.Invoke(this, "Coming soon.");
+            _eventMaster.TriggerInfo("Coming soon");
             return null;
         }
 

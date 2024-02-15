@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows.Threading;
 using Microsoft.Extensions.Logging;
 
@@ -10,23 +11,29 @@ public class AudioRecorder
 {
     private readonly ILogger<AudioRecorder> _logger;
     private readonly Hotkeys _hotkeys;
+    private readonly AudioLevelCalculator _audioLevelCalculator;
 
     private DispatcherTimer _audioLevelTimer = new()
     {
         Interval = TimeSpan.FromSeconds(0.1)
     };
 
-    private readonly WaveFormat _waveFormat = new WaveFormat(16000, 1);
+    private readonly WaveFormat _waveFormat = new(16000, 1)
+    {
+    };
 
     public bool DoRecord { get; set; } = true;
 
+    private bool canEmit = false;
 
-    public AudioRecorder(ILogger<AudioRecorder> logger, Hotkeys hotkeys)
+    public AudioRecorder(ILogger<AudioRecorder> logger, Hotkeys hotkeys, AudioLevelCalculator audioLevelCalculator)
     {
         _logger = logger;
         _hotkeys = hotkeys;
+        _audioLevelCalculator = audioLevelCalculator;
 
-        _memoryStream = new WaveFileWriter(Path.GetTempFileName(), _waveInEvent.WaveFormat);
+        // _memoryStream = new WaveFileWriter(Path.GetTempFileName(), _waveInEvent.WaveFormat);
+        _memoryStream = new WaveWriter(_waveInEvent.WaveFormat);
 
         _waveInEvent.WaveFormat = _waveFormat;
         _waveInEvent.DataAvailable += WaveInEventOnDataAvailable;
@@ -51,61 +58,31 @@ public class AudioRecorder
 
         _audioLevelTimer.Tick += (sender, args) =>
         {
-            // Get the audio samples from the memory stream
-            // var audioData = _memoryStream.ToArray();
-            //
-            // // Calculate the audio volume level
-            // var audioVolume = CalculateRmsLevel(audioData, TimeSpan.FromSeconds(1));
-            //
-            // _logger.LogInformation($"Audio level: {audioVolume}");
-            //
-            // // Raise the AudioLevelReceived event
-            // AudioLevelReceived?.Invoke(this, audioVolume);
+            canEmit = true; // we can emit at this time
         };
     }
 
-    public event EventHandler<double> AudioLevelReceived;
-
-    private double CalculateRmsLevel(byte[] audioData, TimeSpan duration)
-    {
-        // Calculate RMS (root mean square) level
-        if (audioData.Length == 0)
-            return 0;
-
-        // Calculate the number of samples corresponding to the specified duration
-        int numSamplesPerSecond = _waveInEvent.WaveFormat.SampleRate;
-        int numSamples = numSamplesPerSecond * (int)duration.TotalSeconds;
-        int bytesPerSample = _waveInEvent.WaveFormat.BitsPerSample / 8;
-        int bytesPerSecond = numSamplesPerSecond * bytesPerSample;
-
-        // Get the starting position of the portion of audio data to process
-        int startPos = Math.Max(audioData.Length - bytesPerSecond * (int)duration.TotalSeconds, 0);
-
-        // Initialize sum for calculating RMS level
-        long sum = 0;
-
-        // Process the specified portion of audio data
-        for (int i = startPos; i < audioData.Length; i += bytesPerSample)
-        {
-            short sample = BitConverter.ToInt16(audioData, i); // Convert 16-bit sample to short
-            sum += (long)sample * sample;
-        }
-
-        // Calculate RMS level
-        double rms = Math.Sqrt((double)sum / (numSamples / bytesPerSample));
-        return rms;
-    }
+    public event EventHandler<int> AudioRecordingStopped;
 
 
-    private WaveFileWriter _memoryStream;
+    private WaveWriter _memoryStream;
 
     private void WaveInEventOnDataAvailable(object? sender, WaveInEventArgs e)
     {
-        _memoryStream.Write(e.Buffer, 0, e.BytesRecorded);
-        _memoryStream.Flush();
+        if (_memoryStream.CanWrite && isRecording)
+        {
+            if (canEmit)
+            {
+                _audioLevelCalculator?.CalculateAudioLevelAndEmit(e.Buffer, e.BytesRecorded, _waveFormat,
+                    TimeSpan.FromSeconds(2));
+            }
+
+            _memoryStream.Write(e.Buffer, 0, e.BytesRecorded);
+            _memoryStream.Flush();
+        }
     }
 
-    public event EventHandler<WaveFileWriter> RecordingReceived;
+    public event EventHandler<byte[]> RecordingReceived;
 
     private WaveInEvent _waveInEvent = new();
 
@@ -121,7 +98,7 @@ public class AudioRecorder
         _logger.LogInformation($"Audio recording...");
 
 
-        _memoryStream = new WaveFileWriter(Path.GetTempFileName(), _waveInEvent.WaveFormat);
+        _memoryStream = new WaveWriter(_waveInEvent.WaveFormat);
 
         _audioLevelTimer.Start();
 
@@ -143,14 +120,20 @@ public class AudioRecorder
 
         _audioLevelTimer.Stop();
 
+        _memoryStream.UpdateHeader();
 
-        _logger.LogInformation($"Recording stopped.");
+        var fullData = _memoryStream.GetDataAsByteArray();
+
+        _logger.LogInformation($"Received {fullData.Length} bytes of data in");
+
+        RecordingReceived?.Invoke(this, fullData);
+
 
         _memoryStream.Flush();
-        _memoryStream.Close();
-        _memoryStream.Dispose();
+        _memoryStream.DisposeA(true);
 
+        _logger.LogInformation($"Recording stopped at {fullData.Length}");
 
-        RecordingReceived?.Invoke(this, _memoryStream);
+        AudioRecordingStopped?.Invoke(this, fullData.Length);
     }
 }
