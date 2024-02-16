@@ -68,9 +68,23 @@ public partial class App : Application
 
         builder.RegisterType<Header>()
             .AsSelf();
+
+        builder.RegisterType<InformationArea>()
+            .AsSelf()
+            .SingleInstance();
         
+        builder.RegisterType<UpdateChecker>()
+            .AsSelf()
+            .SingleInstance();
+
         builder.RegisterType<EventMaster>()
             .AsSelf().SingleInstance();
+
+        builder.RegisterType<VtubeStudioController>()
+            .AsSelf().SingleInstance();
+
+        builder.RegisterType<VtsLogger>()
+            .AsSelf();
 
         builder.RegisterType<Messages>()
             .AsSelf().InstancePerLifetimeScope();

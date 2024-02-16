@@ -26,6 +26,9 @@ public class Settings
 
     public bool EnableElevenlabs { get; set; } = true;
 
+    public int VtubeStudioPort { get; set; } = 8001;
+    
+    public string VtubeStudioIp { get; set; } = "127.0.0.1";
 
     public int GpuLayerCount { get; set; } = 35;
 

@@ -18,6 +18,8 @@ public partial class Welcome : UserControl
 
     private void ControlLoaded(object sender, RoutedEventArgs e)
     {
+        LoadingMessage.Text = _startupCheck.CurrentLog;
+        
         _startupCheck.OnLogChanged += (o, s) => { this.Dispatcher.Invoke(() => { LoadingMessage.Text = s; }); };
     }
 }

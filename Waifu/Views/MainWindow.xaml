@@ -7,7 +7,7 @@
         Background="{DynamicResource Background}"
 
         Icon="/Resources/Images/Icon.ico"
-        
+
         TextOptions.TextFormattingMode="Display"
         TextOptions.TextRenderingMode="ClearType"
         RenderOptions.BitmapScalingMode="HighQuality"
@@ -45,6 +45,9 @@
                 </Grid>
                 <Grid Name="LayerAboveContent">
 
+                </Grid>
+                <Grid Name="InformationArea">
+                    <shared:InformationArea></shared:InformationArea>
                 </Grid>
             </Grid>
         </DockPanel>

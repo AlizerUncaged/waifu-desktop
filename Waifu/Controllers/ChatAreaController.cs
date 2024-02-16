@@ -102,7 +102,7 @@ public class ChatAreaController
             chatArea.MessageSend += ChatAreaOnMessageSend;
         });
 
-        _logger.LogInformation(
+        _logger.LogDebug(
             $"Initialized chat session.{Environment.NewLine}Channel: {JsonConvert.SerializeObject(channelWithCharacter)}{Environment.NewLine}Character: {JsonConvert.SerializeObject(roleplayCharacter)}{Environment.NewLine}Persona: {JsonConvert.SerializeObject(defaultPersona)}{Environment.NewLine}Chat handler: {chatHandlerForUserType.FullName}");
 
         return chatArea;

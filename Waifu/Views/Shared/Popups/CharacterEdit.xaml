@@ -9,7 +9,7 @@
              TextElement.Foreground="{DynamicResource Foreground}"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Border MaxWidth="600" CornerRadius="15" Background="{DynamicResource Background}">
+        <Border  CornerRadius="15" Background="{DynamicResource Background}">
             <Grid Margin="15">
                 <StackPanel>
                     <StackPanel Margin="0,0,0,15">

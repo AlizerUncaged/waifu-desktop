@@ -14,6 +14,11 @@ public class Messages
         _characterAiApi = characterAiApi;
     }
 
+    public async Task<IEnumerable<ChatMessage>> GetAllMessagesAsync()
+    {
+        return await _applicationDbContext.GetDbContext().ChatMessages.ToListAsync();
+    }
+
     public async Task<IEnumerable<ChatMessage>> GetMessagesAsync(long channelId, long? currentMessageId = null,
         int maxBackwards = 15)
     {

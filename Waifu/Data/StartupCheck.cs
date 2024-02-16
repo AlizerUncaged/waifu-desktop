@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading.Channels;
 using CharacterAI.Client;
 using Humanizer;
 using Microsoft.EntityFrameworkCore;
@@ -16,10 +17,12 @@ public class StartupCheck : ISelfRunning
     private readonly WhisperHuggingFaceModelDownloader _whisperHuggingFaceModelDownloader;
     private readonly CharacterAiApi _characterAiApi;
     private readonly Settings _settings;
+    private readonly VtubeStudioController _vtubeStudioController;
+    private readonly Messages _messages;
 
     public StartupCheck(ApplicationDbContext applicationDbContext, ILogger<StartupCheck> logger, Hotkeys hotkeys,
         WhisperHuggingFaceModelDownloader whisperHuggingFaceModelDownloader, CharacterAiApi characterAiApi,
-        Settings settings)
+        Settings settings, VtubeStudioController vtubeStudioController, Messages messages)
     {
         _applicationDbContext = applicationDbContext;
         _logger = logger;
@@ -27,6 +30,8 @@ public class StartupCheck : ISelfRunning
         _whisperHuggingFaceModelDownloader = whisperHuggingFaceModelDownloader;
         _characterAiApi = characterAiApi;
         _settings = settings;
+        _vtubeStudioController = vtubeStudioController;
+        _messages = messages;
     }
 
     public async Task<bool> DoesAModelExistAsync()
@@ -39,9 +44,11 @@ public class StartupCheck : ISelfRunning
     public async Task StartAsync()
     {
         Log("Updating Database");
-        // make sure database is ok
         await _applicationDbContext.Database.MigrateAsync();
         var settings = await _settings.GetOrCreateSettings();
+        
+        await _messages.GetAllMessagesAsync();
+
         Log("Checking Puppeteer");
 
         PuppeteerLib.PuppeteerLib.PuppeteerDownloadProcessChangedOptimized += (sender, i) =>
@@ -83,13 +90,21 @@ public class StartupCheck : ISelfRunning
             await whisperAwaiter.WaitAsync();
         }
 
+        // Log("Connecting to VTubeStudio");
+        // if (!await _vtubeStudioController.ConnectToVtubeStudio())
+        // {
+        //     // did not connect
+        // }
 
         Log("Starting");
         OnCheckFinishedSuccessfully?.Invoke(this, EventArgs.Empty);
     }
 
+    public string CurrentLog { get; private set; }
+
     private void Log(string log, bool frontendOnly = false)
     {
+        CurrentLog = log;
         if (!frontendOnly)
             _logger.LogDebug(log);
 

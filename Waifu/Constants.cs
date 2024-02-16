@@ -17,4 +17,7 @@ public static class Constants
     public static readonly string DataFolder = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
         "Alizer", "Waifu");
+
+    public const string UpdateJson = "./update.json";
+
 }
