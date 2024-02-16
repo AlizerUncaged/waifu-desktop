@@ -57,7 +57,9 @@
                                         <TextBlock TextWrapping="Wrap">
                                             <Run FontWeight="Bold" Text="{Binding Character.Name}"></Run>
                                         </TextBlock>
-                                        <TextBlock Opacity="0.5" TextWrapping="Wrap" Text="{Binding Character.Title}"></TextBlock>
+                                        <TextBlock Opacity="0.5" Margin="0,5" TextWrapping="Wrap"
+                                                   Text="{Binding Character.Title}">
+                                        </TextBlock>
                                         <TextBlock Opacity="0.5" TextWrapping="Wrap">
                                             <Run Text="{Binding Character.Interactions}"></Run>
                                             <Run Text=" total interactions"></Run>

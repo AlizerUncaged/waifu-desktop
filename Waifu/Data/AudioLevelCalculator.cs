@@ -15,6 +15,16 @@ public class AudioLevelCalculator
 
     public event EventHandler<AudioLevelData> AudioLevelCalculated;
 
+    public void CalculateAudioLevelAndEmit(float max, string target = "CharacterVoice")
+    {
+        var level = max * 1;
+        AudioLevelCalculated?.Invoke(this, new AudioLevelData()
+        {
+            AudioLevel = level, AudioTarget = target
+        });
+
+        _logger.LogInformation($"Audio level {level} for {target}");
+    }
 
     public void CalculateAudioLevelAndEmit(byte[] audioData, int bytes, WaveFormat waveFormat, TimeSpan duration,
         string target = "Mic")

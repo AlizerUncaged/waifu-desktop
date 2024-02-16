@@ -1,16 +1,20 @@
 ﻿using System.IO;
 using System.Windows.Forms.VisualStyles;
+using NAudio.Extras;
 using NAudio.Wave;
+using NAudio.Wave.SampleProviders;
 
 namespace Waifu.Data;
 
 public class AudioPlayer
 {
     private readonly Settings _settings;
+    private readonly AudioLevelCalculator _audioLevelCalculator;
 
-    public AudioPlayer(Settings settings)
+    public AudioPlayer(Settings settings, AudioLevelCalculator audioLevelCalculator)
     {
         _settings = settings;
+        _audioLevelCalculator = audioLevelCalculator;
     }
 
     public static List<WaveOutEvent> WaveOutEvents = new();
@@ -36,33 +40,36 @@ public class AudioPlayer
         {
             using (Mp3FileReader mp3FileReader = new Mp3FileReader(mp3Stream))
             {
-                using (WaveOutEvent waveOut = new WaveOutEvent())
+                using (var wavStream = WaveFormatConversionStream.CreatePcmStream(mp3FileReader))
                 {
-                    WaveOutEvents.Add(waveOut);
+                    using (var baStream = new BlockAlignReductionStream(wavStream))
+                    {  
+                        var meteringProvider = new MeteringSampleProvider(baStream.ToSampleProvider());
 
-                    if (audioOutDeviceId >= 0)
-                    {
-                        waveOut.DeviceNumber = audioOutDeviceId;
-                    }
-                    else
-                    {
-                        // Use the default audio output device
-                        waveOut.DeviceNumber = -1;
-                    }
-
-                    waveOut.Init(mp3FileReader);
-                    waveOut.Play();
-
-                    // Wait asynchronously until playback is finished
-                    await Task.Run(async () =>
-                    {
-                        while (waveOut.PlaybackState == PlaybackState.Playing)
+                        meteringProvider.StreamVolume += (sender, e) =>
                         {
-                            await Task.Delay(TimeSpan.FromSeconds(1));
-                        }
+                            _audioLevelCalculator.CalculateAudioLevelAndEmit(
+                                e.MaxSampleValues.Max());
+                        };
+                        
+                        using (var waveOut = new WaveOut(WaveCallbackInfo.FunctionCallback()))
+                        {
+                            waveOut.DeviceNumber = audioOutDeviceId >= 0 ? audioOutDeviceId : -1;
 
-                        WaveOutEvents.Remove(waveOut);
-                    });
+                          
+
+                            waveOut.Init(meteringProvider);
+                            waveOut.Play();
+
+                            await Task.Run(async () =>
+                            {
+                                while (waveOut.PlaybackState == PlaybackState.Playing)
+                                {
+                                    await Task.Delay(TimeSpan.FromSeconds(1));
+                                }
+                            });
+                        }
+                    }
                 }
             }
         }

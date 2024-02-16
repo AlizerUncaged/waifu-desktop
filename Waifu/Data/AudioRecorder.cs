@@ -12,6 +12,7 @@ public class AudioRecorder
     private readonly ILogger<AudioRecorder> _logger;
     private readonly Hotkeys _hotkeys;
     private readonly AudioLevelCalculator _audioLevelCalculator;
+    private readonly EventMaster _eventMaster;
 
     private DispatcherTimer _audioLevelTimer = new()
     {
@@ -26,11 +27,13 @@ public class AudioRecorder
 
     private bool canEmit = false;
 
-    public AudioRecorder(ILogger<AudioRecorder> logger, Hotkeys hotkeys, AudioLevelCalculator audioLevelCalculator)
+    public AudioRecorder(ILogger<AudioRecorder> logger, Hotkeys hotkeys, AudioLevelCalculator audioLevelCalculator,
+        EventMaster eventMaster)
     {
         _logger = logger;
         _hotkeys = hotkeys;
         _audioLevelCalculator = audioLevelCalculator;
+        _eventMaster = eventMaster;
 
         // _memoryStream = new WaveFileWriter(Path.GetTempFileName(), _waveInEvent.WaveFormat);
         _memoryStream = new WaveWriter(_waveInEvent.WaveFormat);
@@ -39,6 +42,7 @@ public class AudioRecorder
         _waveInEvent.DataAvailable += WaveInEventOnDataAvailable;
 
         _waveInEvent.RecordingStopped += (sender, args) => { };
+
         _hotkeys.HotkeyUp += (sender, s) =>
         {
             if (s == "Voice")
@@ -59,6 +63,11 @@ public class AudioRecorder
         _audioLevelTimer.Tick += (sender, args) =>
         {
             canEmit = true; // we can emit at this time
+        };
+
+        eventMaster.ShuttingDown += (sender, args) =>
+        {
+            _audioLevelTimer.Stop();
         };
     }
 

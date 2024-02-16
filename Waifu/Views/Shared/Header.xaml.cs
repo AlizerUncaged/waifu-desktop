@@ -31,10 +31,7 @@ public partial class Header : UserControl
     private void CloseClicked(object sender, MouseButtonEventArgs e)
     {
         // kill puppeteer first
-        _properShutdownHandler.ShutdownProperly().ContinueWith(x =>
-        {
-            Dispatcher.Invoke(() => { Environment.Exit(Environment.ExitCode); });
-        });
+        _properShutdownHandler.ShutdownProperly();
     }
 
     private void MinimizeClicked(object sender, MouseButtonEventArgs e)

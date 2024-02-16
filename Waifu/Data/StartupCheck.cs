@@ -19,10 +19,17 @@ public class StartupCheck : ISelfRunning
     private readonly Settings _settings;
     private readonly VtubeStudioController _vtubeStudioController;
     private readonly Messages _messages;
+    private readonly UpdateChecker _updateChecker;
 
-    public StartupCheck(ApplicationDbContext applicationDbContext, ILogger<StartupCheck> logger, Hotkeys hotkeys,
-        WhisperHuggingFaceModelDownloader whisperHuggingFaceModelDownloader, CharacterAiApi characterAiApi,
-        Settings settings, VtubeStudioController vtubeStudioController, Messages messages)
+    public StartupCheck(ApplicationDbContext applicationDbContext,
+        ILogger<StartupCheck> logger,
+        Hotkeys hotkeys,
+        WhisperHuggingFaceModelDownloader whisperHuggingFaceModelDownloader,
+        CharacterAiApi characterAiApi,
+        Settings settings,
+        VtubeStudioController vtubeStudioController,
+        Messages messages,
+        UpdateChecker updateChecker)
     {
         _applicationDbContext = applicationDbContext;
         _logger = logger;
@@ -32,6 +39,7 @@ public class StartupCheck : ISelfRunning
         _settings = settings;
         _vtubeStudioController = vtubeStudioController;
         _messages = messages;
+        _updateChecker = updateChecker;
     }
 
     public async Task<bool> DoesAModelExistAsync()
@@ -43,10 +51,16 @@ public class StartupCheck : ISelfRunning
 
     public async Task StartAsync()
     {
+        Log("Checking for Updates");
+
+        await _updateChecker.CheckUpdateAndNotifyFrontendAsync();
+
+
         Log("Updating Database");
+
         await _applicationDbContext.Database.MigrateAsync();
         var settings = await _settings.GetOrCreateSettings();
-        
+
         await _messages.GetAllMessagesAsync();
 
         Log("Checking Puppeteer");
@@ -95,6 +109,8 @@ public class StartupCheck : ISelfRunning
         // {
         //     // did not connect
         // }
+
+        _ = _vtubeStudioController.AttemptToConnectForever();
 
         Log("Starting");
         OnCheckFinishedSuccessfully?.Invoke(this, EventArgs.Empty);

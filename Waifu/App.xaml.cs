@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 using System.Data;
 using System.IO;
+using System.Net.Http;
 using System.Windows;
 using Autofac;
 using LLama.Common;
@@ -69,16 +70,20 @@ public partial class App : Application
         builder.RegisterType<Header>()
             .AsSelf();
 
+        builder.RegisterType<HttpClient>()
+            .AsSelf();
+
         builder.RegisterType<InformationArea>()
             .AsSelf()
             .SingleInstance();
-        
+
         builder.RegisterType<UpdateChecker>()
             .AsSelf()
             .SingleInstance();
 
         builder.RegisterType<EventMaster>()
-            .AsSelf().SingleInstance();
+            .AsSelf()
+            .SingleInstance();
 
         builder.RegisterType<VtubeStudioController>()
             .AsSelf().SingleInstance();

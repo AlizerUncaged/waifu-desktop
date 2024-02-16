@@ -13,6 +13,7 @@ public static class Constants
     public const string DatabasePath = $"{LocalResourcesFolder}\\database.db";
 
     public const string DefaultProfilePicture = $".\\{ProfilePicturesFolder}\\default.jpg";
+    public const string DefaultLowIcon = $".\\{ProfilePicturesFolder}\\128_Icon.png";
 
     public static readonly string DataFolder = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),

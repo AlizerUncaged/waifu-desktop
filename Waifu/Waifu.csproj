@@ -41,6 +41,7 @@
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
       <PackageReference Include="NAudio" Version="2.2.1" />
+      <PackageReference Include="NAudio.Extras" Version="2.2.1" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
       <PackageReference Include="NvAPIWrapper.Net" Version="0.8.1.101" />
       <PackageReference Include="Pastel" Version="4.2.0" />
@@ -49,7 +50,6 @@
       <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
       <PackageReference Include="Serilog.Sinks.File" Version="5.0.1-dev-00972" />
       <PackageReference Include="SharpHook" Version="5.2.3" />
-      <PackageReference Include="VTS-Sharp" Version="2.2.1" />
       <PackageReference Include="Whisper.net" Version="1.5.0" />
       <PackageReference Include="Whisper.net.Runtime" Version="1.5.0" />
     </ItemGroup>
@@ -185,10 +185,14 @@
       <None Update="update.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+      <None Update="Resources\Images\128_Icon.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Dependencies\CharacterAI-NET-API-Wrapper\CharacterAI.Client\CharacterAI.Client.csproj" />
+      <ProjectReference Include="..\Dependencies\VTS-Sharp\NuGet~\VTS.csproj" />
     </ItemGroup>
 
 </Project>
