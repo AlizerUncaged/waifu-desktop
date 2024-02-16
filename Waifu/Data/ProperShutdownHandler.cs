@@ -27,27 +27,27 @@ public class ProperShutdownHandler
 
         _characterAiApi.CharacterAiClient?.EnsureAllChromeInstancesAreKilled();
 
-        // if (Common.CommonDirectory is { } browserDirectory &&
-        //     !string.IsNullOrWhiteSpace(browserDirectory))
-        // {
-        //     var processesRunningInBrowserDirectory =
-        //         await _processUtilities.GetProcessesRunningInFolderAsync(browserDirectory);
-        //
-        //     _logger.LogInformation(
-        //         $"Killing {processesRunningInBrowserDirectory.Count()} processes at browserDirectory");
-        //
-        //     foreach (var process in processesRunningInBrowserDirectory)
-        //     {
-        //         try
-        //         {
-        //             process.Kill();
-        //         }
-        //         catch (Exception ex)
-        //         {
-        //             _logger.LogWarning($"Unable to kill {process.ProcessName} because {ex.Message}");
-        //         }
-        //     }
-        // }
+        if (Common.CommonDirectory is { } browserDirectory &&
+            !string.IsNullOrWhiteSpace(browserDirectory))
+        {
+            var processesRunningInBrowserDirectory =
+                await _processUtilities.GetProcessesRunningInFolderAsync(browserDirectory);
+
+            _logger.LogInformation(
+                $"Killing {processesRunningInBrowserDirectory.Count()} processes at browserDirectory");
+
+            foreach (var process in processesRunningInBrowserDirectory)
+            {
+                try
+                {
+                    process.Kill();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning($"Unable to kill {process.ProcessName} because {ex.Message}");
+                }
+            }
+        }
 
         Application.Current.Dispatcher.Invoke(() => { Environment.Exit(Environment.ExitCode); });
     }

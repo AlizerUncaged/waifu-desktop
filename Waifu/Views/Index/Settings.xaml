@@ -99,21 +99,21 @@
                             </StackPanel>
                         </Button>
                     </StackPanel>
-                    <StackPanel Orientation="Vertical" Margin="0,0,0,15">
-                        <TextBlock FontWeight="Black">
-                            <materialDesign:PackIcon Kind="Audio"></materialDesign:PackIcon>
-                            <Run Text="Audio"></Run>
-                        </TextBlock>
-                        <TextBlock Margin="0,0,0,7" TextWrapping="Wrap"
-                                   Text="Manage audio output devices">
-                        </TextBlock>
-                        <Button Background="{DynamicResource Purple}" BorderThickness="0" Click="ManageAudioClicked">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <materialDesign:PackIcon VerticalAlignment="Center" Margin="0,0,7,0" Kind="Tune"></materialDesign:PackIcon>
-                                <TextBlock Padding="0" Margin="0" VerticalAlignment="Center">Manage Audio</TextBlock>
-                            </StackPanel>
-                        </Button>
-                    </StackPanel>
+                    <!-- <StackPanel Orientation="Vertical" Margin="0,0,0,15"> -->
+                    <!--     <TextBlock FontWeight="Black"> -->
+                    <!--         <materialDesign:PackIcon Kind="Audio"></materialDesign:PackIcon> -->
+                    <!--         <Run Text="Audio"></Run> -->
+                    <!--     </TextBlock> -->
+                    <!--     <TextBlock Margin="0,0,0,7" TextWrapping="Wrap" -->
+                    <!--                Text="Manage audio output devices"> -->
+                    <!--     </TextBlock> -->
+                    <!--     <Button Background="{DynamicResource Purple}" BorderThickness="0" Click="ManageAudioClicked"> -->
+                    <!--         <StackPanel Orientation="Horizontal" VerticalAlignment="Center"> -->
+                    <!--             <materialDesign:PackIcon VerticalAlignment="Center" Margin="0,0,7,0" Kind="Tune"></materialDesign:PackIcon> -->
+                    <!--             <TextBlock Padding="0" Margin="0" VerticalAlignment="Center">Manage Audio</TextBlock> -->
+                    <!--         </StackPanel> -->
+                    <!--     </Button> -->
+                    <!-- </StackPanel> -->
                     <StackPanel Orientation="Vertical" Margin="0,0,0,15">
                         <TextBlock FontWeight="Black">
                             <materialDesign:PackIcon Kind="Keyboard"></materialDesign:PackIcon>
