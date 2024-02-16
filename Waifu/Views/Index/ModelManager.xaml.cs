@@ -53,7 +53,7 @@ public partial class ModelManager : UserControl, IPopup
 
             Dispatcher.Invoke(() =>
             {
-                CharacterAiTokenField.Password = settings.CharacterAiToken;
+                CharacterAiTokenField.Password = settings.CharacterAiToken?.Replace("\"", string.Empty);
                 ElevenlabsTokenField.Password = settings.ElevenlabsApiKey;
                 WhisperModelList.Text = settings.WhisperModel.ToString();
             });

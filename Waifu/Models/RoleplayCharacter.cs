@@ -14,7 +14,7 @@ public class RoleplayCharacter
     public string SampleMessages { get; set; } = string.Empty;
 
     // optional
-    public string? ElevenlabsSelectedVoice { get; set; } = null;
+    public string? ElevenlabsSelectedVoice { get; set; } = "Charlotte";
 
     public string Description { get; set; } = string.Empty;
 

@@ -18,7 +18,7 @@ public class VtubeStudioController : VTS.Core.CoreVTSPlugin
 
     private DispatcherTimer _audioLevelTimer = new()
     {
-        Interval = TimeSpan.FromSeconds(0.2)
+        Interval = TimeSpan.FromSeconds(0.1)
     };
 
     private AudioLevelData? _audioLevelData;
@@ -34,18 +34,27 @@ public class VtubeStudioController : VTS.Core.CoreVTSPlugin
         _eventMaster = eventMaster;
         _audioLevelCalculator = audioLevelCalculator;
 
+        double lastAudioLevel = 0;
         _audioLevelTimer.Tick += (sender, args) =>
         {
-            if (_audioLevelData is not null)
+            if (_audioLevelData is not null && lastAudioLevel != _audioLevelData.AudioLevel)
             {
                 _ = this.InjectParameterValues(new[]
                 {
                     new VTSParameterInjectionValue()
                     {
                         id = "MouthOpen", value = (float)_audioLevelData.AudioLevel, weight = 1
-                    }
+                    },
+                });
+                _ = this.InjectParameterValues(new[]
+                {
+                    new VTSParameterInjectionValue()
+                    {
+                        id = "InputVoice", value = (float)_audioLevelData.AudioLevel, weight = 1
+                    },
                 });
                 logger.LogInformation($"Level in {_audioLevelData.AudioLevel}");
+                lastAudioLevel = _audioLevelData.AudioLevel;
             }
         };
 
@@ -79,7 +88,7 @@ public class VtubeStudioController : VTS.Core.CoreVTSPlugin
             await this.InitializeAsync(new WebSocketImpl(_vtsLogger), new NewtonsoftJsonUtilityImpl(),
                 new TokenStorageImpl("./token"),
                 () => { _eventMaster.TriggerInfo("VtubeStudio disconnected!"); });
-
+            _logger.LogInformation($"VTube studio connected!");
             IsConnected = true;
         }
         catch (Exception exception)

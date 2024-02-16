@@ -11,9 +11,11 @@ public static class StringUtilities
 {
     public static string RemoveSpecialCharacters(this string str)
     {
-        string pattern = @"[_*]"; // disallow underscores and asterisks
-
-        string result = Regex.Replace(str, pattern, "");
+        string result = str.Replace("~", ", ")
+            .Replace("*", ", ")
+            .Replace("_", ", ")
+            .Replace("|", ",")
+            .Replace("\n", ".");
 
         return result;
     }
