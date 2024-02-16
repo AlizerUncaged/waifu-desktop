@@ -1,3 +1,7 @@
 [submodule "Dependencies/CharacterAI-NET-API-Wrapper"]
-	path = https://github.com/AlizerUncaged/VTS-Sharp
+	path = Dependencies/CharacterAI-NET-API-Wrapper
 	url = https://github.com/AlizerUncaged/character-net
+	
+[submodule "Dependencies/VTS-Sharp"]
+	path = Dependencies/VTS
+	url = https://github.com/AlizerUncaged/VTS-Sharp
