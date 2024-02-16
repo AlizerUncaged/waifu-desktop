@@ -5,7 +5,8 @@
   
   ![Donate](https://img.shields.io/badge/☕%20Donate-Buy%20me%20a%20Coffee-lightgreen)
   ![Donate](https://img.shields.io/badge/.NET-8-EC76B6)
-  [![Donate](https://img.shields.io/badge/Download%20Now!-Latest-36A5DB)]()
+  [![Donate](https://img.shields.io/badge/Download%20Now!-Latest-36A5DB)](https://github.com/AlizerUncaged/waifu-desktop/releases)
+  [![Donate](https://img.shields.io/badge/Join-Discord-1F267B)](https://discord.gg/FQgnEE6y2V)
 
   <p>
     💬 Waifu-Desktop, your ultimate AI roleplay companion!
