@@ -9,6 +9,7 @@ using MdXaml;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using Serilog;
+using Serilog.Core;
 using Serilog.Events;
 using Serilog.Extensions.Autofac.DependencyInjection;
 using Serilog.Sinks.SystemConsole.Themes;
@@ -53,6 +54,16 @@ public partial class App : Application
                 "[{Timestamp:HH:mm:ss} {Level:u3}] ({SourceContext}.{Method})  {Message:lj} {NewLine}{Exception}"
             ).WriteTo.File(logPath)
             .MinimumLevel.Information();
+
+        Application.Current.DispatcherUnhandledException += (sender, args) =>
+        {
+            Logger.None.Error($"{args.Exception.ToString()}");
+        };
+
+        AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
+        {
+            Logger.None.Error($"{args.ExceptionObject.ToString()}");
+        };
 
         //
         // Log.Logger = logConfiguration

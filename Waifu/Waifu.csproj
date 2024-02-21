@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net8.0-windows</TargetFramework>
         <Nullable>enable</Nullable>
@@ -10,189 +11,189 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <PlatformTarget>x64</PlatformTarget>
+        <PlatformTarget>x64</PlatformTarget>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <PlatformTarget>x64</PlatformTarget>
+        <PlatformTarget>x64</PlatformTarget>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Autofac" Version="7.1.0" />
-      <PackageReference Include="CachedImage" Version="0.1.15" />
-      <PackageReference Include="ElevenLabs-DotNet" Version="2.1.0" />
-      <PackageReference Include="HardwareInformation" Version="6.0.0-rc2" />
-      <PackageReference Include="Humanizer" Version="2.14.1" />
-      <PackageReference Include="LLamaSharp" Version="0.9.1" />
-      <PackageReference Include="LLamaSharp.Backend.Cpu" Version="0.9.1" />
-      <PackageReference Include="LLamaSharp.Backend.Cuda12" Version="0.9.1" />
-      <PackageReference Include="MaterialDesignColors" Version="3.0.0-ci508" />
-      <PackageReference Include="MaterialDesignThemes" Version="5.0.0-ci508" />
-      <PackageReference Include="MdXaml" Version="1.27.0" />
-      <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.1" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="8.0.1" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.1">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-      <PackageReference Include="NAudio" Version="2.2.1" />
-      <PackageReference Include="NAudio.Extras" Version="2.2.1" />
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-      <PackageReference Include="NvAPIWrapper.Net" Version="0.8.1.101" />
-      <PackageReference Include="Pastel" Version="4.2.0" />
-      <PackageReference Include="Serilog" Version="3.1.2-dev-02097" />
-      <PackageReference Include="Serilog.Extensions.Autofac.DependencyInjection" Version="5.0.0" />
-      <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
-      <PackageReference Include="Serilog.Sinks.File" Version="5.0.1-dev-00972" />
-      <PackageReference Include="SharpHook" Version="5.2.3" />
-      <PackageReference Include="Whisper.net" Version="1.5.0" />
-      <PackageReference Include="Whisper.net.Runtime" Version="1.5.0" />
+        <PackageReference Include="Autofac" Version="7.1.0"/>
+        <PackageReference Include="CachedImage" Version="0.1.15"/>
+        <PackageReference Include="ElevenLabs-DotNet" Version="2.1.0"/>
+        <PackageReference Include="HardwareInformation" Version="6.0.0-rc2"/>
+        <PackageReference Include="Humanizer" Version="2.14.1"/>
+        <PackageReference Include="LLamaSharp" Version="0.9.1"/>
+        <PackageReference Include="LLamaSharp.Backend.Cpu" Version="0.9.1"/>
+        <PackageReference Include="LLamaSharp.Backend.Cuda12" Version="0.9.1"/>
+        <PackageReference Include="MaterialDesignColors" Version="3.0.0-ci508"/>
+        <PackageReference Include="MaterialDesignThemes" Version="5.0.0-ci508"/>
+        <PackageReference Include="MdXaml" Version="1.27.0"/>
+        <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.1"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="8.0.1"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="NAudio" Version="2.2.1"/>
+        <PackageReference Include="NAudio.Extras" Version="2.2.1"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+        <PackageReference Include="NvAPIWrapper.Net" Version="0.8.1.101"/>
+        <PackageReference Include="Pastel" Version="4.2.0"/>
+        <PackageReference Include="Serilog" Version="3.1.2-dev-02097"/>
+        <PackageReference Include="Serilog.Extensions.Autofac.DependencyInjection" Version="5.0.0"/>
+        <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1"/>
+        <PackageReference Include="Serilog.Sinks.File" Version="5.0.1-dev-00972"/>
+        <PackageReference Include="SharpHook" Version="5.2.3"/>
+        <PackageReference Include="Whisper.net" Version="1.5.0"/>
+        <PackageReference Include="Whisper.net.Runtime" Version="1.5.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Page Update="Views\MainWindow.xaml">
-        <Generator>MSBuild:Compile</Generator>
-        <XamlRuntime>Wpf</XamlRuntime>
-        <SubType>Designer</SubType>
-      </Page>
+        <Page Update="Views\MainWindow.xaml">
+            <Generator>MSBuild:Compile</Generator>
+            <XamlRuntime>Wpf</XamlRuntime>
+            <SubType>Designer</SubType>
+        </Page>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Resources\Fonts\" />
-      <Folder Include="Resources\Models\" />
+        <Folder Include="Resources\Fonts\"/>
+        <Folder Include="Resources\Models\"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="Resources\Fonts\LICENSE.txt" />
-      <Resource Include="Resources\Fonts\LICENSE.txt" />
-      <None Remove="Resources\Fonts\Roboto-Black.ttf" />
-      <Resource Include="Resources\Fonts\Roboto-Black.ttf" />
-      <None Remove="Resources\Fonts\Roboto-BlackItalic.ttf" />
-      <Resource Include="Resources\Fonts\Roboto-BlackItalic.ttf" />
-      <None Remove="Resources\Fonts\Roboto-Bold.ttf" />
-      <Resource Include="Resources\Fonts\Roboto-Bold.ttf" />
-      <None Remove="Resources\Fonts\Roboto-BoldItalic.ttf" />
-      <Resource Include="Resources\Fonts\Roboto-BoldItalic.ttf" />
-      <None Remove="Resources\Fonts\Roboto-Italic.ttf" />
-      <Resource Include="Resources\Fonts\Roboto-Italic.ttf" />
-      <None Remove="Resources\Fonts\Roboto-Light.ttf" />
-      <Resource Include="Resources\Fonts\Roboto-Light.ttf" />
-      <None Remove="Resources\Fonts\Roboto-LightItalic.ttf" />
-      <Resource Include="Resources\Fonts\Roboto-LightItalic.ttf" />
-      <None Remove="Resources\Fonts\Roboto-Medium.ttf" />
-      <Resource Include="Resources\Fonts\Roboto-Medium.ttf" />
-      <None Remove="Resources\Fonts\Roboto-MediumItalic.ttf" />
-      <Resource Include="Resources\Fonts\Roboto-MediumItalic.ttf" />
-      <None Remove="Resources\Fonts\Roboto-Regular.ttf" />
-      <Resource Include="Resources\Fonts\Roboto-Regular.ttf" />
-      <None Remove="Resources\Fonts\Roboto-Thin.ttf" />
-      <Resource Include="Resources\Fonts\Roboto-Thin.ttf" />
-      <None Remove="Resources\Fonts\Roboto-ThinItalic.ttf" />
-      <Resource Include="Resources\Fonts\Roboto-ThinItalic.ttf" />
-      <None Remove="Resources\Fonts\OpenSans-Bold.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans-Bold.ttf" />
-      <None Remove="Resources\Fonts\OpenSans-BoldItalic.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans-BoldItalic.ttf" />
-      <None Remove="Resources\Fonts\OpenSans-ExtraBold.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans-ExtraBold.ttf" />
-      <None Remove="Resources\Fonts\OpenSans-ExtraBoldItalic.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans-ExtraBoldItalic.ttf" />
-      <None Remove="Resources\Fonts\OpenSans-Italic.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans-Italic.ttf" />
-      <None Remove="Resources\Fonts\OpenSans-Light.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans-Light.ttf" />
-      <None Remove="Resources\Fonts\OpenSans-LightItalic.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans-LightItalic.ttf" />
-      <None Remove="Resources\Fonts\OpenSans-Medium.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans-Medium.ttf" />
-      <None Remove="Resources\Fonts\OpenSans-MediumItalic.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans-MediumItalic.ttf" />
-      <None Remove="Resources\Fonts\OpenSans-Regular.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans-Regular.ttf" />
-      <None Remove="Resources\Fonts\OpenSans-SemiBold.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans-SemiBold.ttf" />
-      <None Remove="Resources\Fonts\OpenSans-SemiBoldItalic.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans-SemiBoldItalic.ttf" />
-      <None Remove="Resources\Fonts\OpenSans_Condensed-Bold.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans_Condensed-Bold.ttf" />
-      <None Remove="Resources\Fonts\OpenSans_Condensed-BoldItalic.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans_Condensed-BoldItalic.ttf" />
-      <None Remove="Resources\Fonts\OpenSans_Condensed-ExtraBold.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans_Condensed-ExtraBold.ttf" />
-      <None Remove="Resources\Fonts\OpenSans_Condensed-ExtraBoldItalic.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans_Condensed-ExtraBoldItalic.ttf" />
-      <None Remove="Resources\Fonts\OpenSans_Condensed-Italic.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans_Condensed-Italic.ttf" />
-      <None Remove="Resources\Fonts\OpenSans_Condensed-Light.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans_Condensed-Light.ttf" />
-      <None Remove="Resources\Fonts\OpenSans_Condensed-LightItalic.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans_Condensed-LightItalic.ttf" />
-      <None Remove="Resources\Fonts\OpenSans_Condensed-Medium.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans_Condensed-Medium.ttf" />
-      <None Remove="Resources\Fonts\OpenSans_Condensed-MediumItalic.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans_Condensed-MediumItalic.ttf" />
-      <None Remove="Resources\Fonts\OpenSans_Condensed-Regular.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans_Condensed-Regular.ttf" />
-      <None Remove="Resources\Fonts\OpenSans_Condensed-SemiBold.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans_Condensed-SemiBold.ttf" />
-      <None Remove="Resources\Fonts\OpenSans_Condensed-SemiBoldItalic.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans_Condensed-SemiBoldItalic.ttf" />
-      <None Remove="Resources\Fonts\OpenSans_SemiCondensed-Bold.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans_SemiCondensed-Bold.ttf" />
-      <None Remove="Resources\Fonts\OpenSans_SemiCondensed-BoldItalic.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans_SemiCondensed-BoldItalic.ttf" />
-      <None Remove="Resources\Fonts\OpenSans_SemiCondensed-ExtraBold.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans_SemiCondensed-ExtraBold.ttf" />
-      <None Remove="Resources\Fonts\OpenSans_SemiCondensed-ExtraBoldItalic.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans_SemiCondensed-ExtraBoldItalic.ttf" />
-      <None Remove="Resources\Fonts\OpenSans_SemiCondensed-Italic.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans_SemiCondensed-Italic.ttf" />
-      <None Remove="Resources\Fonts\OpenSans_SemiCondensed-Light.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans_SemiCondensed-Light.ttf" />
-      <None Remove="Resources\Fonts\OpenSans_SemiCondensed-LightItalic.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans_SemiCondensed-LightItalic.ttf" />
-      <None Remove="Resources\Fonts\OpenSans_SemiCondensed-Medium.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans_SemiCondensed-Medium.ttf" />
-      <None Remove="Resources\Fonts\OpenSans_SemiCondensed-MediumItalic.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans_SemiCondensed-MediumItalic.ttf" />
-      <None Remove="Resources\Fonts\OpenSans_SemiCondensed-Regular.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans_SemiCondensed-Regular.ttf" />
-      <None Remove="Resources\Fonts\OpenSans_SemiCondensed-SemiBold.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans_SemiCondensed-SemiBold.ttf" />
-      <None Remove="Resources\Fonts\OpenSans_SemiCondensed-SemiBoldItalic.ttf" />
-      <Resource Include="Resources\Fonts\OpenSans_SemiCondensed-SemiBoldItalic.ttf" />
-      <None Remove="Resources\Images\Brand-Text.png" />
-      <Resource Include="Resources\Images\Brand-Text.png" />
-      <None Remove="Resources\Images\Placeholder-Text.png" />
-      <Resource Include="Resources\Images\Placeholder-Text.png" />
-      <None Remove="Resources\Images\Welcome-Text.png" />
-      <Resource Include="Resources\Images\Welcome-Text.png" />
-      <None Remove="Resources\Images\Icon.png" />
-      <Resource Include="Resources\Images\Icon.png" />
-      <None Remove="Resources\Images\Icon (6).ico" />
-      <Content Include="Resources\Images\Icon.ico">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Resources\Images\default.jpg" />
-      <Content Include="Resources\Images\default.jpg">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <None Update="update.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Images\128_Icon.png">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
+        <None Remove="Resources\Fonts\LICENSE.txt"/>
+        <Resource Include="Resources\Fonts\LICENSE.txt"/>
+        <None Remove="Resources\Fonts\Roboto-Black.ttf"/>
+        <Resource Include="Resources\Fonts\Roboto-Black.ttf"/>
+        <None Remove="Resources\Fonts\Roboto-BlackItalic.ttf"/>
+        <Resource Include="Resources\Fonts\Roboto-BlackItalic.ttf"/>
+        <None Remove="Resources\Fonts\Roboto-Bold.ttf"/>
+        <Resource Include="Resources\Fonts\Roboto-Bold.ttf"/>
+        <None Remove="Resources\Fonts\Roboto-BoldItalic.ttf"/>
+        <Resource Include="Resources\Fonts\Roboto-BoldItalic.ttf"/>
+        <None Remove="Resources\Fonts\Roboto-Italic.ttf"/>
+        <Resource Include="Resources\Fonts\Roboto-Italic.ttf"/>
+        <None Remove="Resources\Fonts\Roboto-Light.ttf"/>
+        <Resource Include="Resources\Fonts\Roboto-Light.ttf"/>
+        <None Remove="Resources\Fonts\Roboto-LightItalic.ttf"/>
+        <Resource Include="Resources\Fonts\Roboto-LightItalic.ttf"/>
+        <None Remove="Resources\Fonts\Roboto-Medium.ttf"/>
+        <Resource Include="Resources\Fonts\Roboto-Medium.ttf"/>
+        <None Remove="Resources\Fonts\Roboto-MediumItalic.ttf"/>
+        <Resource Include="Resources\Fonts\Roboto-MediumItalic.ttf"/>
+        <None Remove="Resources\Fonts\Roboto-Regular.ttf"/>
+        <Resource Include="Resources\Fonts\Roboto-Regular.ttf"/>
+        <None Remove="Resources\Fonts\Roboto-Thin.ttf"/>
+        <Resource Include="Resources\Fonts\Roboto-Thin.ttf"/>
+        <None Remove="Resources\Fonts\Roboto-ThinItalic.ttf"/>
+        <Resource Include="Resources\Fonts\Roboto-ThinItalic.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans-Bold.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans-Bold.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans-BoldItalic.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans-BoldItalic.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans-ExtraBold.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans-ExtraBold.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans-ExtraBoldItalic.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans-ExtraBoldItalic.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans-Italic.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans-Italic.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans-Light.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans-Light.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans-LightItalic.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans-LightItalic.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans-Medium.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans-Medium.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans-MediumItalic.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans-MediumItalic.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans-Regular.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans-Regular.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans-SemiBold.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans-SemiBold.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans-SemiBoldItalic.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans-SemiBoldItalic.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans_Condensed-Bold.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans_Condensed-Bold.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans_Condensed-BoldItalic.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans_Condensed-BoldItalic.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans_Condensed-ExtraBold.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans_Condensed-ExtraBold.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans_Condensed-ExtraBoldItalic.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans_Condensed-ExtraBoldItalic.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans_Condensed-Italic.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans_Condensed-Italic.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans_Condensed-Light.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans_Condensed-Light.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans_Condensed-LightItalic.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans_Condensed-LightItalic.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans_Condensed-Medium.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans_Condensed-Medium.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans_Condensed-MediumItalic.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans_Condensed-MediumItalic.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans_Condensed-Regular.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans_Condensed-Regular.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans_Condensed-SemiBold.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans_Condensed-SemiBold.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans_Condensed-SemiBoldItalic.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans_Condensed-SemiBoldItalic.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans_SemiCondensed-Bold.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans_SemiCondensed-Bold.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans_SemiCondensed-BoldItalic.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans_SemiCondensed-BoldItalic.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans_SemiCondensed-ExtraBold.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans_SemiCondensed-ExtraBold.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans_SemiCondensed-ExtraBoldItalic.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans_SemiCondensed-ExtraBoldItalic.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans_SemiCondensed-Italic.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans_SemiCondensed-Italic.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans_SemiCondensed-Light.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans_SemiCondensed-Light.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans_SemiCondensed-LightItalic.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans_SemiCondensed-LightItalic.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans_SemiCondensed-Medium.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans_SemiCondensed-Medium.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans_SemiCondensed-MediumItalic.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans_SemiCondensed-MediumItalic.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans_SemiCondensed-Regular.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans_SemiCondensed-Regular.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans_SemiCondensed-SemiBold.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans_SemiCondensed-SemiBold.ttf"/>
+        <None Remove="Resources\Fonts\OpenSans_SemiCondensed-SemiBoldItalic.ttf"/>
+        <Resource Include="Resources\Fonts\OpenSans_SemiCondensed-SemiBoldItalic.ttf"/>
+        <None Remove="Resources\Images\Brand-Text.png"/>
+        <Resource Include="Resources\Images\Brand-Text.png"/>
+        <None Remove="Resources\Images\Placeholder-Text.png"/>
+        <Resource Include="Resources\Images\Placeholder-Text.png"/>
+        <None Remove="Resources\Images\Welcome-Text.png"/>
+        <Resource Include="Resources\Images\Welcome-Text.png"/>
+        <None Remove="Resources\Images\Icon.png"/>
+        <Resource Include="Resources\Images\Icon.png"/>
+        <None Remove="Resources\Images\Icon (6).ico"/>
+        <Content Include="Resources\Images\Icon.ico">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Resources\Images\default.jpg"/>
+        <Content Include="Resources\Images\default.jpg">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <None Update="update.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Images\128_Icon.png">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Dependencies\CharacterAI-NET-API-Wrapper\CharacterAI.Client\CharacterAI.Client.csproj" />
-      <ProjectReference Include="..\Dependencies\VTS-Sharp\NuGet~\VTS.csproj" />
+        <ProjectReference Include="..\Dependencies\CharacterAI-NET-API-Wrapper\CharacterAI.Client\CharacterAI.Client.csproj"/>
+        <ProjectReference Include="..\Dependencies\VTS-Sharp\NuGet~\VTS.csproj"/>
     </ItemGroup>
 
 </Project>

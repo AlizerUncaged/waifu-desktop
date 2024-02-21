@@ -25,7 +25,7 @@ By harnessing the power of the current technologies we have, we can turn the voi
 - Elevenlabs key, you can find it [here](https://beta.elevenlabs.io/subscription).
 
 
-<div>
+<div align="center">
 <center>
     <img align="center" src="https://i.ibb.co/b65QD9H/image.png"/>
 </center>
