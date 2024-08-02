@@ -24,6 +24,7 @@ public class UpdateChecker
 
     public async Task CheckUpdateAndNotifyFrontendAsync()
     {
+        return;
         if (!File.Exists(Constants.UpdateJson))
         {
             _logger.LogError($"Update metadata file not found at {Constants.UpdateJson}");
