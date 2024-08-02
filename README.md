@@ -5,7 +5,8 @@
   
   ![Donate](https://img.shields.io/badge/☕%20Donate-Buy%20me%20a%20Coffee-lightgreen)
   ![Donate](https://img.shields.io/badge/.NET-8-EC76B6)
-  [![Donate](https://img.shields.io/badge/Download%20Now!-Latest-36A5DB)]()
+  [![Donate](https://img.shields.io/badge/Download%20Now!-Latest-36A5DB)](https://github.com/AlizerUncaged/waifu-desktop/releases)
+  [![Donate](https://img.shields.io/badge/Join-Discord-1F267B)](https://discord.gg/FQgnEE6y2V)
 
   <p>
     💬 Waifu-Desktop, your ultimate AI roleplay companion!
@@ -24,7 +25,7 @@ By harnessing the power of the current technologies we have, we can turn the voi
 - Elevenlabs key, you can find it [here](https://beta.elevenlabs.io/subscription).
 
 
-<div>
+<div align="center">
 <center>
     <img align="center" src="https://i.ibb.co/b65QD9H/image.png"/>
 </center>
