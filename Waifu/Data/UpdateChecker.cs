@@ -14,7 +14,10 @@ public class UpdateChecker
     public UpdateChecker(ILogger<UpdateChecker> logger, HttpClient httpClient)
     {
         _logger = logger;
-        _httpClient = httpClient;
+        _httpClient = new HttpClient()
+        {
+            Timeout = TimeSpan.FromSeconds(5)
+        };
     }
 
     public event EventHandler<Update> UpdateFound;
